@@ -1,6 +1,6 @@
 -- FAVOURITES DATA
 INSERT INTO favourites
-  (item_for_sale_id, user_id, vendor_id)
+  (item_id, user_id, vendor_id)
 VALUES
   (1, 1, 1),
   (1, 2, 1),
