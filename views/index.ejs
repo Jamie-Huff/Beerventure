@@ -2,16 +2,34 @@
 <html lang="en">
   <head>
     <title>Home Page</title>
-
+    <!-- internal css sheets-->
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
     <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
     <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/navbar.css" type="text/css" />
+    <!-- internal javascript-->
 
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
     <script type="text/javascript" src="/scripts/app.js"></script>
   </head>
 
   <body>
+    <nav class="nav-bar">
+      <span id="title">
+        <h1>Beer Venture</h1>
+      </span>
+      <div id="nav-middle">
+      <span id="discover">Discover</span>
+      <span id="favourites">Favourites</span>
+      <span id="messages">Messages</span>
+      <span id="profile">Profile</span>
+      <span id="sell">Sell</span>
+      </div>
+      <span id="sign-up-nav">
+        <button id="sign-up-button">Sign up</button>
+      </span>
+    </nav>
+
     <h1>Hello World!</h1>
   </body>
 </html>
