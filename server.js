@@ -47,31 +47,31 @@ app.use("/api/widgets", widgetsRoutes(db));
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 app.get("/", (req, res) => {
-  res.render("index");
+  res.render("urls_index");
 });
 
 app.get("/discover", (req, res) => {
-  res.render("discover");
+  res.render("urls_discover");
 });
 
 app.get("/favourites", (req, res) => {
-  res.render("favourites");
+  res.render("urls_favourites");
 });
 
 app.get("/messages", (req, res) => {
-  res.render("messages");
+  res.render("urls_messages");
 });
 
 app.get("/profile", (req, res) => {
-  res.render("profile");
+  res.render("urls_profile");
 });
 
 app.get("/sell", (req, res) => {
-  res.render("index");
+  res.render("urls_sell");
 });
 
 app.get("/login", (req, res) => {
-  res.render("index");
+  res.render("urls_sell");
 });
 
 
