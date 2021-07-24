@@ -1,4 +1,4 @@
--- DROP TABLE IF EXISTS items_for_sale CASCADE;
+DROP TABLE IF EXISTS items_for_sale CASCADE;
 
 -- ITEMS FOR SALE
 CREATE TABLE items_for_sale (

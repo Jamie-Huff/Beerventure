@@ -1,4 +1,4 @@
--- DROP TABLE IF EXISTS favourites CASCADE;
+DROP TABLE IF EXISTS favourites CASCADE;
 
 -- FAVOURITES
 CREATE TABLE favourites (
