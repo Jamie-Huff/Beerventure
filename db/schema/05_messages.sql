@@ -5,6 +5,5 @@ CREATE TABLE messages (
   id SERIAL PRIMARY KEY NOT NULL,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   vendor_id INTEGER REFERENCES vendors(id) ON DELETE CASCADE,
-  price INTEGER REFERENCES items_for_sale(price) ON DELETE CASCADE,
   message TEXT
 );
