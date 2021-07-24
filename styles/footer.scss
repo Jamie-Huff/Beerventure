@@ -1,0 +1,23 @@
+footer {
+
+  display: flex;
+  justify-content: space-evenly;
+
+  .copyright {
+    position: absolute;
+    left: 13.89%;
+    right: 79.44%;
+    top: 46.67%;
+    bottom: 48.07%;
+
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+
+    color: #000000;
+
+  }
+}
+
