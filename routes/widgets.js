@@ -13,10 +13,8 @@ const router  = express.Router();
 module.exports = (db) => {
   router.get("/", (req, res) => {
     let query = `SELECT * FROM items_for_sale`;
-    console.log(query);
     return db.query(query)
       .then(data => {
-        console.log(data.rows)
         const items = data.rows;
         return res.json({ items });
       })
