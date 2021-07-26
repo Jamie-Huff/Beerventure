@@ -27,15 +27,18 @@
       <% for (const product of products) { %>
 
         <div class="featured-items">
+
           <h4>Featured Item</h4>
           <p class="prod-name"> <%= product.name %> </p>
           <img class="product-image" src=<%= product.image %>
           <p> <%= product.category %> </p>
           <p><%= product.price %> </p>
           <button id="more-info">Tell Me More</button>
+
         </div>
 
       <% } %>
+
     </div>
 
     </main>
