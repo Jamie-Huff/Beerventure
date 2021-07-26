@@ -8,6 +8,10 @@ const pool = new Pool({
 });
 
 
+// const bcrypt = require('bcrypt');
+// const saltRounds = 10;
+
+
 /// ----------------------------------------------------- Users
 
 const getUserByEmail = function(email) {
@@ -17,4 +21,6 @@ const getUserByEmail = function(email) {
     .catch(err => console.error('query error', err.stack));
 };
 exports.getUserByEmail = getUserByEmail;
+
+// const authenticateUser =
 
