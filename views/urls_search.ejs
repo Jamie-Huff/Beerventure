@@ -38,20 +38,23 @@
   </form>
 </div>
 
+<% for (const item of items) { %>
 <div class="search-result">
+
   <div class="image">
     <picture>
       <img id="search-image" src="/images/budlight.jpg" alt="beer can">
   </picture>
 </div>
 <div class="info-container">
-  <p>title</p>
-  <p>price</p>
-  <p>date</p>
+  <p><%= item.name %></p>
+  <p><%= item.price %></p>
+  <p><%= item.date_posted %></p>
+  <p><%= item.category %> </p>
 </div>
 
 </div>
-
+<% } %>
 
   <!-- your content here... -->
 
@@ -61,5 +64,6 @@
 
 
 </body>
+
 
 </html>
