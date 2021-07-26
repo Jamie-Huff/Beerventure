@@ -54,9 +54,8 @@ module.exports = (db) => {
 
           // if user does exist in DB and password matches (data === userDBObject)
           if (data) {
-            console.log("here on 55");
-            console.log("data, line 56: ", data);
-            console.log("products, line 57: ", products);
+            console.log("data, line 57: ", data);
+            console.log("products, line 58: ", products);
             return res.render("../views/urls_index", { templateVars });
           }
         })
@@ -83,10 +82,10 @@ module.exports = (db) => {
     const {email, password} = req.body;
 
     // BEGIN moving contents of old login function inside the post request
-    db.query(`SELECT * FROM users WHERE email = $1;`, [email])
+    getUserByEmail(email)
     .then(res => {
       if (res.rows[0]) {
-        console.log('res.rows[0] from inside login function: ', res.rows[0]);
+        // console.log('res.rows[0] from inside login function: ', res.rows[0]);
         return res.rows[0]
       }
       return null
