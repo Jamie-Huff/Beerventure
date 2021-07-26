@@ -30,16 +30,13 @@ module.exports = (db) => {
   router.get("/", (req, res) => {
     // get user email from session cookie
     const userEmail = req.session.userId;
-    // get userObject from database, based on user email from session cookie
-    // const userDBObject = getUserByEmail(userEmail);
-    // const featuredProducts = getFeaturedProducts();
 
+    // helper function to retrieve userObject from DB
     getUserByEmail(userEmail)
       .then(data => {
-        console.log("here on 39");
         console.log('data: ', data);
 
-        const featuredProducts = getFeaturedProducts();
+        // helper function to retrieve products from DB
         getFeaturedProducts()
         .then(products => {
           console.log('products line 46: ', products)

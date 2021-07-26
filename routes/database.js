@@ -35,7 +35,7 @@ const getFeaturedProducts = function() {
   // Make this modular so 3 different sets of products are returned for different user types?
 
   return pool
-    .query(`SELECT * FROM items_for_sale WHERE featured=TRUE`)
+    .query(`SELECT * FROM items WHERE featured=TRUE`)
     .then(res => res.rows[0] ? res.rows[0] : null)
     .catch(err => console.error('query error', err.stack));
 }
