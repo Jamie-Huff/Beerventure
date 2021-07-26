@@ -20,7 +20,7 @@ module.exports = (db) => {
   router.post("/", (req, res) => {
     console.log(req.body)
     const city = req.body.city
-    let query = `SELECT name, city FROM vendors WHERE $1 = city`
+    let query = `SELECT city FROM vendors WHERE city = $1`
     console.log(city)
     return db.query(query, [city])
       .then(data => {
