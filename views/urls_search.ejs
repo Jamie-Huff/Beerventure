@@ -1,0 +1,65 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <!-- internal css -->
+  <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+  <link rel="stylesheet" href="/styles/searchPage.css" type="text/css" />
+  <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+  <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+  <!-- internal js -->
+
+  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+  <script type="text/javascript" src="/scripts/app.js"></script>
+
+
+
+  <!-- external css -->
+
+  <!-- external js -->
+
+</head>
+
+<body>
+  <%- include('partials/_navbar') %>
+
+  <div class ="search-bar">
+  <form action="/search" method="POST" id="search-form" class="search-form">
+    <div class="search-form-box">
+      <label for="search-form-box">Lets see whats to drink in your city!</label>
+      <input type="text" name="city" placeholder="City" id="search-city">
+    </div>
+
+    <div class="search-property-form__field-wrapper">
+        <button type="submit">Search</button>
+        <a id="search-property-form__cancel"href="#">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<div class="search-result">
+  <div class="image">
+    <picture>
+      <img id="search-image" src="/images/budlight.jpg" alt="beer can">
+  </picture>
+</div>
+<div class="info-container">
+  <p>title</p>
+  <p>price</p>
+  <p>date</p>
+</div>
+
+</div>
+
+
+  <!-- your content here... -->
+
+<div id="above-footer">
+</div>
+    <%- include('partials/_footer'); %>
+
+
+</body>
+
+</html>

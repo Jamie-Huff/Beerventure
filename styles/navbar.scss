@@ -1,12 +1,13 @@
 .nav-bar {
+  z-index: 100;
   display: flex;
   justify-content: space-between;
-  align-items: center;;
-  position: fixed;
+  align-items: center;
+  position: relative;
   top: 0;
   height: 60px;
   width: 100%;
-  margin: 0;
+  margin: 0px;
   background-color: grey;
 }
 
@@ -35,7 +36,6 @@
 	text-decoration: none;
 	background: black;
 	padding: 10px;
-	display: inline-block;
 	border: none;
 	transition: all 0.4s ease 0s;
 }
@@ -48,6 +48,29 @@
 	box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
 	transition: all 0.4s ease 0s;
 }
+
+.nav-bar #sign-in-button {
+  margin-right: 20px;
+  color: #fff;
+	text-transform: uppercase;
+	text-decoration: none;
+	background: black;
+	padding: 10px;
+	border: none;
+	transition: all 0.4s ease 0s;
+  float: right;
+}
+
+.nav-bar #sign-in-button:hover {
+	background: #434343;
+	letter-spacing: 1px;
+	-webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+	-moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+	box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+	transition: all 0.4s ease 0s;
+}
+
+
 
 .nav-bar-links {
   color: black;
