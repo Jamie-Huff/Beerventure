@@ -7,7 +7,6 @@ $(() => {
   //     $("<div>").text(user.name).appendTo($("body"));
   //   }
   // });;
-  console.log('loaded')
     $("#search-city").submit((event) => {
       event.preventDefault()
         $.ajax({
@@ -20,6 +19,5 @@ $(() => {
     console.log(error)
   })
     })
-
 });
 
