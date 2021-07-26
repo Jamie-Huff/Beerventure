@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const sass       = require("node-sass-middleware");
 const app        = express();
 const morgan     = require('morgan');
+const cookieSession = require('cookie-session');
 
 // PG database client/connection setup
 const { Pool } = require('pg');
@@ -31,11 +32,18 @@ app.use("/styles", sass({
 }));
 app.use(express.static("public"));
 
+// add cookie session
+app.use(cookieSession({
+  name: 'session',
+  keys: ['beer', 'cider']
+}));
+
 // Separated Routes for each Resource
 // Note: Feel free to replace the example routes below with your own
 const usersRoutes = require("./routes/users");
 const widgetsRoutes = require("./routes/widgets");
 const homepage = require("./routes/userRoutes");
+
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 app.use("/api/users", usersRoutes(db));
@@ -66,29 +74,29 @@ app.use("/", homepage(db));
 //   res.render("urls_index")
 // });
 
-app.get("/discover", (req, res) => {
-  res.render("urls_discover");
-});
+// app.get("/discover", (req, res) => {
+//   res.render("urls_discover");
+// });
 
-app.get("/favourites", (req, res) => {
-  res.render("urls_favourites");
-});
+// app.get("/favourites", (req, res) => {
+//   res.render("urls_favourites");
+// });
 
-app.get("/messages", (req, res) => {
-  res.render("urls_messages");
-});
+// app.get("/messages", (req, res) => {
+//   res.render("urls_messages");
+// });
 
-app.get("/profile", (req, res) => {
-  res.render("urls_profile");
-});
+// app.get("/profile", (req, res) => {
+//   res.render("urls_profile");
+// });
 
-app.get("/sell", (req, res) => {
-  res.render("urls_sell");
-});
+// app.get("/sell", (req, res) => {
+//   res.render("urls_sell");
+// });
 
-app.get("/login", (req, res) => {
-  res.render("urls_sell");
-});
+// app.get("/login", (req, res) => {
+//   res.render("urls_sell");
+// });
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);

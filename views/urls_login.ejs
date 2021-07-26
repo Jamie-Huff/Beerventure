@@ -16,9 +16,33 @@
 
 <body>
   <%- include('partials/_navbar') %>
+  <br>
+  <br>
   <h1>Login Page</h1>
   <!-- your content here... -->
-  <script src="js/scripts.js"></script>
+
+  <main>
+
+    <h3>Welcome Back</h3>
+
+    <form method="POST" action="/login">
+      <input type="email" name="email" placeholder="email"/>
+      <br>
+      <input type="password" name="password" placeholder="password"/>
+      <br>
+      <button type="submit">Login</button>
+    </form>
+
+    <br>
+
+    <h5 style="padding-top: 2em;">Don't have an account?</h5>
+    <button class="btn btn-info" style="margin-top: 1em; padding-left: 20px; padding-right: 20px;"onclick="window.location.href='/register';">Register</button>
+
+  </main>
+
+
+
+
 
 
     <%- include('partials/_footer'); %>
