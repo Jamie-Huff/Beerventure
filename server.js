@@ -44,11 +44,13 @@ const usersRoutes = require("./routes/users");
 const featuredItems = require("./routes/featuredItemsRoutes");
 const homepage = require("./routes/userRoutes");
 const search = require("./routes/vendors")
+const messages = require(("./routes/messagesRoutes"))
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 app.use("/api/users", usersRoutes(db));
 app.use("/", featuredItems(db));
 app.use("/", homepage(db));
+app.use("/api/messages", messages(db));
 app.use("/search", search(db));
 // Note: mount other resources here, using the same pattern above
 
