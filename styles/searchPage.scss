@@ -12,12 +12,13 @@
   height: 250px;
 }
 
-#above-footer {
-  margin-top: 20px;
-}
-
 #search-image {
   height: 100px;
   float: left;
   margin: 1em;
+}
+
+.info-container {
+  border: 2px solid black;
+  height: 100%;
 }

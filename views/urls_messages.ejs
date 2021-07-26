@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <!-- internal css -->
-  <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+  <link rel="stylesheet" href="/styles/messages.css" type="text/css" />
 
   <!-- internal js -->
   <!-- <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script> -->
@@ -18,9 +18,31 @@
   <%- include('partials/_navbar') %>
   <h1>Messages Page</h1>
   <!-- your content here... -->
+  <% for (let message of messages) { %>
+
+  <div class="message-page">
+    <!-- <tr>
+      <td><th scope="col">Conversations</th></td>
+      <td><th scope="col">Messages</th></td>
+    </tr> -->
 
 
-    <%- include('partials/_footer'); %>
+      <div class="sidebar">
+        <td><p>Vendor Name</p></td>
+        <td><a href='#'><%= message.name %></a></td>
+      </div>
+
+      <div class="convos">
+        <td><p><%= message.message %></p></td>
+      </div>
+
+    <!-- </tr> -->
+
+  </div>
+  <% } %>
+
+
+  <%- include('partials/_footer'); %>
 
 
 </body>

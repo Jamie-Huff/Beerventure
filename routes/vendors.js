@@ -20,13 +20,19 @@ module.exports = (db) => {
   router.post("/", (req, res) => {
     console.log(req.body)
     const city = req.body.city
-    let query = `SELECT city FROM vendors WHERE city = $1`
+    let query = `
+    SELECT price, items_for_sale.name, category, vendors.city as city, date_posted
+    FROM items_for_sale
+    JOIN vendors ON vendors.id = posted_by
+    WHERE city = $1
+    `
     console.log(city)
     return db.query(query, [city])
       .then(data => {
         const items = data.rows;
         console.log(items)
-        return res.json({ items });
+        // return res.json({ items });
+        res.render('urls_search', {items})
       })
       .catch(err => {
         res
