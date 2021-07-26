@@ -36,11 +36,13 @@ app.use(express.static("public"));
 const usersRoutes = require("./routes/users");
 const widgetsRoutes = require("./routes/widgets");
 const homepage = require("./routes/userRoutes");
+const search = require("./routes/search");
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 app.use("/api/users", usersRoutes(db));
 app.use("/api/widgets", widgetsRoutes(db));
 app.use("/", homepage(db));
+app.use("/search", search(db));
 // Note: mount other resources here, using the same pattern above
 
 // app.use('/', (req, res, next) => {//app.use works for EVERYTHING (get, post)
@@ -66,9 +68,9 @@ app.use("/", homepage(db));
 //   res.render("urls_index")
 // });
 
-app.get("/search", (req, res) => {
-  res.render("urls_search");
-});
+// app.get("/search", (req, res) => {
+//   res.render("urls_search");
+// });
 
 app.get("/favourites", (req, res) => {
   res.render("urls_favourites");
