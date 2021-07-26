@@ -1,0 +1,87 @@
+.hero {
+  background-image: linear-gradient(0deg, rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('../images/claude-piche-EHbtjmz7hvw-unsplash.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  height: 500px;
+  left: 0px;
+  margin-top: 60px;
+  width: 100%;
+}
+
+.hero-content {
+  align-items: center;
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  margin: 8%;
+  justify-content: center;
+}
+
+.hero-left {
+  align-content: center;
+  display: flex;
+  color: whitesmoke;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-width: 50%;
+
+  h2 {
+    font-size: 2.5em;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 0;
+    padding-bottom: 1em;
+  }
+
+  p {
+  margin-right: 5em;
+  }
+}
+
+.hero-right {
+  color: whitesmoke;
+  display: flex;
+  height: 200px;
+  width: 40%;
+}
+
+.hero-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.auto-location-result {
+  align-self: flex-end;
+  font-size: 1.5em;
+}
+
+.hero-form {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.hero-text-field {
+  filter: drop-shadow(4px 4px 4px rgba(0,0,0,0.25));
+  height: 2em;
+  margin-top: 1em;
+  resize: none;
+}
+
+::placeholder {
+  font-size: 1.2em;
+  text-align: right;
+}
+
+.btn {
+  align-self: flex-end;
+  background-color: #4b4b4b;
+  border: 0;
+  border-radius: 3px;
+  color: white;
+  filter: drop-shadow(4px 4px 4px rgba(0,0,0,0.25));
+  height: 30px;
+  margin-top: 1em;
+  width: 50%;
+}

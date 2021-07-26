@@ -9,13 +9,14 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (db) => {
+
   router.get("/", (req, res) => {
-    let query = `SELECT * FROM widgets`;
-    console.log(query);
+    let query = `SELECT * FROM items_for_sale WHERE featured=TRUE`;
     db.query(query)
       .then(data => {
-        const widgets = data.rows;
-        res.json({ widgets });
+        const products = data.rows;
+        // console.log(products)
+        res.render("urls_index", {products})
       })
       .catch(err => {
         res

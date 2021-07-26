@@ -20,7 +20,7 @@ db.connect();
 // 'dev' = Concise output colored by response status for development use.
 //         The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
 app.use(morgan('dev'));
-
+app.set('views', './views');
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/styles", sass({
@@ -34,22 +34,63 @@ app.use(express.static("public"));
 // Separated Routes for each Resource
 // Note: Feel free to replace the example routes below with your own
 const usersRoutes = require("./routes/users");
-const widgetsRoutes = require("./routes/featuredItemsRoutes");
-
+const featuredItemsRoutes = require("./routes/featuredItemsRoutes");
+const homepage = require("./routes/userRoutes");
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 app.use("/api/users", usersRoutes(db));
-app.use("/api/featuredItemsRoutes", widgetsRoutes(db));
+app.use("/", featuredItemsRoutes(db));
+app.use("/", homepage(db));
 // Note: mount other resources here, using the same pattern above
+
+// app.use('/', (req, res, next) => {//app.use works for EVERYTHING (get, post)
+//   const userID = req.session.user_id;
+//   const whiteList = ['/urls', '/login', '/register', '/logout'];
+//   if (users[userID]) { //check if we have userID (from cookie from registering) in our user database
+//     next(); //goes to next http request
+//   } else if (whiteList.includes(req.path) || req.path.startsWith('/u/')) {
+//     next();
+//   } else {
+//     res.redirect('/urls'); //if not, redirect to homepage
+//   }
+// });
+
 
 
 // Home page
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
-app.get("/", (req, res) => {
-  res.render("index");
+
+
+// app.get("/", (req, res) => {
+//   res.render("urls_index")
+// });
+
+app.get("/discover", (req, res) => {
+  res.render("urls_discover");
+});
+
+app.get("/favourites", (req, res) => {
+  res.render("urls_favourites");
+});
+
+app.get("/messages", (req, res) => {
+  res.render("urls_messages");
+});
+
+app.get("/profile", (req, res) => {
+  res.render("urls_profile");
+});
+
+app.get("/sell", (req, res) => {
+  res.render("urls_sell");
+});
+
+app.get("/login", (req, res) => {
+  res.render("urls_sell");
 });
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
+

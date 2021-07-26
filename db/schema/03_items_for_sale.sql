@@ -8,7 +8,7 @@ CREATE TABLE items_for_sale (
   price INTEGER NOT NULL,
   posted_by INTEGER REFERENCES vendors(id) ON DELETE CASCADE,
   sold BOOLEAN DEFAULT FALSE,
-  date_posted TIMESTAMP DEFAULT date()::now,
+  date_posted TIMESTAMP DEFAULT now(),
   featured BOOLEAN DEFAULT FALSE,
   category VARCHAR(255) NOT NULL,
   abv INTEGER NOT NULL,
