@@ -1,5 +1,5 @@
 const express = require('express');
-const { getUserWithEmail, getUserByEmail } = require('./database');
+const { getUserByEmail, getFeaturedProducts } = require('./database');
 const router  = express.Router();
 // const bcrypt = require('bcrypt');
 
@@ -32,34 +32,47 @@ module.exports = (db) => {
     const userEmail = req.session.userId;
     // get userObject from database, based on user email from session cookie
     const userDBObject = getUserByEmail(userEmail);
-    // console.log('userDBObject: ', userDBObject);
+    const featuredProducts = getFeaturedProducts();
 
     userDBObject
       .then(data => {
+        console.log("here on 39");
+        console.log('data: ', data);
 
-        // if user does exist in DB but password doesn't match (data === null)
-        // or if page is loaded with no existing session cookie (data === null since userEmail = undefined)
-        if (!data) {
-          return res.render("../views/urls_index")
-        }
-
-        // if user does exist in DB and password matches (data === userDBObject)
-        if (data) {
-          console.log('here on 45');
+        const featuredProducts = getFeaturedProducts();
+        featuredProducts
+        .then(products => {
+          console.log('products line 46: ', products)
           const templateVars = {
-            userDBObject
+            userDBObject: data,
+            products: products,
+          };
+          console.log("templateVars: ", templateVars);
+
+          // if user does exist in DB but password doesn't match (data === null)
+          // or if page is loaded with no existing session cookie (data === null since userEmail = undefined)
+          if (!data) {
+            return res.render("../views/urls_index", { templateVars });
           }
-          return res.render("../views/urls_index", templateVars)
-        }
+
+          // if user does exist in DB and password matches (data === userDBObject)
+          if (data) {
+            console.log("here on 55");
+            console.log("data, line 56: ", data);
+            console.log("products, line 57: ", products);
+            return res.render("../views/urls_index", { templateVars });
+          }
+        })
+        .catch((err) => {
+          res.status(500).json({ error: err.message });
+        });
       })
 
       // if user doesn't exist in DB (promise failed to return)
       // change this to a better message
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message })
-      })
+      .catch((err) => {
+        res.status(500).json({ error: err.message });
+      });
   });
 
   // Render Login Page:
@@ -99,7 +112,7 @@ module.exports = (db) => {
             res.send({error: "error"});
             return;
           }
-          console.log('here at 64');
+          console.log('here at 103');
           req.session.userId = user.id;
           // res.send({user: {name: user.name, email: user.email, id: user.id}});
           res.redirect("/")
