@@ -12,17 +12,17 @@
     size: 100px;
   }
 
-  .nonfeatured-items {
+  // .nonfeatured-items {
 
-    border: 1px red solid;
+  //   border: 1px red solid;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  //   display: flex;
+  //   flex-direction: column;
+  //   align-items: center;
 
-    width: 90%;
-    padding-bottom: 1em;
-  }
+  //   width: 90%;
+  //   padding-bottom: 1em;
+  // }
 
   .featured-items {
 
@@ -35,6 +35,10 @@
     width: 90%;
     padding-bottom: 1em;
 
+  }
+
+  .product-image {
+    height: 50%;
   }
 
 }
