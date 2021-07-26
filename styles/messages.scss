@@ -1,12 +1,16 @@
-.messages-page {
+.message-page {
   display: flex;
   border: 1px red solid;
 
   .sidebar {
     display: flex;
+    border: 1px red solid;
+    width: 20%;
   }
 
-  .messages-page {
+  .convo {
     display: flex;
+    border: 1px red solid;
+    width: 80%
   }
 }
