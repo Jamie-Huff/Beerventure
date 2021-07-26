@@ -31,9 +31,8 @@
       <input type="text" name="city" placeholder="City" id="search-city">
     </div>
 
-    <div class="search-property-form__field-wrapper">
+    <div class="search-form">
         <button type="submit">Search</button>
-        <a id="search-property-form__cancel"href="#">Cancel</a>
     </div>
   </form>
 </div>
@@ -47,7 +46,7 @@
 </div>
 <div class="info-container">
   <p><%= item.name %></p>
-  <p><%= item.price %></p>
+  <p>$<%= item.price %></p>
   <p><%= item.date_posted %></p>
   <p><%= item.category %> </p>
 </div>
