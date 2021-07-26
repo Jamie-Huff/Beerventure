@@ -31,16 +31,16 @@ module.exports = (db) => {
     // get user email from session cookie
     const userEmail = req.session.userId;
     // get userObject from database, based on user email from session cookie
-    const userDBObject = getUserByEmail(userEmail);
-    const featuredProducts = getFeaturedProducts();
+    // const userDBObject = getUserByEmail(userEmail);
+    // const featuredProducts = getFeaturedProducts();
 
-    userDBObject
+    getUserByEmail(userEmail)
       .then(data => {
         console.log("here on 39");
         console.log('data: ', data);
 
         const featuredProducts = getFeaturedProducts();
-        featuredProducts
+        getFeaturedProducts()
         .then(products => {
           console.log('products line 46: ', products)
           const templateVars = {
