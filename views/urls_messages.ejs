@@ -7,7 +7,6 @@
 
   <!-- internal js -->
   <!-- <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script> -->
-  <script type="text/javascript" src="/scripts/app.js"></script>
 
   <!-- external css -->
 
@@ -19,19 +18,28 @@
   <%- include('partials/_navbar') %>
   <h1>Messages Page</h1>
   <!-- your content here... -->
+  <% for (let message of messages) { %>
 
   <div class="message-page">
-    <div class="sidebar">
-      <p>person1</p>
-      <p>person2</p>
-    </div>
+    <!-- <tr>
+      <td><th scope="col">Conversations</th></td>
+      <td><th scope="col">Messages</th></td>
+    </tr> -->
 
-    <div class="convos">
-      <p> Message</p>
-      <p> message</p>
-    </div>
+
+      <div class="sidebar">
+        <td><p>Vendor Name</p></td>
+        <td><a href='#'><%= message.name %></a></td>
+      </div>
+
+      <div class="convos">
+        <td><p><%= message.message %></p></td>
+      </div>
+
+    <!-- </tr> -->
 
   </div>
+  <% } %>
 
 
   <%- include('partials/_footer'); %>
