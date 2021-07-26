@@ -12,9 +12,15 @@ const router  = express.Router();
 module.exports = (db) => {
   console.log(db)
   router.get("/", (req, res) => {
-    db.query(`SELECT * FROM messages;`)
+    db.query(`
+    SELECT messages.*, vendors.name as name
+    FROM messages
+    JOIN vendors ON vendor_id = vendors.id
+    ORDER BY vendor_id;
+    `)
       .then(data => {
         const messages = data.rows;
+        console.log(messages);
         res.render("urls_messages", {messages});
       })
       .catch(err => {
