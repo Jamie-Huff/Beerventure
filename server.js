@@ -50,12 +50,7 @@ const messages = require(("./routes/messagesRoutes"))
 app.use("/api/users", usersRoutes(db));
 // app.use("/", featuredItems(db));
 app.use("/", homepage(db));
-<<<<<<< HEAD
 // app.use("/search", search(db));
-=======
-app.use("/api/messages", messages(db));
-app.use("/search", search(db));
->>>>>>> master
 // Note: mount other resources here, using the same pattern above
 
 // app.use('/', (req, res, next) => {//app.use works for EVERYTHING (get, post)
