@@ -21,9 +21,9 @@ module.exports = (db) => {
     console.log(req.body)
     const city = req.body.city
     let query = `
-    SELECT price, items_for_sale.name, category, vendors.city as city, date_posted
-    FROM items_for_sale
-    JOIN vendors ON vendors.id = posted_by
+    SELECT price, items.name, category, vendors.city as city, date_posted
+    FROM items
+    JOIN vendors ON vendors.id = vendor_id
     WHERE city = $1
     `
     console.log(city)
