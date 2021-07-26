@@ -66,8 +66,8 @@ app.use("/", homepage(db));
 //   res.render("urls_index")
 // });
 
-app.get("/discover", (req, res) => {
-  res.render("urls_discover");
+app.get("/search", (req, res) => {
+  res.render("urls_search");
 });
 
 app.get("/favourites", (req, res) => {
