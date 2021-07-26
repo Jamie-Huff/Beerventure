@@ -1,15 +1,18 @@
-const { Pool, Client } = require('pg');
+const { Pool } = require('pg');
+const dbParams = require('../lib/db.js');
 
-const pool = new Pool({
-  user: 'vagrant',
-  password: '123',
-  host: 'localhost',
-  database: 'lightbnb'
+const pool = new Pool(dbParams);
+
+
+pool.connect().then(() => {
+  console.log("Connected");
+}).catch(e => {
+  console.log(e.message);
 });
 
 
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
+// const bcrypt = require('bcrypt');
+// const saltRounds = 10;
 
 
 /// ----------------------------------------------------- Users
@@ -23,9 +26,6 @@ const getUserByEmail = function(email) {
 exports.getUserByEmail = getUserByEmail;
 
 // const authenticateUser =
-
-
-
 
 
 

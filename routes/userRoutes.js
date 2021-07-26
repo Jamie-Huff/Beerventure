@@ -31,34 +31,52 @@ module.exports = (db) => {
     // get user email from session cookie
     const userEmail = req.session.userId;
 
-    // helper function to retrieve userObject from DB
-    getUserByEmail(userEmail)
-      .then(data => {
-        console.log('data: ', data);
-
-        // helper function to retrieve products from DB
-        getFeaturedProducts()
+    // Anonymous user landing on homepage
+    if (!userEmail) {
+      getFeaturedProducts()
         .then(products => {
-          console.log('products line 46: ', products)
           const templateVars = {
-            userDBObject: data,
+            userObject: null,
             products: products,
           };
           console.log("templateVars: ", templateVars);
-
-          // if user does exist in DB but password doesn't match (data === null)
-          // or if page is loaded with no existing session cookie (data === null since userEmail = undefined)
-          if (!data) {
-            return res.render("../views/urls_index", { templateVars });
-          }
-
-          // if user does exist in DB and password matches (data === userDBObject)
-          if (data) {
-            console.log("data, line 57: ", data);
-            console.log("products, line 58: ", products);
-            return res.render("../views/urls_index", { templateVars });
-          }
+          return res.render("../views/urls_index", { templateVars });
         })
+        .catch((err) => {
+          res.status(500).json({ error: err.message });
+        });
+    };
+
+    getUserByEmail(userEmail)
+    .then(result => console.log('result: ', result))
+
+    // helper function to retrieve userObject from DB
+    getUserByEmail(userEmail)
+      .then(data => {
+
+          // helper function to retrieve products from DB
+          getFeaturedProducts()
+          .then(products => {
+            // console.log('products line 46: ', products)
+            const templateVars = {
+              userObject: data,
+              products: products,
+            };
+            console.log("templateVars: ", templateVars);
+
+            // if user does exist in DB but password doesn't match (data === null)
+            // or if page is loaded with no existing session cookie (data === null since userEmail = undefined)
+            if (!data) {
+              return res.render("../views/urls_index", { templateVars });
+            }
+
+            // if user does exist in DB and password matches (data === userDBObject)
+            if (data) {
+              console.log("data, line 57: ", data);
+              // console.log("products, line 58: ", products);
+              return res.render("../views/urls_index", { templateVars });
+            }
+          })
         .catch((err) => {
           res.status(500).json({ error: err.message });
         });
