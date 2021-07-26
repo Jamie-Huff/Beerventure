@@ -27,9 +27,10 @@
         <% for (let product of products) { %>
         <div class="featured-items">
           <h4>Featured Item</h4>
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbkkyJGwx9BmQTj5B1yffXqc0j_uxoDA49Ew&usqp=CAU">
           <p>Product Name</p>
           <%= product.name %>
+          <img class="product-image" src=<%= product.image %> >
+
           <p>Category</p>
           <%= product.category %>
           <p>Price</p>
