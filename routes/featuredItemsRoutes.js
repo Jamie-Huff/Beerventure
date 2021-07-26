@@ -11,12 +11,14 @@ const router  = express.Router();
 
 
 module.exports = (db) => {
+
   router.get("/", (req, res) => {
-    let query = `SELECT * FROM items_for_sale`;
-    return db.query(query)
+    let query = `SELECT * FROM items_for_sale WHERE featured=TRUE`;
+    db.query(query)
       .then(data => {
-        const items = data.rows;
-        return res.json({ items });
+        const products = data.rows;
+        // console.log(products)
+        res.render("urls_index", {products})
       })
       .catch(err => {
         res
