@@ -74,31 +74,18 @@ module.exports = (db) => {
 
   // Render Login Page:
   router.get("/login", (req, res) => {
-    // const userEmail = req.session.user_id;
-    // db.query(`SELECT * FROM users WHERE email = $1;`, [email])
-    // .then(res => {
-    //   if (res.rows[0]) {
-    //     console.log('here at 53');
-    //     console.log('res.rows[0] from inside login function: ', res.rows[0]);
-    //     return res.rows[0]
-    //   }
-    //   return null
-    // })
-    // give error message and render
+    // TO ADD: Check if session cookie exists, render urls_index instead
     res.render("../views/urls_login")
   });
 
 
   router.post('/login', (req, res) => {
-    // console.log(req.body);
-
     const {email, password} = req.body;
 
     // BEGIN moving contents of old login function inside the post request
     db.query(`SELECT * FROM users WHERE email = $1;`, [email])
     .then(res => {
       if (res.rows[0]) {
-        console.log('here at 53');
         console.log('res.rows[0] from inside login function: ', res.rows[0]);
         return res.rows[0]
       }
@@ -109,37 +96,13 @@ module.exports = (db) => {
             res.send({error: "error"});
             return;
           }
-          console.log('here at 103');
           req.session.userId = user.id;
           // res.send({user: {name: user.name, email: user.email, id: user.id}});
           res.redirect("/")
         })
     .catch(err => console.error('query error', err.stack));
     // END moving contents of old login function inside the post request
-
-
-        // OLD METHOD - DIDN'T WORK ASYNC
-    // login(email, password)
-    //   .then(res => console.log('res result line 49: ', res))
-    // console.log('result of login: ', login(email, password));
-
-    // login(email, password)
-    //   .then(res => console.log('res from inside post request: ', res))
-    //   .then(user => {
-    //     if (!user) {
-    //       res.send({error: "error"});
-    //       return;
-    //     }
-    //     console.log('here');
-    //     req.session.userId = user.id;
-    //     res.send({user: {name: user.name, email: user.email, id: user.id}});
-    //   })
-    //   .catch(e => res.send(e));
   });
-
-
-
-
 
   return router;
 };
