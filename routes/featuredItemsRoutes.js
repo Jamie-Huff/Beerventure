@@ -11,7 +11,7 @@ const router  = express.Router();
 module.exports = (db) => {
 
   router.get("/", (req, res) => {
-    let query = `SELECT * FROM items_for_sale WHERE featured=TRUE`;
+    let query = `SELECT * FROM items WHERE featured=TRUE`;
     db.query(query)
       .then(data => {
         const products = data.rows;
