@@ -3,20 +3,19 @@
  * Since this file is loaded in server.js into api/messages,
  *   these routes are mounted onto /users
  * See: https://expressjs.com/en/guide/using-middleware.html#middleware.router
- */
+*/
 
 const express = require('express');
 const router  = express.Router();
 const { getUserByEmail, getVendorByEmail } = require('./database');
 
 module.exports = (db) => {
-  // console.log(db)
 
   router.get("/", (req, res) => {
-    console.log(req.session);
-    const user_id = req.session.user_id
-    if (!user_id) {
-      res.render("../views/urls_messages", {user_id})
+    const userEmail = req.session.userId
+    console.log(userEmail);
+    if (!userEmail) {
+      res.render("../views/urls_messages", {userEmail})
     }
     res.redirect('/:user_id');
   })
@@ -37,7 +36,6 @@ module.exports = (db) => {
     })
 
 
-
     const reply = {}
     return db.query(`
     SELECT messages.*, vendors.name as name
@@ -45,7 +43,7 @@ module.exports = (db) => {
     JOIN vendors ON vendor_id = vendors.id
     WHERE user_id = $1
     ORDER BY vendor_id;
-    `, [user_id])
+    `, [userEmail])
     .then(data => {
       const messages = data.rows;
       const exists = [];
@@ -91,9 +89,7 @@ module.exports = (db) => {
     `, [user_id, reply.vendor_id, reply.text])
     .then(data => {
       const messages = data.rows;
-      // console.log(messages);
       return res.redirect(`/messages/${user_id}`)
-      // res.render("../views/urls_messages", { messages, reply, user_id })
     })
     .catch(err => {
       res
