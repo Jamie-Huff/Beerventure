@@ -1,21 +1,16 @@
 const express = require('express');
 const router  = express.Router();
-const { getUserByEmail, getFeaturedProducts } = require('./database');
+const { getUserByEmail, getFeaturedProducts, getVendorByEmail } = require('./database');
 
 // Move these two if authenticateUser() moves:
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-// Helper Functions (Not DB calls) - could be moved to a different file
-const authenticateUser = function(entered, userObject) {
-  return bcrypt.compareSync(entered, userObject.password)
-}
-
 
 module.exports = (db) => {
 
   // ---------------------------------------------- HOMEPAGE (RENDER w PRODUCTS & CHECK FOR SESSION COOKIE)
-  router.get("/", (req, res) => {
+  router.get('/', (req, res) => {
     // get user email from session cookie
     const userEmail = req.session.userId;
 
@@ -76,7 +71,7 @@ module.exports = (db) => {
     // ---------------------------------------------- LOG IN (RENDER)
 
   // Render Login Page:
-  router.get("/login", (req, res) => {
+  router.get('/login', (req, res) => {
     // -----------------------------------TO DO: check if session cookie exists, render urls_index instead (or profile?)
     res.render("../views/urls_login")
   });

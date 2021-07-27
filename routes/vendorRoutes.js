@@ -1,21 +1,20 @@
 const express = require('express');
 const router  = express.Router();
-const { getUserByEmail, getFeaturedProducts } = require('./database');
+const { getVendorByEmail, getVendorsProducts } = require('./database');
 
 // Move these two if authenticateUser() moves:
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-// Helper Functions (Not DB calls) - could be moved to a different file
-const authenticateUser = function(entered, userObject) {
-  return bcrypt.compareSync(entered, userObject.password)
-}
-
 
 module.exports = (db) => {
 
   // ---------------------------------------------- HOMEPAGE (RENDER w PRODUCTS & CHECK FOR SESSION COOKIE)
-  router.get("/vendorsLoggedIn", (req, res) => {
+  router.get("/vendors", (req, res) => {
+
+    // Temporary:
+    return res.render("../views/urls_index");
+
     // get user email from session cookie
     const userEmail = req.session.userId;
 
@@ -25,12 +24,11 @@ module.exports = (db) => {
     };
 
     // Session cookie does exist
-    // helper function to retrieve userObject from DB
-    getUserByEmail(userEmail)
+    // helper function to retrieve vendorObject from DB
+    getVendorByEmail(userEmail)
       .then(data => {
-
-          // helper function to retrieve products from DB
-          getFeaturedProducts()
+          // helper function to retrieve only the vendor's products from DB
+          getVendorsProducts(userEmail)
           .then(products => {
             const templateVars = {
               userObject: data,
@@ -62,39 +60,16 @@ module.exports = (db) => {
   });
 
     // ---------------------------------------------- LOG IN (RENDER)
-
-  // Render Login Page:
-  router.get("/login", (req, res) => {
-    // -----------------------------------TO DO: check if session cookie exists, render urls_index instead (or profile?)
-    res.render("../views/urls_login")
-  });
-
-    // ---------------------------------------------- LOG IN (POST)
-
-	// On login button submit
-  router.post('/login', (req, res) => {
-    const {email, password} = req.body;
-
-    // -----------------------------------TO DO: Provide user with an error if password isn't valid
-
-    // THIS NEEDS TO BE FIXED:
-    getUserByEmail(email)
-    .then(res => bcrypt.compare(password, res.password))
-    .then(compare => {
-      compare ? req.session.userId = res.id : null
-      compare ? res.redirect("/") : res.redirect("/login")
-    })
-    .catch(err => console.error('query error', err.stack));
+    // unnecessary. vendors and users can share a log in form
 
 
+    // ---------------------------------------------- LOG OUT (UNSURE IF THIS IS STILL NECESSARY. DON'T THINK SO)
+    // router.post('/logout', (req, res) => {
+    //   req.session.userId = null;
+    //   res.redirect("/")
+    // });
 
-    // ---------------------------------------------- LOG OUT
-    router.post('/logout', (req, res) => {
-      req.session.userId = null;
-      res.redirect("/")
-    });
-
-  });
+  // });
 
 
   return router;
