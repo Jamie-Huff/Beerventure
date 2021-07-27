@@ -7,19 +7,36 @@
 
 const express = require('express');
 const router  = express.Router();
+const { getUserByEmail, getVendorByEmail } = require('./database');
 
 module.exports = (db) => {
   // console.log(db)
 
   router.get("/", (req, res) => {
-    const user_id = req.params.user_id
+    console.log(req.session);
+    const user_id = req.session.user_id
     if (!user_id) {
-      res.render("../views/urls_messages", { user_id })
+      res.render("../views/urls_messages", {user_id})
     }
+    res.redirect('/:user_id');
   })
 
   router.get("/:user_id", (req, res) => {
-    const user_id = req.params.user_id
+    const userEmail = req.session.userId;
+
+    getUserByEmail(userEmail)
+    .then (userInfo => {
+      getVendorByEmail(userInfo.email)
+      .then(vendorInfo => {
+        if (userInfo | vendorInfo) {
+          console.log(userInfo)
+          console.log(vendorInfo)
+
+        }
+      })
+    })
+
+
 
     const reply = {}
     return db.query(`
