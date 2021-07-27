@@ -19,7 +19,6 @@ module.exports = (db) => {
   });
 
   router.post("/", (req, res) => {
-    console.log(req.body)
     const city = req.body.city
     let query = `
     SELECT price, items.name, category, vendors.city as city, date_posted, image, vendors.name as vendor

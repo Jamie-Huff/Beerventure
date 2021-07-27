@@ -13,7 +13,7 @@ module.exports = (db) => {
   router.get("/vendors", (req, res) => {
 
     // Temporary:
-    return res.render("../views/urls_index");
+    // return res.render("../views/urls_index");
 
     // get user email from session cookie
     const userEmail = req.session.userId;
