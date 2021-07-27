@@ -58,17 +58,6 @@ app.use("/search", search(db));
 app.use("/messages", messages(db));
 // Note: mount other resources here, using the same pattern above
 
-// app.use('/', (req, res, next) => {//app.use works for EVERYTHING (get, post)
-//   const userID = req.session.user_id;
-//   const whiteList = ['/urls', '/login', '/register', '/logout'];
-//   if (users[userID]) { //check if we have userID (from cookie from registering) in our user database
-//     next(); //goes to next http request
-//   } else if (whiteList.includes(req.path) || req.path.startsWith('/u/')) {
-//     next();
-//   } else {
-//     res.redirect('/urls'); //if not, redirect to homepage
-//   }
-// });
 
 
 
@@ -76,34 +65,6 @@ app.use("/messages", messages(db));
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 
-
-// app.get("/", (req, res) => {
-//   res.render("urls_index")
-// });
-
-// app.get("/discover", (req, res) => {
-//   res.render("urls_discover");
-// });
-
-// app.get("/favourites", (req, res) => {
-//   res.render("urls_favourites");
-// });
-
-// app.get("/messages", (req, res) => {
-//   res.render("urls_messages");
-// });
-
-// app.get("/profile", (req, res) => {
-//   res.render("urls_profile");
-// });
-
-// app.get("/sell", (req, res) => {
-//   res.render("urls_sell");
-// });
-
-// app.get("/login", (req, res) => {
-//   res.render("urls_sell");
-// });
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);

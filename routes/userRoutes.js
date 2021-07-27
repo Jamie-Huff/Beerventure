@@ -13,10 +13,9 @@ module.exports = (db) => {
   router.get('/', (req, res) => {
     // get user email from session cookie
     const user = req.session.user;
-    const userEmail = user.email;
 
     // Anonymous user landing on homepage - no session cookie
-    if (!userEmail) {
+    if (!user) {
       // helper function to retrieve products from DB
       getFeaturedProducts()
         .then(products => {
@@ -29,49 +28,42 @@ module.exports = (db) => {
         .catch((err) => {
           res.status(500).json({ error: err.message });
         });
-    };
+    } else {
 
-    // Session cookie does exist
-    // helper function to retrieve userObject from DB
-    getUserByEmail(userEmail)
-      .then(data => {
-
-          // helper function to retrieve products from DB
-          getFeaturedProducts()
-          .then(products => {
-            const templateVars = {
-              userObject: data,
-              products: products,
-            };
-
-            // if user does exist in DB but password doesn't match (data === null)
-            // -----------------------------------TO DO: should be updated to better output (failure message)
-            if (!data) {
-              return res.render("../views/urls_index", templateVars);
-            }
-
-            // if user does exist in DB and password matches (data === userDBObject)
-            if (data) {
-              return res.render("../views/urls_index", templateVars);
-            }
-          })
-        .catch((err) => {
-          res.status(500).json({ error: err.message });
-        });
+      // Session cookie does exist
+      // helper function to retrieve products from DB
+      getFeaturedProducts()
+      .then(products => {
+        const templateVars = {
+          userObject: user,
+          products: products,
+        };
+        // if user does exist in DB but password doesn't match (user === null)
+        // -----------------------------------TO DO: should be updated to better output (failure message)
+        if (!user) {
+          return res.render("../views/urls_index", templateVars);
+        }
+        // if user does exist in DB and password matches (data === userDBObject)
+        if (user) {
+          return res.render("../views/urls_index", templateVars);
+        }
       })
-
-      // if user doesn't exist in DB (promise failed to return)
-      // -----------------------------------TO DO: Prompt user to sign up / redirect to sign up
       .catch((err) => {
         res.status(500).json({ error: err.message });
       });
+    };
   });
 
     // ---------------------------------------------- LOG IN (RENDER)
 
   // Render Login Page:
   router.get('/login', (req, res) => {
-    // -----------------------------------TO DO: check if session cookie exists, render urls_index instead (or profile?)
+    // Check if session cookie exists,
+    const user = req.session.user;
+    if (user) {
+      res.render("/")
+    }
+    // -----------------------------------TO DO: Change this route to user profile page
     res.render("../views/urls_login")
   });
 
@@ -81,15 +73,13 @@ module.exports = (db) => {
   router.post('/login', (req, res) => {
     const {email, password} = req.body;
 
-    // -----------------------------------TO DO: Provide user with an error if password isn't valid
-
-    // THIS NEEDS TO BE FIXED:
+    // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
     getUserByEmail(email)
-    .then(res => bcrypt.compare(password, res.password))
-    .then(compare => {
-      compare ? req.session.userId = res.id : null
-      compare ? res.redirect("/") : res.redirect("/login")
+    .then(user => {
+      bcrypt.compare(password, user.password);
+      req.session.user = user;
     })
+    .then(result => res.redirect('/'))
     .catch(err => console.error('query error', err.stack));
   });
 
@@ -97,7 +87,7 @@ module.exports = (db) => {
   // ---------------------------------------------------------TO DO: link to a logout button
 
   router.post('/logout', (req, res) => {
-    req.session.userId = null;
+    req.session.user = null;
     res.redirect("/")
   });
 
@@ -107,9 +97,9 @@ module.exports = (db) => {
 
   router.get('/register', (req, res) => {
     // get user email from session cookie
-    const userEmail = req.session.userId;
+    const user = req.session.user;
     // if session cookie exists, redirect to homepage TO DO - CHANGE THIS TO REDIRECT TO USER'S PAGE
-    if (userEmail) return res.redirect('/');
+    if (user) return res.redirect('/');
     // if user doesn't have a session cookie, show the registration page
     return res.render('../views/urls_register_user');
   });
@@ -151,7 +141,7 @@ module.exports = (db) => {
           res.send({error: "error"});
           return;
         }
-        req.session.userId = user.id;
+        req.session.user = user;
         res.redirect('/');
       })
       .catch(e => res.send(e));
