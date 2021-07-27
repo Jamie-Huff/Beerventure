@@ -53,6 +53,7 @@ app.use("/api/users", usersRoutes(db));
 app.use("/", featuredItems(db));
 app.use("/", homepage(db));
 app.use("/search", search(db));
+app.use("/api/messages", messages(db));
 // Note: mount other resources here, using the same pattern above
 
 // app.use('/', (req, res, next) => {//app.use works for EVERYTHING (get, post)
