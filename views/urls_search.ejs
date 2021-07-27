@@ -65,7 +65,7 @@
   <% for (const item of items) { %>
     <div class="featured-items">
 
-      <h4>Featured Item</h4>
+      <p class="prod-name"> <%= item.vendor %> </p>
       <p class="prod-name"> <%= item.name %> </p>
       <img class="product-image" src=<%= item.image %>
       <p> <%= item.category %> </p>

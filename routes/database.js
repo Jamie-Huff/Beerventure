@@ -54,7 +54,10 @@ exports.getVendorByEmail = getVendorByEmail;
 const getFeaturedProducts = function() {
   // Make this modular so 3 different sets of products are returned for different user types?
   return pool
-    .query(`SELECT * FROM items WHERE featured=TRUE`)
+    .query(`SELECT items.*, vendors.name as vendor_name
+    FROM items
+    JOIN vendors ON vendors.id = vendor_id
+    WHERE featured=TRUE`)
     .then(res => res.rows ? res.rows : null)
     .catch(err => console.error('query error', err.stack))
 }
@@ -94,3 +97,20 @@ const getMessages = () => {
 
 };
 exports.getMessages = getMessages;
+
+// consts addMessages = (message, reqparams) => {
+//   //adds messages to database
+//   return pool
+//     .query(`
+//       INSERT INTO messages
+//       (item_id, user_id, vendor_id, message)
+//       VALUES
+//       (, , ,$1)
+//       `)
+//     .then((result) => {
+//       console.log(result.rows);
+//       result.rows;
+//     })
+//     .catch(err => console.error('query error', err.stack));
+// };
+// exports.addMessages = addMessages;

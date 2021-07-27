@@ -16,7 +16,12 @@
 
 <body>
   <%- include('partials/_navbar') %>
-  <h1>Messages Page</h1>
+
+  <!-- <% if (!user_id) { %> -->
+  <%- include('partials/_error') %>
+  <!-- <% } %> -->
+
+  <h1>My Messages</h1>
   <!-- your content here... -->
 
   <% for (let message of messages) { %>
@@ -25,14 +30,22 @@
 
 
     <div class="sidebar">
-      <p>Vendor Name</p>
+      <p>Conversation with:</p>
       <a href='#'><%= message.name %></a>
     </div>
     <div class="convos">
+      <%= message.vendor_id %>
       <p><%= message.message %></p>
-      <form action="/login" method="POST">
+      <% if (message.vendor_id == reply.vendor_id) { %>
+      <div>
+        <%= reply.text %>
+      </div>
+      <% } %>
+      <form action="/messages/<%= user_id %>" method="POST">
         <h5>Reply</h5>
-        <input type="text" placeholder="Type message here..." />
+        <input type="hidden" value="<%= message.vendor_id %>" name="vendor_id"/>
+        <textarea name="text" placeholder="Type message here..."></textarea>
+        <button type="submit">Send Message</button>
       </form>
     </div>
 

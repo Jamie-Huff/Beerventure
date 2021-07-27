@@ -1,0 +1,13 @@
+.error {
+  border: 1px red solid;
+
+  .error-item-link {
+    text-decoration: none;
+    color: black;
+  }
+
+  .error-item-link:hover {
+    text-decoration: revert;
+    color:green;
+  }
+}
