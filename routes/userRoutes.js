@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { getUserByEmail, getFeaturedProducts, getVendorByEmail } = require('./database');
+const { getUserByEmail, getFeaturedProducts, getVendorByEmail, addNewUser } = require('./database');
 
 // Move these two if authenticateUser() moves:
 const bcrypt = require('bcrypt');
@@ -117,12 +117,87 @@ module.exports = (db) => {
 
 
   // On register for an account button submit
+  router.post('/register', (req, res) => {
+    const {name, email, password, phone} = req.body;
+    // console.log(name)
+    // console.log(email)
+
+    // Check if user email already exists in DB. Redirect to login page
+    // -----------------------------------TO DO: Provide user with a relevant error message
+    // -----------------------------------TO DO: Validate all inputs, provide user with appropriate error messages
+      // call to get user by form email.
+      /*
+    getUserByEmail(email)
+      .then(res => {
+        console.log('res line 131: ', res);
+        if (res) {
+          return res;
+        }
+        return false;
+      })
+      .then(second => {
+        if (second) {
+          console.log('second line 135: ', res);
+          return res.render('/login');
+        }
+      })
+      .catch(err => console.error('query error', err.stack));
+      */
+
+    /*
+    const userExists = async function(email) {
+      try{
+        const isUser = await getUserByEmail(email);
+        const isVendor = await getVendorByEmail(email);
+        return {isUser, isVendor}
+      } catch(err) {
+        console.log(err.message);
+      }
+    }
+    */
+
+      // call to get vendor by form email
+
+
+
+    // if email doesn't exist in DB, register the user by INPUT in user database
+
+
+      // bcrypt the password
+
+
+
+
+    // once registered, res.render search page? - TO DO: Decide on age a new user lands on
+
+
+
+  });
+
+
+
+
+  // START - DELETE THIS
+  /*
   router.post('/login', (req, res) => {
     const {email, password} = req.body;
 
     // -----------------------------------TO DO: Provide user with an error if password isn't valid
 
+    // THIS NEEDS TO BE FIXED:
+    getUserByEmail(email)
+    .then(res => bcrypt.compare(password, res.password))
+    .then(compare => {
+      compare ? req.session.userId = res.id : null
+      compare ? res.redirect("/") : res.redirect("/login")
+    })
+    .catch(err => console.error('query error', err.stack));
   });
+  */
+  // END - DELETE THIS
+
+
+
   // ---------------------------------------------- END REGISTER NEW USER
 
 

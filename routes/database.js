@@ -22,9 +22,37 @@ const getUserByEmail = function(email) {
 exports.getUserByEmail = getUserByEmail;
 
 
+const addNewUser = function(user) {
+  const values = [user.name, user.email, user.password, user.phone];
+  return pool
+    .query(`
+    INSERT INTO users (name, email, password, phone)
+    VALUES($1, $2, $3, $4)
+    RETURNING *;
+    `, values)
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack));
+};
+exports.addNewUser = addNewUser;
+
+
+
+// Combined helper function to check if email exists in users or vendors
+const userExists = async function(email) {
+  try{
+    const isUser = await getUserByEmail(email);
+    const isVendor = await getVendorByEmail(email);
+    return {isUser, isVendor}
+  } catch(err) {
+    console.log(err.message);
+  }
+}
+exports.userExists = userExists;
+
+
 /// ----------------------------------------------------- Vendors
 
-// We could really combine this with getUserByEmail and just JOIN tables, search both for a match
+// We could combine this with getUserByEmail and just JOIN tables, search both for a match?
 const getVendorByEmail = function(email) {
   return pool
     .query(`SELECT * FROM vendors WHERE email = $1;`, [email])
@@ -57,20 +85,11 @@ const getVendorsProducts = function(email) {
 }
 exports.getVendorsProducts = getVendorsProducts;
 
-// router.get("/", (req, res) => {
-//   let query = `SELECT * FROM items_for_sale WHERE featured=TRUE`;
-//   db.query(query)
-//     .then(data => {
-//       const products = data.rows;
-//       // console.log(products)
-//       res.render("urls_index", {products})
-//     })
-//     .catch(err => {
-//       res
-//         .status(500)
-//         .json({ error: err.message });
-//     });
-// });
+
+
+/// ----------------------------------------------------- Messages
+
+
 const getMessages = () => {
   //to retrieve messags from the database (currently set to return all data)
   return pool
