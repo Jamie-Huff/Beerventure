@@ -30,10 +30,10 @@
     </div>
     <div class="convos">
       <p><%= message.message %></p>
-      <form action="/api/messages" method="POST">
+      <form action="/messages" method="POST">
         <h5>Reply</h5>
-        <input type="text" placeholder="Type message here..." />
-        <button type="submit" class="btn btn-primary">Send Message</button>
+        <textarea name="text" placeholder="Type message here..."></textarea>
+        <button type="submit">Send Message</button>
       </form>
     </div>
 
