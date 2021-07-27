@@ -40,31 +40,10 @@
 
 
 
-
-<!--
-<% for (const item of items) { %>
-<div class="search-result">
-
-  <div class="image">
-    <picture>
-      <img id="search-image" src=<%=item.image%> alt="beer can">
-  </picture>
-</div>
-<div class="info-container">
-  <p><%= item.name %></p>
-  <p>$<%= item.price %></p>
-  <p><%= item.date_posted %></p>
-  <p><%= item.category %> </p>
-</div>
-
-</div>
-<% } %> -->
-
 <main class="all-products">
   <div class="products">
   <% for (const item of items) { %>
     <div class="featured-items">
-
       <p class="prod-name"> <%= item.vendor %> </p>
       <p class="prod-name"> <%= item.name %> </p>
       <img class="product-image" src=<%= item.image %>
