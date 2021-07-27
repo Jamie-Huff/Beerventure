@@ -92,16 +92,38 @@ module.exports = (db) => {
       compare ? res.redirect("/") : res.redirect("/login")
     })
     .catch(err => console.error('query error', err.stack));
+  });
+
+  // ---------------------------------------------- LOG OUT
+  // ---------------------------------------------------------TO DO: link to a logout button
+
+  router.post('/logout', (req, res) => {
+    req.session.userId = null;
+    res.redirect("/")
+  });
 
 
+  // ---------------------------------------------- REGISTER NEW USER
+  // ---------------------------------------------------------TO DO: link to a register button on homepage
 
-    // ---------------------------------------------- LOG OUT
-    router.post('/logout', (req, res) => {
-      req.session.userId = null;
-      res.redirect("/")
-    });
+  router.get('/register', (req, res) => {
+    // get user email from session cookie
+    const userEmail = req.session.userId;
+    // if session cookie exists, redirect to homepage TO DO - CHANGE THIS TO REDIRECT TO USER'S PAGE
+    if (userEmail) return res.redirect('/');
+    // if user doesn't have a session cookie, show the registration page
+    return res.render('../views/urls_register_user');
+  });
+
+
+  // On register for an account button submit
+  router.post('/login', (req, res) => {
+    const {email, password} = req.body;
+
+    // -----------------------------------TO DO: Provide user with an error if password isn't valid
 
   });
+  // ---------------------------------------------- END REGISTER NEW USER
 
 
   return router;
