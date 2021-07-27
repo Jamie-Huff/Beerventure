@@ -17,7 +17,7 @@ const getUserByEmail = function(email) {
   return pool
     .query(`SELECT * FROM users WHERE email = $1;`, [email])
     .then(res => res.rows[0] ? res.rows[0] : null)
-    .catch(err => console.error('query error', err.stack));
+    .catch(err => console.error('query error', err.stack))
 };
 exports.getUserByEmail = getUserByEmail;
 
@@ -31,14 +31,39 @@ const addNewUser = function(user) {
     RETURNING *;
     `, values)
     .then(res => res.rows)
-    .catch(err => console.error('query error', err.stack));
+    .catch(err => console.error('query error', err.stack))
 };
 exports.addNewUser = addNewUser;
 
 
 
 // Combined helper function to check if email exists in users or vendors
-const userExists = async function(email) {
+const checkUserExists = function(email) {
+
+  getUserByEmail(email)
+    .then(userRes => userRes ? true : false)
+    .then(getVendorByEmail(email))
+    .then(vendorRes => vendorRes ? true : false)
+    .catch(e => console.log(e.stack))
+
+
+
+
+
+
+  // return pool
+  //   .query(`SELECT *, vendors.*
+  //   FROM users
+  //   JOIN messages ON user_id = users.id
+  //   JOIN vendors on vendor_id = vendors.id
+  //   WHERE users.email = $1 OR vendors.email = $1;`, [email])
+  //   .then(res => res.rows)
+  //   // .then(res => res.rows[0] ? res.rows[0] : null)
+  //   .catch(err => console.error('query error', err.stack))
+};
+
+/* NOT WORKING:
+const checkUserExists = async function(email) {
   try{
     const isUser = await getUserByEmail(email);
     const isVendor = await getVendorByEmail(email);
@@ -47,7 +72,8 @@ const userExists = async function(email) {
     console.log(err.message);
   }
 }
-exports.userExists = userExists;
+*/
+exports.checkUserExists = checkUserExists;
 
 
 /// ----------------------------------------------------- Vendors
@@ -57,7 +83,7 @@ const getVendorByEmail = function(email) {
   return pool
     .query(`SELECT * FROM vendors WHERE email = $1;`, [email])
     .then(res => res.rows[0] ? res.rows[0] : null)
-    .catch(err => console.error('query error', err.stack));
+    .catch(err => console.error('query error', err.stack))
 };
 exports.getVendorByEmail = getVendorByEmail;
 
@@ -69,7 +95,7 @@ const getFeaturedProducts = function() {
   return pool
     .query(`SELECT * FROM items WHERE featured=TRUE`)
     .then(res => res.rows ? res.rows : null)
-    .catch(err => console.error('query error', err.stack));
+    .catch(err => console.error('query error', err.stack))
 }
 exports.getFeaturedProducts = getFeaturedProducts;
 
@@ -81,7 +107,7 @@ const getVendorsProducts = function(email) {
   return pool
     .query(`SELECT * FROM items JOIN vendors ON vendor_id = vendors.id WHERE vendors.email=$1`, [email])
     .then(res => res.rows[0] ? res.rows[0] : null)
-    .catch(err => console.error('query error', err.stack));
+    .catch(err => console.error('query error', err.stack))
 }
 exports.getVendorsProducts = getVendorsProducts;
 
@@ -103,7 +129,7 @@ const getMessages = () => {
       console.log(result.rows);
       result.rows;
     })
-    .catch(err => console.error('query error', err.stack));
+    .catch(err => console.error('query error', err.stack))
 
 };
 exports.getMessages = getMessages;

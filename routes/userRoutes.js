@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { getUserByEmail, getFeaturedProducts, getVendorByEmail, addNewUser } = require('./database');
+const { getUserByEmail, getFeaturedProducts, addNewUser, getVendorByEmail } = require('./database');
 
 // Move these two if authenticateUser() moves:
 const bcrypt = require('bcrypt');
@@ -116,53 +116,33 @@ module.exports = (db) => {
 
   // On register for an account button submit
   router.post('/register', (req, res) => {
-    // const {name, email, password, phone} = req.body;
     const newUser = req.body;
-    console.log('newUser: ', newUser);
     // bcrypt the password
     newUser.password = bcrypt.hashSync(newUser.password, saltRounds);
-    console.log('newUser after the hash: ', newUser);
 
     // Check if user email already exists in DB. Redirect to login page
     // -----------------------------------TO DO: Provide user with a relevant error message
     // -----------------------------------TO DO: Validate all inputs, provide user with appropriate error messages
-      // call to get user by form email.
-    /*
-    getUserByEmail(email)
-      .then(res => {
-        console.log('res line 131: ', res);
-        if (res) {
-          return res;
-        }
-        return false;
+    getUserByEmail(newUser.email)
+    .then(userData => {
+        // helper function to retrieve products from DB
+        getVendorByEmail(newUser.email)
+        .then(vendorData => {
+          // -----------------------------------TO DO: should be updated to better output (failure message)
+          if (userData || vendorData) {
+            // if user does exist in DB users table, redirect to login to their account
+            userData ? res.send({"existingAccount":"users"}) : null;
+            // if user does exist in DB vendors table, redirect to login to their account
+            vendorData ? res.send({"existingAccount":"vendors"}) : null;
+            return res.redirect('/login');
+          }
+        })
+      .catch((err) => {
+        res.status(500).json({ error: err.message });
       })
-      .then(second => {
-        if (second) {
-          console.log('second line 135: ', res);
-          return res.render('/login');
-        }
-      })
-      .catch(err => console.error('query error', err.stack));
-      */
+    });
 
-    /*
-    const userExists = async function(email) {
-      try{
-        const isUser = await getUserByEmail(email);
-        const isVendor = await getVendorByEmail(email);
-        return {isUser, isVendor}
-      } catch(err) {
-        console.log(err.message);
-      }
-    }
-    */
-
-      // call to get vendor by form email
-
-
-
-
-    // if email doesn't exist in DB, register the user by INPUT in user database
+    // if email doesn't exist in DB, register the user by INPUTing their data in user database
     addNewUser(newUser)
       .then(user => {
         if (!user) {
@@ -173,42 +153,8 @@ module.exports = (db) => {
         res.redirect('/');
       })
       .catch(e => res.send(e));
-
-
-
-
-
-
     // once registered, res.render search page? - TO DO: Decide on age a new user lands on
-
-
-
   });
-
-
-
-
-  // START - DELETE THIS
-  /*
-  router.post('/login', (req, res) => {
-    const {email, password} = req.body;
-
-    // -----------------------------------TO DO: Provide user with an error if password isn't valid
-
-    // THIS NEEDS TO BE FIXED:
-    getUserByEmail(email)
-    .then(res => bcrypt.compare(password, res.password))
-    .then(compare => {
-      compare ? req.session.userId = res.id : null
-      compare ? res.redirect("/") : res.redirect("/login")
-    })
-    .catch(err => console.error('query error', err.stack));
-  });
-  */
-  // END - DELETE THIS
-
-
-
   // ---------------------------------------------- END REGISTER NEW USER
 
 
