@@ -59,3 +59,20 @@ exports.getFeaturedProducts = getFeaturedProducts;
 //         .json({ error: err.message });
 //     });
 // });
+const getMessages = () => {
+  //to retrieve messags from the database (currently set to return all data)
+  return pool
+    .query(`
+      SELECT messages.*, vendors.name as name
+      FROM messages
+      JOIN vendors ON vendor_id = vendors.id
+      ORDER BY vendor_id;
+      `)
+    .then((result) => {
+      console.log(result.rows);
+      result.rows;
+    })
+    .catch(err => console.error('query error', err.stack));
+
+};
+exports.getMessages = getMessages;
