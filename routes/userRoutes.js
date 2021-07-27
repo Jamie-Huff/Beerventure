@@ -1,13 +1,20 @@
 const express = require('express');
-const { getUserByEmail, getFeaturedProducts } = require('./database');
 const router  = express.Router();
-// const bcrypt = require('bcrypt');
+const { getUserByEmail, getFeaturedProducts } = require('./database');
 
+// Move these two if authenticateUser() moves:
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
+// Helper Functions (Not DB calls) - could be moved to a different file
+const authenticateUser = function(entered, userObject) {
+  return bcrypt.compareSync(entered, userObject.password)
+}
 
 
 module.exports = (db) => {
 
-  // Homepage
+  // ---------------------------------------------- HOMEPAGE (RENDER w PRODUCTS & CHECK FOR SESSION COOKIE)
   router.get("/", (req, res) => {
     // get user email from session cookie
     const userEmail = req.session.userId;
@@ -60,11 +67,13 @@ module.exports = (db) => {
       })
 
       // if user doesn't exist in DB (promise failed to return)
-      // -----------------------------------TO DO: VALIDATE USER BASED ON PASSWORD
+      // -----------------------------------TO DO: Prompt user to sign up / redirect to sign up
       .catch((err) => {
         res.status(500).json({ error: err.message });
       });
   });
+
+    // ---------------------------------------------- LOG IN (RENDER)
 
   // Render Login Page:
   router.get("/login", (req, res) => {
@@ -72,29 +81,32 @@ module.exports = (db) => {
     res.render("../views/urls_login")
   });
 
+    // ---------------------------------------------- LOG IN (POST)
+
 	// On login button submit
   router.post('/login', (req, res) => {
     const {email, password} = req.body;
 
-    // -----------------------------------TO DO: VALIDATE USER BASED ON PASSWORD
-    getUserByEmail(email)
-    .then(res => {
-      if (res.rows[0]) {
-        return res.rows[0]
-      }
-      return null
-    })
-    .then(user => {
-          if (!user) {
-            res.send({error: "error"});
-            return;
-          }
-          req.session.userId = user.id;
-          res.redirect("/")
-        })
-    .catch(err => console.error('query error', err.stack));
-  });
+    // -----------------------------------TO DO: Provide user with an error if password isn't valid
 
+    // THIS NEEDS TO BE FIXED:
+    getUserByEmail(email)
+    .then(res => bcrypt.compare(password, res.password))
+    .then(compare => {
+      compare ? req.session.userId = res.id : null
+      compare ? res.redirect("/") : res.redirect("/login")
+    })
+    .catch(err => console.error('query error', err.stack));
+
+
+
+    // ---------------------------------------------- LOG OUT
+    router.post('/logout', (req, res) => {
+      req.session.userId = null;
+      res.redirect("/")
+    });
+
+  });
 
 
   return router;

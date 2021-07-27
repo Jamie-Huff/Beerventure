@@ -11,10 +11,6 @@ pool.connect().then(() => {
 });
 
 
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
-
-
 /// ----------------------------------------------------- Users
 
 const getUserByEmail = function(email) {
@@ -25,12 +21,7 @@ const getUserByEmail = function(email) {
 };
 exports.getUserByEmail = getUserByEmail;
 
-// const authenticateUser = function(userObject) {
 
-// }
-
-
-// exports.authenticateUser = authenticateUser;
 
 
 
@@ -48,19 +39,3 @@ exports.getFeaturedProducts = getFeaturedProducts;
 
 
 
-
-
-// router.get("/", (req, res) => {
-//   let query = `SELECT * FROM items_for_sale WHERE featured=TRUE`;
-//   db.query(query)
-//     .then(data => {
-//       const products = data.rows;
-//       // console.log(products)
-//       res.render("urls_index", {products})
-//     })
-//     .catch(err => {
-//       res
-//         .status(500)
-//         .json({ error: err.message });
-//     });
-// });
