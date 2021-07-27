@@ -137,6 +137,7 @@ module.exports = (db) => {
             return res.redirect('/login');
           }
         })
+        // -----------------------------------TO DO: BUG! CURRENTLY TRYING TO SEND AN ERROR BEFORE REGISTERING NEW USER
       .catch((err) => {
         res.status(500).json({ error: err.message });
       })

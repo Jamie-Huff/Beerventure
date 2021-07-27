@@ -37,45 +37,6 @@ exports.addNewUser = addNewUser;
 
 
 
-// Combined helper function to check if email exists in users or vendors
-const checkUserExists = function(email) {
-
-  getUserByEmail(email)
-    .then(userRes => userRes ? true : false)
-    .then(getVendorByEmail(email))
-    .then(vendorRes => vendorRes ? true : false)
-    .catch(e => console.log(e.stack))
-
-
-
-
-
-
-  // return pool
-  //   .query(`SELECT *, vendors.*
-  //   FROM users
-  //   JOIN messages ON user_id = users.id
-  //   JOIN vendors on vendor_id = vendors.id
-  //   WHERE users.email = $1 OR vendors.email = $1;`, [email])
-  //   .then(res => res.rows)
-  //   // .then(res => res.rows[0] ? res.rows[0] : null)
-  //   .catch(err => console.error('query error', err.stack))
-};
-
-/* NOT WORKING:
-const checkUserExists = async function(email) {
-  try{
-    const isUser = await getUserByEmail(email);
-    const isVendor = await getVendorByEmail(email);
-    return {isUser, isVendor}
-  } catch(err) {
-    console.log(err.message);
-  }
-}
-*/
-exports.checkUserExists = checkUserExists;
-
-
 /// ----------------------------------------------------- Vendors
 
 // We could combine this with getUserByEmail and just JOIN tables, search both for a match?
