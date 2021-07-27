@@ -12,7 +12,8 @@ module.exports = (db) => {
   // ---------------------------------------------- HOMEPAGE (RENDER w PRODUCTS & CHECK FOR SESSION COOKIE)
   router.get('/', (req, res) => {
     // get user email from session cookie
-    const userEmail = req.session.userId;
+    const user = req.session.user;
+    const userEmail = user.email;
 
     // Anonymous user landing on homepage - no session cookie
     if (!userEmail) {
