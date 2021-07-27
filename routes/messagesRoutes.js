@@ -20,7 +20,7 @@ module.exports = (db) => {
     `)
     .then(data => {
       const messages = data.rows;
-      res.render("../views/urls_messages", { messages });
+      res.render("../views/urls_messages", { messages })
     })
     .catch(err => {
       res
@@ -29,13 +29,23 @@ module.exports = (db) => {
     });
   });
 
-  // router.post("/:userid", (req, res) => {
-  //   .then((queryResults) => {
-  //     res.json(queryResults.rows[0])
-  //   })
-  // });
+  router.post("/", (req, res) => {
+    console.log(req.body)
+
+    if (!req.body.text) {
+      res.status(400).json({ error: 'invalid request: no data in POST body'});
+      return;
+    }
+
+    const message = {
+      message: req.body.text,
+      user: req.body.user
+      // vendor:
+      //item
+    }
+
+
+  });
 
   return router;
 };
-
-
