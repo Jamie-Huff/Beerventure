@@ -6,6 +6,8 @@ const { getVendorByEmail, getVendorsProducts } = require('./database');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+    // -----------------------------------TO DO:  GO THROUGH ALL ROUTES AND MAKE SURE COOKIES ARE CORRECT
+
 
 module.exports = (db) => {
 
@@ -16,7 +18,8 @@ module.exports = (db) => {
     // return res.render("../views/urls_index");
 
     // get user email from session cookie
-    const userEmail = req.session.userId;
+    const user = req.session.user;
+    const userEmail = user.email;
 
     // Anonymous user landing on homepage - no session cookie
     if (!userEmail) {
@@ -65,7 +68,7 @@ module.exports = (db) => {
 
     // ---------------------------------------------- LOG OUT (UNSURE IF THIS IS STILL NECESSARY. DON'T THINK SO)
     // router.post('/logout', (req, res) => {
-    //   req.session.userId = null;
+    //   req.session.user = null;
     //   res.redirect("/")
     // });
 
