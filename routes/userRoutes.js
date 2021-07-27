@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { getUserByEmail, getFeaturedProducts, getVendorByEmail } = require('./database');
+const { getUserByEmail, getFeaturedProducts, addNewUser, getVendorByEmail } = require('./database');
 
 // Move these two if authenticateUser() moves:
 const bcrypt = require('bcrypt');
@@ -23,7 +23,6 @@ module.exports = (db) => {
             userObject: null,
             products: products,
           };
-          console.log("templateVars: ", templateVars);
           return res.render("../views/urls_index", templateVars);
         })
         .catch((err) => {
@@ -52,7 +51,6 @@ module.exports = (db) => {
 
             // if user does exist in DB and password matches (data === userDBObject)
             if (data) {
-              console.log("data, line 57: ", data);
               return res.render("../views/urls_index", templateVars);
             }
           })
@@ -92,16 +90,73 @@ module.exports = (db) => {
       compare ? res.redirect("/") : res.redirect("/login")
     })
     .catch(err => console.error('query error', err.stack));
+  });
+
+  // ---------------------------------------------- LOG OUT
+  // ---------------------------------------------------------TO DO: link to a logout button
+
+  router.post('/logout', (req, res) => {
+    req.session.userId = null;
+    res.redirect("/")
+  });
 
 
+  // ---------------------------------------------- REGISTER NEW USER
+  // ---------------------------------------------------------TO DO: link to a register button on homepage
 
-    // ---------------------------------------------- LOG OUT
-    router.post('/logout', (req, res) => {
-      req.session.userId = null;
-      res.redirect("/")
+  router.get('/register', (req, res) => {
+    // get user email from session cookie
+    const userEmail = req.session.userId;
+    // if session cookie exists, redirect to homepage TO DO - CHANGE THIS TO REDIRECT TO USER'S PAGE
+    if (userEmail) return res.redirect('/');
+    // if user doesn't have a session cookie, show the registration page
+    return res.render('../views/urls_register_user');
+  });
+
+
+  // On register for an account button submit
+  router.post('/register', (req, res) => {
+    const newUser = req.body;
+    // bcrypt the password
+    newUser.password = bcrypt.hashSync(newUser.password, saltRounds);
+
+    // Check if user email already exists in DB. Redirect to login page
+    // -----------------------------------TO DO: Provide user with a relevant error message
+    // -----------------------------------TO DO: Validate all inputs, provide user with appropriate error messages
+    getUserByEmail(newUser.email)
+    .then(userData => {
+        // helper function to retrieve products from DB
+        getVendorByEmail(newUser.email)
+        .then(vendorData => {
+          // -----------------------------------TO DO: should be updated to better output (failure message)
+          if (userData || vendorData) {
+            // if user does exist in DB users table, redirect to login to their account
+            userData ? res.send({"existingAccount":"users"}) : null;
+            // if user does exist in DB vendors table, redirect to login to their account
+            vendorData ? res.send({"existingAccount":"vendors"}) : null;
+            return res.redirect('/login');
+          }
+        })
+        // -----------------------------------TO DO: BUG! CURRENTLY TRYING TO SEND AN ERROR BEFORE REGISTERING NEW USER
+      .catch((err) => {
+        res.status(500).json({ error: err.message });
+      })
     });
 
+    // if email doesn't exist in DB, register the user by INPUTing their data in user database
+    addNewUser(newUser)
+      .then(user => {
+        if (!user) {
+          res.send({error: "error"});
+          return;
+        }
+        req.session.userId = user.id;
+        res.redirect('/');
+      })
+      .catch(e => res.send(e));
+    // once registered, res.render search page? - TO DO: Decide on age a new user lands on
   });
+  // ---------------------------------------------- END REGISTER NEW USER
 
 
   return router;
