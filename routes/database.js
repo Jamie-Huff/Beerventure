@@ -26,7 +26,7 @@ const addNewUser = function(user) {
   const values = [user.name, user.email, user.password, user.phone];
   return pool
     .query(`
-    INSERT INTO users (name, email, password, phone)
+    INSERT INTO users (name, email, password, phone_number)
     VALUES($1, $2, $3, $4)
     RETURNING *;
     `, values)

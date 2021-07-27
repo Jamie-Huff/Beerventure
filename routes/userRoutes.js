@@ -23,7 +23,6 @@ module.exports = (db) => {
             userObject: null,
             products: products,
           };
-          console.log("templateVars: ", templateVars);
           return res.render("../views/urls_index", templateVars);
         })
         .catch((err) => {
@@ -52,7 +51,6 @@ module.exports = (db) => {
 
             // if user does exist in DB and password matches (data === userDBObject)
             if (data) {
-              console.log("data, line 57: ", data);
               return res.render("../views/urls_index", templateVars);
             }
           })
@@ -118,15 +116,18 @@ module.exports = (db) => {
 
   // On register for an account button submit
   router.post('/register', (req, res) => {
-    const {name, email, password, phone} = req.body;
-    // console.log(name)
-    // console.log(email)
+    // const {name, email, password, phone} = req.body;
+    const newUser = req.body;
+    console.log('newUser: ', newUser);
+    // bcrypt the password
+    newUser.password = bcrypt.hashSync(newUser.password, saltRounds);
+    console.log('newUser after the hash: ', newUser);
 
     // Check if user email already exists in DB. Redirect to login page
     // -----------------------------------TO DO: Provide user with a relevant error message
     // -----------------------------------TO DO: Validate all inputs, provide user with appropriate error messages
       // call to get user by form email.
-      /*
+    /*
     getUserByEmail(email)
       .then(res => {
         console.log('res line 131: ', res);
@@ -160,10 +161,20 @@ module.exports = (db) => {
 
 
 
+
     // if email doesn't exist in DB, register the user by INPUT in user database
+    addNewUser(newUser)
+      .then(user => {
+        if (!user) {
+          res.send({error: "error"});
+          return;
+        }
+        req.session.userId = user.id;
+        res.redirect('/');
+      })
+      .catch(e => res.send(e));
 
 
-      // bcrypt the password
 
 
 
