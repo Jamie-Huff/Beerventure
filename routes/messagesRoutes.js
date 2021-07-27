@@ -29,17 +29,11 @@ module.exports = (db) => {
     });
   });
 
-  router.post("/", (req, res) => {
-    db.query(`
-    SELECT messages.*, vendors.name as name
-    FROM messages
-    JOIN vendors ON vendor_id = vendors.id
-    ORDER BY vendor_id;
-    `)
-    .then((queryResults) => {
-      res.json(queryResults.rows[0])
-    })
-  });
+  // router.post("/:userid", (req, res) => {
+  //   .then((queryResults) => {
+  //     res.json(queryResults.rows[0])
+  //   })
+  // });
 
   return router;
 };

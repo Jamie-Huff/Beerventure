@@ -88,3 +88,20 @@ const getMessages = () => {
 
 };
 exports.getMessages = getMessages;
+
+// consts addMessages = (message, reqparams) => {
+//   //adds messages to database
+//   return pool
+//     .query(`
+//       INSERT INTO messages
+//       (item_id, user_id, vendor_id, message)
+//       VALUES
+//       (, , ,$1)
+//       `)
+//     .then((result) => {
+//       console.log(result.rows);
+//       result.rows;
+//     })
+//     .catch(err => console.error('query error', err.stack));
+// };
+// exports.addMessages = addMessages;
