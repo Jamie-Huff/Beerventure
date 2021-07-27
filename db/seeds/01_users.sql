@@ -2,7 +2,7 @@
 INSERT INTO users
   (name, email, password, phone_number)
 VALUES
-  ('Stacey', 'stacey@mail.com', 'password', '736-566-9431'),
+  ('Stacey', 'stacey@mail.com', '$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u.', '736-566-9431'),
   ('Callie', 'callie@mail.com', '$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u.', '729-602-8945'),
   ('Adela', 'adela@mail.com', '$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u.', '311-552-0919'),
   ('Darrel', 'darrel@mail.com', '$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u.', '323-740-6159'),
