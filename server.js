@@ -43,15 +43,17 @@ app.use(cookieSession({
 // Separated Routes for each Resource
 // Note: Feel free to replace the example routes below with your own
 const usersRoutes = require("./routes/users");
-const featuredItems = require("./routes/featuredItemsRoutes");
+// const featuredItems = require("./routes/featuredItemsRoutes");
 const homepage = require("./routes/userRoutes");
+const vendorsRoutes = require("./routes/vendorRoutes");
+// how come search is routing to /vendors? can we rename that to search?
 const search = require("./routes/vendors")
 const messages = require(("./routes/messagesRoutes"))
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 app.use("/api/users", usersRoutes(db));
-app.use("/", featuredItems(db));
 app.use("/", homepage(db));
+app.use("/vendors", vendorsRoutes(db));
 app.use("/search", search(db));
 app.use("/api/messages", messages(db));
 // Note: mount other resources here, using the same pattern above

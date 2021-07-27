@@ -18,6 +18,7 @@
   <%- include('partials/_navbar') %>
   <h1>Messages Page</h1>
   <!-- your content here... -->
+
   <% for (let message of messages) { %>
 
   <div class="message-page">
@@ -26,26 +27,17 @@
       <td><th scope="col">Messages</th></td>
     </tr> -->
 
-
-      <div class="sidebar">
-        <td><p>Vendor Name</p></td>
-        <td><a href='#'><%= message.name %></a></td>
-      </div>
-
-      <div class="convos">
-        <td><p><%= message.message %></p></td>
-
-        <form action="/login" method="POST">
-
-          <h5>Reply</h5>
-          <input type="text" placeholder="Type message here..." />
-
-
-        </form>
-
-
-
-      </div>
+    <div class="sidebar">
+      <p>Vendor Name</p>
+      <a href='#'><%= message.name %></a>
+    </div>
+    <div class="convos">
+      <p><%= message.message %></p>
+      <form action="/login" method="POST">
+        <h5>Reply</h5>
+        <input type="text" placeholder="Type message here..." />
+      </form>
+    </div>
 
     <!-- </tr> -->
 
