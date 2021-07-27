@@ -39,7 +39,10 @@ exports.getVendorByEmail = getVendorByEmail;
 const getFeaturedProducts = function() {
   // Make this modular so 3 different sets of products are returned for different user types?
   return pool
-    .query(`SELECT * FROM items WHERE featured=TRUE`)
+    .query(`SELECT items.*, vendors.name as vendor_name
+    FROM items
+    JOIN vendors ON vendors.id = vendor_id
+    WHERE featured=TRUE`)
     .then(res => res.rows ? res.rows : null)
     .catch(err => console.error('query error', err.stack));
 }
