@@ -16,7 +16,12 @@
 
 <body>
   <%- include('partials/_navbar') %>
-  <h1>Messages Page</h1>
+
+  <!-- <% if (!user_id) { %> -->
+  <%- include('partials/_error') %>
+  <!-- <% } %> -->
+
+  <h1>My Messages</h1>
   <!-- your content here... -->
 
   <% for (let message of messages) { %>
@@ -25,7 +30,7 @@
 
 
     <div class="sidebar">
-      <p>Vendor Name</p>
+      <p>Conversation with:</p>
       <a href='#'><%= message.name %></a>
     </div>
     <div class="convos">

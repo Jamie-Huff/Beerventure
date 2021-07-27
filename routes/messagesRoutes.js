@@ -11,8 +11,16 @@ const router  = express.Router();
 module.exports = (db) => {
   // console.log(db)
 
+  router.get("/", (req, res) => {
+    const user_id = req.params.user_id
+    if (!user_id) {
+      res.render("../views/urls_messages", { user_id })
+    }
+  })
+
   router.get("/:user_id", (req, res) => {
     const user_id = req.params.user_id
+
     const reply = {}
     return db.query(`
     SELECT messages.*, vendors.name as name
@@ -23,8 +31,17 @@ module.exports = (db) => {
     `, [user_id])
     .then(data => {
       const messages = data.rows;
+      const exists = [];
+      const messageList = [];
+      for (let i = 0; i < messages.length; i++) {
+        const element = messages[i];
+        if (!exists.includes(element.vendor_id)) {
+          messageList.push(element);
+          exists.push(element.vendor_id);
+        }
+      }
       console.log(messages);
-      res.render("../views/urls_messages", { messages, reply, user_id })
+      res.render("../views/urls_messages", { messages: messageList, reply, user_id })
     })
     .catch(err => {
       res
