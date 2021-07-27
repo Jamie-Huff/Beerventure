@@ -21,19 +21,19 @@ module.exports = (db) => {
   })
 
   router.get("/:user_id", (req, res) => {
-    const userEmail = req.session.userId;
+    const user_id = req.session.userId;
 
-    getUserByEmail(userEmail)
-    .then (userInfo => {
-      getVendorByEmail(userInfo.email)
-      .then(vendorInfo => {
-        if (userInfo | vendorInfo) {
-          console.log(userInfo)
-          console.log(vendorInfo)
+    // getUserByEmail(user_id)
+    // .then (userInfo => {
+    //   getVendorByEmail(userInfo.email)
+    //   .then(vendorInfo => {
+    //     if (userInfo | vendorInfo) {
+    //       console.log(userInfo)
+    //       console.log(vendorInfo)
 
-        }
-      })
-    })
+    //     }
+    //   })
+    // })
 
 
     const reply = {}
@@ -43,7 +43,7 @@ module.exports = (db) => {
     JOIN vendors ON vendor_id = vendors.id
     WHERE user_id = $1
     ORDER BY vendor_id;
-    `, [userEmail])
+    `, [user_id])
     .then(data => {
       const messages = data.rows;
       const exists = [];
