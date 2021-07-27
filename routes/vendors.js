@@ -29,7 +29,6 @@ module.exports = (db) => {
     `
     return db.query(query, [city])
       .then(data => {
-
         const items = data.rows;
         res.render('urls_search', {items})
       })
