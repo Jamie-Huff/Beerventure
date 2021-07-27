@@ -11,8 +11,8 @@ pool.connect().then(() => {
 });
 
 
-// const bcrypt = require('bcrypt');
-// const saltRounds = 10;
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 
 /// ----------------------------------------------------- Users
@@ -25,7 +25,12 @@ const getUserByEmail = function(email) {
 };
 exports.getUserByEmail = getUserByEmail;
 
-// const authenticateUser =
+// const authenticateUser = function(userObject) {
+
+// }
+
+
+// exports.authenticateUser = authenticateUser;
 
 
 
