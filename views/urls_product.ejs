@@ -17,8 +17,19 @@
 <body>
   <%- include('partials/_navbar') %>
   <h1>Product Information Page</h1>
-  <!-- your content here... -->
 
+  <% for (const item of items) { %>
+    <div class="featured-items">
+      <p class="prod-name"> <%= item.vendor %> </p>
+      <p class="prod-name"> <%= item.name %> </p>
+      <img class="product-image" src=<%= item.image %>
+      <p> <%= item.category %> </p>
+      <p><%= item.price %> </p>
+      <button id="more-info">Tell Me More</button>
+
+    </div>
+
+  <% } %>
 
     <%- include('partials/_footer'); %>
 

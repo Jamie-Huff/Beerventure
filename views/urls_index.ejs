@@ -25,7 +25,7 @@
       <div class="products">
       <% for (const product of products) { %>
         <div class="featured-items">
-          <a class="nav-bar-links" id="sell" href='/:<%=product.name%>&itemId:<%=product.id%>'>Feature Item</a>
+          <a class="nav-bar-links" id="sell" href='/product/:<%=product.name%>&itemId:<%=product.id%>'>Feature Item</a>
           <p class="prod-name"> <%= product.vendor_name %> </p>
           <p class="prod-name"> <%= product.name %> </p>
           <img class="product-image" src=<%= product.image %>
