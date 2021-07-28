@@ -4,16 +4,15 @@
   <script>
     $(document).ready(function(event){
 
-    $('.reveal-hide').click(function(event) {
-      // event.preventDefault();
-      const $postItemForm = $('.new-item-slide');
-      if ($postItemForm.is(':visible')) {
-        $postItemForm.slideUp();
-      } else {
-        $postItemForm.slideDown();
-      }
-    });
-
+      $('.reveal-hide').click(function(event) {
+        // event.preventDefault();
+        const $postItemForm = $('.new-item-slide');
+        if ($postItemForm.is(':visible')) {
+          $postItemForm.slideUp();
+        } else {
+          $postItemForm.slideDown();
+        }
+      });
 
     });
 
@@ -29,13 +28,11 @@
       <% if (userObject) { %>
 
       <div class="hero-content">
-        <div class="hero-left">
 
         <h2>Hello <%= userObject.name %></h2>
         <br>
-        <h2>Manage your items for sale</h2>
+        <h6>Manage your items for sale</h6>
         <%- include('_post_item') %>
-        </div>
       </div>
 
 
