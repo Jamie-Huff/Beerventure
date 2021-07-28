@@ -2,17 +2,17 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
     $(document).ready(function(event){
+      $('.new-item-slide').css("opacity", 0);
 
-    $('.reveal-hide').click(function(event) {
-      // event.preventDefault();
-      const $postItemForm = $('.new-item-slide');
-      if ($postItemForm.is(':visible')) {
-        $postItemForm.slideUp();
-      } else {
-        $postItemForm.slideDown();
-      }
-    });
-
+      $('.reveal-hide').click(function(event) {
+        
+        const $postItemForm = $('.new-item-slide');
+        if ($postItemForm.is(':visible')) {
+          $postItemForm.slideUp();
+        } else {
+          $postItemForm.slideDown();
+        }
+      });
 
     });
 
