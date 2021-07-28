@@ -50,7 +50,7 @@ module.exports = (db) => {
     `, [userID])
     .then(data => {
       const messages = data.rows;
-      console.log("MESSAGES: ", messages)
+      // console.log("MESSAGES: ", messages)
       // const exists = [];
       // const messageList = [];
       // for (let i = 0; i < messages.length; i++) {
@@ -74,14 +74,14 @@ module.exports = (db) => {
         }
       }
 
-      // console.log("UNIQUE CONVOS AFTER FUNCTION: ", uniqueConvos);
+      console.log("UNIQUE CONVOS AFTER FUNCTION: ", uniqueConvos);
 
       let arrayofConvos = [];
       for(const u of uniqueConvos) {
         arrayofConvos.push([]);
       }
 
-      // console.log("ARRAYOFCONVOS: ", arrayofConvos)
+      console.log("ARRAYOFCONVOS: ", arrayofConvos)
 
       for (let i = 0; i < uniqueConvos.length; i++) {
         for (const item of messages) {
@@ -90,9 +90,9 @@ module.exports = (db) => {
           }
         }
       }
-      // console.log("ARRAY OF CONVOS ALL: ", arrayofConvos)
-      // console.log("ARRAY OF CONVOS ARRAY 1: ", arrayofConvos[0])
-      // console.log("ARRAY OF CONVOS ARRAY 2: ", arrayofConvos[1])
+      console.log("ARRAY OF CONVOS ALL: ", arrayofConvos)
+      console.log("ARRAY OF CONVOS ARRAY 1: ", arrayofConvos[0])
+      console.log("ARRAY OF CONVOS ARRAY 2: ", arrayofConvos[1])
 
       res.render("../views/urls_messages", { messages, reply, userID, userEmail, arrayofConvos, uniqueConvos })
     })

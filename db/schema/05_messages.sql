@@ -7,4 +7,5 @@ CREATE TABLE messages (
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   vendor_id INTEGER REFERENCES vendors(id) ON DELETE CASCADE,
   message TEXT,
+  is_vendor BOOLEAN DEFAULT FALSE NOT NULL
 );

@@ -122,3 +122,12 @@ VALUES
   (1, 18, 1, 'message'),
   (3, 19, 2, 'message'),
   (5, 20, 3, 'message');
+
+INSERT INTO messages
+  (item_id, user_id, vendor_id, message, is_vendor)
+VALUES
+  (1, 1, 1, 'i see you are desperate for alcohol...', true),
+  (1, 2, 1, 'i see you are desperate for alcohol...', true),
+  (1, 3, 1, 'i see you are desperate for alcohol...', true),
+  (1, 4, 1, 'i see you are desperate for alcohol...', true),
+  (1, 5, 1, 'i see you are desperate for alcohol...', true);
