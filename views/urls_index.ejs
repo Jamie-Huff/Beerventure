@@ -14,15 +14,15 @@
 
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
     <script type="text/javascript" src="/scripts/app.js"></script>
-  </head>
 
+  </head>
   <body>
     <% if (userObject) { %>
     <%-include('partials/_navbarSignedIn') %>
     <% } else { %>
     <%- include('partials/_navbar') %>
     <% } %>
-    
+
     <%- include('partials/_hero') %>
 
     <main class="all-products">
