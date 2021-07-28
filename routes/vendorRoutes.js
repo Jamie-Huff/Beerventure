@@ -28,7 +28,6 @@ module.exports = (db) => {
               userObject: vendor,
               products: products,
             };
-            console.log(templateVars);
             // render vendor's profile page:
             return res.render("../views/urls_vendor_profile", templateVars);
           })
@@ -36,7 +35,6 @@ module.exports = (db) => {
             return res.status(500).json({ error: err.message });
           });
       } else {
-        console.log('HERE');
         return res.status(403).json({ error: "not authorized. you are not a vendor" });
       }
     }
@@ -66,7 +64,6 @@ module.exports = (db) => {
 
 	  router.post('/login', (req, res) => {
     const {email, password} = req.body;
-    console.log('email: ', email);
 
     // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
 
