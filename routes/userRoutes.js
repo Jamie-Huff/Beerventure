@@ -196,6 +196,19 @@ module.exports = (db) => {
   // ---------------------------------------------- END REGISTER NEW USER
 
 
+  // ---------------------------------------------- product load page
+  // router.get(`/:productURL`, (req, res) => {
+  //   let value = req.params.productURL
+  //   value = value.split('&')
+  //   const productName = value[0].substr(1, value[0].length)
+  //   const itemId = value[1].substr(7)
+  //   const params = { 'item.name': productName, 'item.id': itemId }
+  //   // .then(params => {
+  //   //   res.render('urls_product')
+  //   //   return console.log(params)
+  //   // })
+  // })
+  // --------------------------------------------------------------------
   return router;
 };
 
