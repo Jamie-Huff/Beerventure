@@ -17,7 +17,11 @@
 
 <body>
 
-  <%- include('partials/_navbar') %>
+  <% if (userObject) { %>
+    <%-include('partials/_navbarSignedIn') %>
+    <% } else { %>
+    <%- include('partials/_navbar') %>
+    <% } %>
 
 
   <h1>Profile page</h1>
@@ -25,7 +29,7 @@
   <h1>Welcome Back!</h1>
 
   <p>Favourites</p>
-  <p>Messages</p>
+  <a class="messages-after-signin" id="messages-link" href='/messages'>messages</a>
 
 
   <%- include('partials/_footer'); %>

@@ -134,17 +134,13 @@ module.exports = (db) => {
 
 
   // ---------------------------------------------- LOG OUT
-  // ---------------------------------------------------------TO DO: link to a logout button
-
-  router.post('/logout', (req, res) => {
-    req.session.user = null;
+  router.get('/logout', (req, res) => {
+    req.session = null;
     res.redirect("/")
   });
 
 
   // ---------------------------------------------- REGISTER NEW USER
-  // ---------------------------------------------------------TO DO: link to a register button on homepage
-
   router.get('/register', (req, res) => {
     // get user email from session cookie
     const user = req.session.user;
@@ -190,7 +186,7 @@ module.exports = (db) => {
           return;
         }
         req.session.user = user;
-        res.redirect('/urls_profile');
+        res.redirect('/profile');
       })
     // once registered, res.render search page? - TO DO: Decide on age a new user lands on
   });
