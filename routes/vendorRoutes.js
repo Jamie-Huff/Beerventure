@@ -32,7 +32,7 @@ module.exports = (db) => {
             console.log("PRODUCTS", products);
             console.log("TEMPLATEVARS", templateVars);
             // render vendor's profile page:
-            return res.render("../views/urls_vendor_profile", {templateVars});
+            return res.render("../views/urls_vendor_profile", templateVars);
           })
           .catch((err) => {
             return res.status(500).json({ error: err.message });
@@ -47,8 +47,24 @@ module.exports = (db) => {
 
 
   // ---------------------------------------------- VENDOR PROFILE (RENDER)
-
-
+  router.get('/profile', (req, res) => {
+    // get user email from session cookie
+    // getVendorsProducts(vendor.email)
+    //   .then(products => {
+    //     const templateVars = {
+    //       userObject: vendor,
+    //       products: products,
+    //     };
+    //     console.log("PRODUCTS", products);
+    //     console.log("TEMPLATEVARS", templateVars);
+    //     // render vendor's profile page:
+    //     return res.render("../views/urls_vendor_profile", templateVars);
+    //   })
+    //   .catch((err) => {
+    //     return res.status(500).json({ error: err.message });
+    //   });
+    res.redirect('/vendors');
+  });
 
 
   // ---------------------------------------------- LOG IN (RENDER)
