@@ -17,46 +17,66 @@
 <body>
   <%- include('partials/_navbar') %>
 
-  <!-- <% if (!user_id) { %> -->
+  <% if (!userEmail) { %>
   <%- include('partials/_error') %>
-  <!-- <% } %> -->
+  <% } else { %>
 
-  <h1>My Messages</h1>
-  <!-- your content here... -->
+    <h1>My Messages</h1>
+    <!-- your content here... -->
 
-  <% for (let message of messages) { %>
+    <div class="message-page">
 
-  <div class="message-page">
+      <% for (let number of uniqueConvos) { %>
+
+        <div class="sidebar">
+          <p>Conversation with:</p>
+          <a href='#'><%= arrayofConvos[0][0].name %></a>
+          <p>Vendor ID:</p>
+          <%= arrayofConvos[0][0].vendor_id %>
+        </div>
+
+        <% for (let convo of arrayofConvos) { %>
+          <% for (let i = 0; i < convo.length; i++) { %>
+
+          <div class="convos">
+            <p><%= convo[i].message %></p>
+            <% if (convo[i].vendor_id == reply.vendor_id) { %>
+            <div>
+              <%= reply.text %>
+            </div>
+            <% } %>
+
+            <form class="send-message" action="/messages/<%= userID %>" method="POST">
+              <input type="hidden" value="<%= message.vendor_id %>" name="vendor_id"/>
+              <textarea name="text" placeholder="Type message here..."></textarea>
+              <button type="submit">Send</button>
+            </form>
+
+          </div>
 
 
-    <div class="sidebar">
-      <p>Conversation with:</p>
-      <a href='#'><%= message.name %></a>
-    </div>
-    <div class="convos">
-      <%= message.vendor_id %>
-      <p><%= message.message %></p>
-      <% if (message.vendor_id == reply.vendor_id) { %>
-      <div>
-        <%= reply.text %>
-      </div>
+        <% } %>
+
       <% } %>
-      <form action="/messages/<%= user_id %>" method="POST">
-        <h5>Reply</h5>
-        <input type="hidden" value="<%= message.vendor_id %>" name="vendor_id"/>
-        <textarea name="text" placeholder="Type message here..."></textarea>
-        <button type="submit">Send Message</button>
-      </form>
+
     </div>
 
-    <!-- </tr> -->
-
-  </div>
   <% } %>
 
+  <section>
+
+    <div>
+      <p>YOU: </p>
+      <p>%JS for what you said%</p>
+    </div>
+    <div>
+      <p>NOT YOU: </p>
+      <p>%JS for what they said%</p>
+    </div>
+
+  </section>
 
   <%- include('partials/_footer'); %>
-
 
 </body>
 </html>

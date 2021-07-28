@@ -3,23 +3,42 @@
  * Since this file is loaded in server.js into api/messages,
  *   these routes are mounted onto /users
  * See: https://expressjs.com/en/guide/using-middleware.html#middleware.router
- */
+*/
 
 const express = require('express');
 const router  = express.Router();
+const { getUserByEmail, getVendorByEmail } = require('./database');
 
 module.exports = (db) => {
-  // console.log(db)
 
   router.get("/", (req, res) => {
-    const user_id = req.params.user_id
-    if (!user_id) {
-      res.render("../views/urls_messages", { user_id })
+
+    const user = req.session.user;
+    if (!user) {
+      const userEmail = user.email;
+      res.render("../views/urls_messages", {userEmail})
     }
+    const userID = user.id;
+    res.redirect(`/messages/${userID}`);
   })
 
   router.get("/:user_id", (req, res) => {
-    const user_id = req.params.user_id
+    const user = req.session.user;
+    const userEmail = user.email;
+    const userID = user.id;
+
+    // getUserByEmail(user_id)
+    // .then (userInfo => {
+    //   getVendorByEmail(userInfo.email)
+    //   .then(vendorInfo => {
+    //     if (userInfo | vendorInfo) {
+    //       console.log(userInfo)
+    //       console.log(vendorInfo)
+
+    //     }
+    //   })
+    // })
+
 
     const reply = {}
     return db.query(`
@@ -28,20 +47,54 @@ module.exports = (db) => {
     JOIN vendors ON vendor_id = vendors.id
     WHERE user_id = $1
     ORDER BY vendor_id;
-    `, [user_id])
+    `, [userID])
     .then(data => {
       const messages = data.rows;
-      const exists = [];
-      const messageList = [];
-      for (let i = 0; i < messages.length; i++) {
+      console.log("MESSAGES: ", messages)
+      // const exists = [];
+      // const messageList = [];
+      // for (let i = 0; i < messages.length; i++) {
+      //   if (!exists.includes(element.vendor_id)) {
+      //     if (messageList.length < 1) {
+      //       messageList.push([])
+      //     }
+      //     messageList.push(element);
+      //     exists.push(element.vendor_id);
+      //   }
+      // }
+      // console.log("MESSAGELIST: ", messageList);
+      // console.log("EXISTS: ", exists);
+
+      const uniqueConvos = [];
+
+      for(let i = 0; i < messages.length; i++) {
         const element = messages[i];
-        if (!exists.includes(element.vendor_id)) {
-          messageList.push(element);
-          exists.push(element.vendor_id);
+        if (!uniqueConvos.includes(element.vendor_id)) {
+          uniqueConvos.push(element.vendor_id);
         }
       }
-      console.log(messages);
-      res.render("../views/urls_messages", { messages: messageList, reply, user_id })
+
+      // console.log("UNIQUE CONVOS AFTER FUNCTION: ", uniqueConvos);
+
+      let arrayofConvos = [];
+      for(const u of uniqueConvos) {
+        arrayofConvos.push([]);
+      }
+
+      // console.log("ARRAYOFCONVOS: ", arrayofConvos)
+
+      for (let i = 0; i < uniqueConvos.length; i++) {
+        for (const item of messages) {
+          if (item.vendor_id == uniqueConvos[i]) {
+            arrayofConvos[i].push(item);
+          }
+        }
+      }
+      // console.log("ARRAY OF CONVOS ALL: ", arrayofConvos)
+      // console.log("ARRAY OF CONVOS ARRAY 1: ", arrayofConvos[0])
+      // console.log("ARRAY OF CONVOS ARRAY 2: ", arrayofConvos[1])
+
+      res.render("../views/urls_messages", { messages, reply, userID, userEmail, arrayofConvos, uniqueConvos })
     })
     .catch(err => {
       res
@@ -51,7 +104,7 @@ module.exports = (db) => {
   });
 
   router.post("/:user_id", (req, res) => {
-    const user_id = req.params.user_id
+    const user = req.session.user;
 
     console.log(req.body)
 
@@ -74,9 +127,7 @@ module.exports = (db) => {
     `, [user_id, reply.vendor_id, reply.text])
     .then(data => {
       const messages = data.rows;
-      // console.log(messages);
       return res.redirect(`/messages/${user_id}`)
-      // res.render("../views/urls_messages", { messages, reply, user_id })
     })
     .catch(err => {
       res
