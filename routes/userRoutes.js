@@ -26,7 +26,7 @@ module.exports = (db) => {
           return res.render("../views/urls_index", templateVars);
         })
         .catch((err) => {
-          res.status(500).json({ error: err.message });
+          return res.status(500).json({ error: err.message });
         });
     } else {
 

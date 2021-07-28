@@ -79,24 +79,51 @@ exports.getVendorsProducts = getVendorsProducts;
 
 /// ----------------------------------------------------- Messages
 
-
-const getMessages = () => {
-  //to retrieve messags from the database (currently set to return all data)
+// repeating code but it makes it simpler:
+const getVendorMessages = function(vendorId) {
   return pool
-    .query(`
-      SELECT messages.*, vendors.name as name
-      FROM messages
-      JOIN vendors ON vendor_id = vendors.id
-      ORDER BY vendor_id;
-      `)
-    .then((result) => {
-      console.log(result.rows);
-      result.rows;
-    })
+    .query(`SELECT messages.*, users.name
+    FROM messages
+    JOIN users on users.id = user_id
+    WHERE vendor_id = $1
+    ORDER BY users.name`, [vendorID])
+    .then(res => res.rows ? res.rows : null)
     .catch(err => console.error('query error', err.stack))
+}
+exports.getVendorMessages = getVendorMessages;
 
-};
-exports.getMessages = getMessages;
+
+
+
+const getUserMessages = function(userId) {
+  //
+
+}
+exports.getUserMessages = getUserMessages;
+
+
+
+
+
+
+
+// const getMessages = () => {
+//   //to retrieve messags from the database (currently set to return all data)
+//   return pool
+//     .query(`
+//       SELECT messages.*, vendors.name as name
+//       FROM messages
+//       JOIN vendors ON vendor_id = vendors.id
+//       ORDER BY vendor_id;
+//       `)
+//     .then((result) => {
+//       console.log(result.rows);
+//       result.rows;
+//     })
+//     .catch(err => console.error('query error', err.stack))
+
+// };
+// exports.getMessages = getMessages;
 
 // consts addMessages = (message, reqparams) => {
 //   //adds messages to database

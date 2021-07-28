@@ -7,16 +7,110 @@
 
 const express = require('express');
 const router  = express.Router();
-const { getUserByEmail, getVendorByEmail } = require('./database');
+const { getUserByEmail, getVendorByEmail, getVendorMessages, getUserMessages } = require('./database');
 
 module.exports = (db) => {
 
   router.get("/", (req, res) => {
+    // get user cookie (all users need a cookie to be signed in to access the page)
+    const user = req.session.user;
+    // if no cookie, push them to login
+    if (!user) {
+      return res.status(403).json({ error: "not authorized"});
+      // could just boot them to login page instead?
+      return res.render("../views/urls_login")
+    }
 
+
+
+    // if user is a vendor (session cookie has vendor: true)
+    if (user.vendor) {
+      // just so i don't get confused:
+      const vendor = user;
+      // Get all the messages from the database where messages.vendor_id = vendor.id
+      getVendorMessages(vendor.id)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(e => res.send(e))
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    } else {
+      // user is not a vendor, they are a user
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
     const user = req.session.user;
     if (!user) {
-      const userEmail = user.email;
-      res.render("../views/urls_messages", {userEmail})
+      res.render("../views/login", {userEmail})
     }
     const userID = user.id;
     res.redirect(`/messages/${userID}`);
@@ -114,6 +208,7 @@ module.exports = (db) => {
 
 
 
+    */
   });
 
   return router;
