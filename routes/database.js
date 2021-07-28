@@ -95,9 +95,10 @@ exports.getVendorsProducts = getVendorsProducts;
 // repeating code but it makes it simpler:
 const getVendorMessages = function(vendorId) {
   return pool
-    .query(`SELECT messages.*, users.name
+    .query(`SELECT messages.id, , users.name
     FROM messages
     JOIN users on users.id = user_id
+    JOIN itesm on 
     WHERE vendor_id = $1
     ORDER BY users.name`, [vendorId])
     .then(res => res.rows ? res.rows : null)

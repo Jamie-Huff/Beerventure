@@ -18,11 +18,12 @@
   <%- include('partials/_navbar') %>
 
   <% if (!userEmail) { %>
-  <%- include('partials/_error') %>
+    <%- include('partials/_error') %>
   <% } else { %>
 
     <h1>My Messages</h1>
 
+<<<<<<< HEAD
   
     <section id="messages-container">
 
@@ -30,6 +31,48 @@
 
 
 
+=======
+    <section class="message-page">
+      <% for (const convo of arrayofConvos) { %>
+        <div class="convo-title">
+          CONVERATION WITH: <%= convo[0].name %>
+        </div>
+
+        <div class="convos">
+
+
+        <% for (let i = convo.length - 1 ; i >= 0; i--) { %>
+
+          <% if (convo[i].is_vendor === isVendor) { %>
+
+            <div>
+              <p>User: <%= convo[i].message %> </p>
+            </div>
+
+          <% } else { %>
+
+            <div>
+              <p>Vendor: <%= convo[i].message %> </p>
+            </div>
+
+          <% } %>
+
+        <% } %>
+        </div>
+        <form class="send-message" action="/messages/<%= userID %>" method="POST">
+          <input type="hidden" value="<%= convo[0].vendor_id %>" name="vendor_id"/>
+          <textarea class="msg" name="text" placeholder="Type message here..."></textarea>
+          <button type="submit">Send</button>
+        </form>
+
+
+      <% } %>
+
+    </section>
+
+  <% } %>
+
+>>>>>>> messaging
 
   <%- include('partials/_footer'); %>
 
