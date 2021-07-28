@@ -6,5 +6,5 @@ CREATE TABLE messages (
   item_id INTEGER REFERENCES items(id) ON DELETE CASCADE,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   vendor_id INTEGER REFERENCES vendors(id) ON DELETE CASCADE,
-  message TEXT,
+  message TEXT
 );

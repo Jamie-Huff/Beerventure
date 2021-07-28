@@ -47,18 +47,7 @@ module.exports = (db) => {
 
   // ---------------------------------------------- VENDOR PROFILE (RENDER)
 
-  // Render Login Page:
-  router.get('/profile', (req, res) => {
-    const user = req.session.user;
-    console.log('user line 52: ', user);
-    if (!user) {
-      return res.render("../views/urls_login");
-    }
-    if (user.vendor) {
-      res.render('../views/urls_vendor_profile');
-    }
-    return res.status(403).json({ error: "not authorized. you are not a vendor" });
-  });
+
 
 
     // ---------------------------------------------- LOG IN (RENDER)
@@ -75,21 +64,25 @@ module.exports = (db) => {
   });
   */
     // ---------------------------------------------- LOG IN (POST)
-  /*
-	// On login button submit
-  router.post('/login', (req, res) => {
+
+	  router.post('/login', (req, res) => {
     const {email, password} = req.body;
+    console.log('email: ', email);
 
     // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
-    getUserByEmail(email)
-    .then(user => {
-      bcrypt.compare(password, user.password);
-      req.session.user = user;
-    })
-    .then(result => res.redirect('/'))
-    .catch(err => console.error('query error', err.stack));
+
+    getVendorByEmail(email)
+      .then(vendor => {
+            if (vendor) {
+              bcrypt.compare(password, vendor.password);
+              req.session.user = vendor;
+            }
+          })
+      .then(result => {
+        return res.redirect('/vendors/profile');
+      })
+      .catch(err => console.error('query error', err.stack))
   });
-  */
 
   // ---------------------------------------------- LOG OUT
   // ---------------------------------------------------------TO DO: link to a logout button

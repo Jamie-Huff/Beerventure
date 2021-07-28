@@ -66,7 +66,7 @@ module.exports = (db) => {
       return res.render("../views/urls_login");
     }
     if (user.vendor) {
-      return res.redirect('/vendors/profile');
+      return res.render("../views/urls_vendor_profile");
     }
     return res.render("../views/urls_profile");
   });
@@ -92,26 +92,45 @@ module.exports = (db) => {
     const {email, password} = req.body;
 
     // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
+
     getUserByEmail(email)
       .then(user => {
-        getVendorByEmail(email)
-          .then(vendor => {
             if (user) {
               bcrypt.compare(password, user.password);
               req.session.user = user;
-            } else if (vendor) {
+            }
+          })
+      .then(result => {
+        return res.redirect('/profile');
+      })
+      .catch(err => console.error('query error', err.stack))
+
+  });
+
+
+  router.post('/vendors/login', (req, res) => {
+    const {email, password} = req.body;
+    console.log('email: ', email);
+
+    // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
+
+    getVendorByEmail(email)
+      .then(vendor => {
+            if (vendor) {
               bcrypt.compare(password, vendor.password);
               vendor.vendor = true;
               req.session.user = vendor;
             }
           })
       .then(result => {
-        return res.redirect('/profile');
-      })
+        return res.redirect('/vendors');
       })
       .catch(err => console.error('query error', err.stack))
   });
 
+
+
+  
 
   // ---------------------------------------------- LOG OUT
   // ---------------------------------------------------------TO DO: link to a logout button
