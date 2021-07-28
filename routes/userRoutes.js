@@ -63,10 +63,10 @@ module.exports = (db) => {
   router.get('/profile', (req, res) => {
     const user = req.session.user;
     if (!user) {
-      return res.render("../views/login");
+      return res.render("../views/urls_login");
     }
     if (user.vendor) {
-      return res.redirect('/vendors');
+      return res.redirect('/vendors/profile');
     }
     return res.render("../views/urls_profile");
   });

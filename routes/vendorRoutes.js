@@ -12,6 +12,7 @@ module.exports = (db) => {
   router.get('/', (req, res) => {
     // get user email from session cookie
     const vendor = req.session.user;
+    console.log('VENDOR COOKIE: ', vendor);
 
     // Anonymous user landing on homepage - no session cookie
     if (!vendor) {
@@ -26,11 +27,11 @@ module.exports = (db) => {
           .then(products => {
             const templateVars = {
               userObject: vendor,
-              products: products
+              products: products,
             };
             console.log(templateVars);
             // render vendor's profile page:
-            return res.render("../views/urls_vendor_profile", {templateVars});
+            return res.render("../views/urls_vendor_profile", templateVars);
           })
           .catch((err) => {
             return res.status(500).json({ error: err.message });
@@ -44,14 +45,14 @@ module.exports = (db) => {
   });
 
 
-
   // ---------------------------------------------- VENDOR PROFILE (RENDER)
 
   // Render Login Page:
-  router.get('/vendor/profile', (req, res) => {
+  router.get('/profile', (req, res) => {
     const user = req.session.user;
+    console.log('user line 52: ', user);
     if (!user) {
-      return res.render("../views/login");
+      return res.render("../views/urls_login");
     }
     if (user.vendor) {
       res.render('../views/urls_vendor_profile');
@@ -103,18 +104,22 @@ module.exports = (db) => {
   // ---------------------------------------------- REGISTER NEW VENDOR
   // ---------------------------------------------------------TO DO: link to a register button on homepage
 
-  router.get('/vendor/register', (req, res) => {
+  router.get('/register', (req, res) => {
     // get vendor email from session cookie
-    const vendor = req.session.user;
+    const user = req.session.user;
     // if session cookie exists, redirect to homepage TO DO - CHANGE THIS TO REDIRECT TO VENDOR'S PAGE
-    if (vendor.vendor) return res.send({"error":"vendor already logged in"});
+    if (user) {
+      if (user.vendor) {
+        return res.send({"error":"vendor already logged in"});
+      }
+    }
     // if vendor doesn't have a session cookie, show the registration page
     return res.render('../views/urls_register_vendor');
   });
 
 
   // On register for an account button submit
-  router.post('/vendor/register', (req, res) => {
+  router.post('/register', (req, res) => {
     const newVendor = req.body;
     // bcrypt the password
     newVendor.password = bcrypt.hashSync(newVendor.password, saltRounds);
@@ -143,8 +148,10 @@ module.exports = (db) => {
           return;
         }
         req.session.user = newVendor;
-        return res.redirect('/urls_vendor_profile');
+        return res.redirect('/profile');
       })
+      .catch(e => res.send(e));
+
   });
   // ---------------------------------------------- END REGISTER NEW VENDOR
 

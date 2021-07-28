@@ -83,7 +83,7 @@ const getVendorsProducts = function(email) {
 
   return pool
     .query(`SELECT items.* FROM items JOIN vendors ON vendor_id = vendors.id WHERE vendors.email=$1`, [email])
-    .then(res => res.rows[0] ? res.rows[0] : null)
+    .then(res => res.rows ? res.rows : null)
     .catch(err => console.error('query error', err.stack))
 }
 exports.getVendorsProducts = getVendorsProducts;
