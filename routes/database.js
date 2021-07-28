@@ -88,6 +88,22 @@ const getVendorsProducts = function(email) {
 }
 exports.getVendorsProducts = getVendorsProducts;
 
+//add product
+const addProduct = function(list) {
+  return pool
+    .query(`
+      INSERT INTO items
+        (vendor_id, image, name, description, price, category, abv, mliter)
+      VALUES
+        ($1, $2, $3, $4, $5, $6, $7, $8)
+    `, list)
+    .then((result) => {
+      console.log(result)
+      return result
+    })
+    .catch(err => console.error('query error', err.stack))
+}
+exports.addProduct = addProduct;
 
 
 const addNewProduct = function(product) {

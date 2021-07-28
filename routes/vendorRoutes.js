@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { addNewVendor, getVendorByEmail, getVendorsProducts, addNewProduct } = require('./database');
+const { addNewVendor, getVendorByEmail, getVendorsProducts, addNewProduct, addProduct } = require('./database');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -10,7 +10,6 @@ module.exports = (db) => {
 
   // ---------------------------------------------- HOMEPAGE (RENDER w PRODUCTS & CHECK FOR SESSION COOKIE)
   router.get('/', (req, res) => {
-    console.log("AT ROUTE /");
     // get user email from session cookie
     const vendor = req.session.user;
 
@@ -43,10 +42,91 @@ module.exports = (db) => {
   });
 
 
-    // ---------------------------------------------- LOG IN (RENDER)
-    // Handled in userRoutes.js
-  
-    // ---------------------------------------------- LOG IN (POST)
+  // ---------------------------------------------- VENDOR PROFILE (RENDER)
+  router.get('/profile', (req, res) => {
+    // get user email from session cookie
+    const vendor = req.session.user;
+    const vendorEmail = vendor.email;
+
+    if (!vendor) {
+      // if vendor lands on /vendors and doesn't have a session cookie, redirect to login
+      return res.render("../views/urls_login");
+    }
+    // res.redirect('/');
+
+    getVendorByEmail(vendorEmail)
+      .then(vendorData => {
+        if (vendorData) {
+          getVendorsProducts(vendorEmail)
+            .then(() => {
+              // redirect to vendor's profile page:
+              res.redirect('/');
+            })
+            .catch((err) => {
+              return res.status(500).json({ error: err.message });
+            });
+        }
+      })
+      .catch((err) => {
+        return res.status(500).json({ error: err.message });
+      });
+  });
+
+  router.post('/profile', (req, res) => {
+
+    const vendor = req.session.user;
+    // console.log("VENDOR: ", vendor);
+    // console.log("REQ BODY: ", req.body)
+    if (!req.body) {
+      res.status(400).json({ error: 'invalid request: no data in POST body'});
+      return;
+    }
+
+    const vendorID = vendor.id
+    const itemImage = req.body.item_image
+    const itemName = req.body.item_name
+    const itemDescription = req.body.item_description
+    const itemPrice = req.body.item_price
+    const itemCategory = req.body.item_category
+    const itemAbv = req.body.item_abv
+    const itemMliter = req.body.item_mliter
+
+    //(vendor_id, image, name, description, price, category, abv, mliter)
+    const productDetails = [
+      vendorID,
+      itemImage,
+      itemName,
+      itemDescription,
+      Number(itemPrice),
+      itemCategory,
+      parseInt(itemAbv),
+      Number(itemMliter)
+    ]
+    // console.log("PRODUCTDETAILS: ", productDetails)
+    addProduct(productDetails)
+    .then((newProduct) => {
+      return res.redirect('/vendors/profile')
+    })
+    .catch((error) => {
+      res.status(500).json({ error: err.message })
+    })
+
+  })
+
+  // ---------------------------------------------- LOG IN (RENDER)
+  /*
+  // Render Login Page:
+  router.get('/login', (req, res) => {
+    // Check if session cookie exists,
+    const user = req.session.user;
+    if (user) {
+      res.render("/")
+    }
+    // -----------------------------------TO DO: Change this route to user profile page
+    res.render("../views/urls_login")
+  });
+  */
+  // ---------------------------------------------- LOG IN (POST)
 
 	router.post('/login', (req, res) => {
     const {email, password} = req.body;
@@ -153,7 +233,7 @@ module.exports = (db) => {
     // TO DO: Figure out how to handle images properly. Unsure how they get output to page
     newItem.image = 'https://images.unsplash.com/photo-1523567830207-96731740fa71?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=634&q=80';
     console.log('newItem: ', newItem);
-    
+
 
     addNewProduct(newItem)
       .then(item => {
