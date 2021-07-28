@@ -12,7 +12,7 @@ module.exports = (db) => {
   router.get('/', (req, res) => {
     // get user email from session cookie
     const user = req.session.user;
-    
+
     // Anonymous user landing on homepage - no session cookie
     if (!user) {
       // helper function to retrieve products from DB
@@ -62,13 +62,14 @@ module.exports = (db) => {
   // Render Login Page:
   router.get('/profile', (req, res) => {
     const user = req.session.user;
+    const templateVars = {userObject: user}
     if (!user) {
       return res.render("../views/urls_login");
     }
     if (user.vendor) {
       return res.render("../views/urls_vendor_profile");
     }
-    return res.render("../views/urls_profile");
+    return res.render("../views/urls_profile", templateVars);
   });
 
 

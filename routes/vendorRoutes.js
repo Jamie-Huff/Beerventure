@@ -10,12 +10,13 @@ module.exports = (db) => {
 
   // ---------------------------------------------- HOMEPAGE (RENDER w PRODUCTS & CHECK FOR SESSION COOKIE)
   router.get('/', (req, res) => {
+    console.log("AT ROUTE /");
     // get user email from session cookie
     const vendor = req.session.user;
 
     // Anonymous user landing on homepage - no session cookie
     if (!vendor) {
-       // if vendor lands on /vendors and doesn't have a session cookie, redirect to login
+      // if vendor lands on /vendors and doesn't have a session cookie, redirect to login
       return res.render("../views/urls_login");
 
     } else {
@@ -47,22 +48,22 @@ module.exports = (db) => {
   
     // ---------------------------------------------- LOG IN (POST)
 
-	  router.post('/login', (req, res) => {
+	router.post('/login', (req, res) => {
     const {email, password} = req.body;
 
     // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
 
     getVendorByEmail(email)
       .then(vendor => {
-            if (vendor) {
-              bcrypt.compare(password, vendor.password);
-              req.session.user = vendor;
-            }
-          })
+        if (vendor) {
+          bcrypt.compare(password, vendor.password);
+          req.session.user = vendor;
+        }
+      })
       .then(result => {
         return res.redirect('/vendors/profile');
       })
-      .catch(err => console.error('query error', err.stack))
+      .catch(err => console.error('query error', err.stack));
   });
 
   // ---------------------------------------------- LOG OUT
@@ -103,14 +104,14 @@ module.exports = (db) => {
     // -----------------------------------TO DO: Provide vendor with a relevant error message
     // -----------------------------------TO DO: Validate all inputs, provide vendor with appropriate error messages
     getVendorByEmail(newVendor.email)
-    .then(vendorData => {
-      if (vendorData) {
+      .then(vendorData => {
+        if (vendorData) {
         // if vendor exists in DB vendors table, redirect to login to their account
-        vendorData ? res.send({"existingAccount":"vendors"}) : null;
-        return res.redirect('/login');
-      }
-    })
-    .catch(e => res.send(e));
+          vendorData ? res.send({"existingAccount":"vendors"}) : null;
+          return res.redirect('/login');
+        }
+      })
+      .catch(e => res.send(e));
 
     // if email doesn't exist in DB, register the user by INPUTing their data in user database
     // add a vendor boolean to the cookie

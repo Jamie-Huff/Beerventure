@@ -32,6 +32,7 @@ module.exports = (db) => {
   });
 
   router.post("/", (req, res) => {
+    let user = req.session.user
     const city = req.body.city
     let query = `
     SELECT price, items.name, category, vendors.city as city, date_posted, image, vendors.name as vendor
@@ -41,8 +42,21 @@ module.exports = (db) => {
     `
     return db.query(query, [city])
       .then(data => {
+        let templateVars;
         const items = data.rows;
-        res.render('urls_search', {items})
+        if (user) {
+          templateVars = {
+            items,
+            userObject: user
+          }
+        } else {
+          templateVars = {
+          items,
+          userObject: null
+          }
+        }
+
+        res.render('urls_search', templateVars)
       })
       .catch(err => {
         res
