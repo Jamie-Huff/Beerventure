@@ -1,4 +1,9 @@
 
+<head>
+
+</head>
+
+
 <header class="hero">
   <div class="overlay">
 
@@ -7,13 +12,15 @@
       <% if (userObject) { %>
 
       <div class="hero-content">
-        <div class="hero-left">
 
         <h2>Hello <%= userObject.name %></h2>
         <br>
-        <h2>Manage your items for sale</h2>
-        </div>
+        <h6>Manage your items for sale</h6>
+
+        <%- include('_post_item') %>
       </div>
+
+
 
       <% } else { %>
 
@@ -38,6 +45,8 @@
         </div>
 
       <% } %>
+
+
 
     </div>
   </div>

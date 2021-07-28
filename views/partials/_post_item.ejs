@@ -1,0 +1,62 @@
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function(event){
+      $('.new-item-slide').css("visibility", "hidden");
+      $('.new-item-slide').slideUp();
+
+      $('.reveal').click(function(event) {
+      $('.new-item-slide').css("visibility", "visible");
+
+        const $postItemForm = $('.new-item-slide');
+        if ($postItemForm.is(':visible')) {
+          $postItemForm.slideUp();
+        } else {
+          $postItemForm.slideDown();
+        }
+      });
+
+    });
+
+  </script>
+</head>
+
+<header>
+
+  <main>
+    <div class="reveal-hide">
+      <button class="reveal">Post New Item</button>
+    </div>
+
+    <section class="new-item-slide">
+      <form method="POST" action="/vendors/new_item">
+        <input type="text" name="name" placeholder="Item Name" required>
+        <br>
+        <input type="text" name="description" placeholder="Product description, Tasting or pairing notes">
+        <br>
+        <input type="text" name="price" placeholder="Price" required>
+        <br>
+        <input type="text" name="category" placeholder="category" required>
+        <br>
+        <input type="text" name="abv" placeholder="Alcohol Content (%)" required>
+        <br>
+        <input type="text" name="mliter" placeholder="Volume (mL)" required>
+        <br>
+        <label for="imageFile">Upload a photo:</label>
+        <br>
+        <input type="file" id="imageFile" capture="environment" accept="image/*" required>
+        <br>
+        <label for="featured-check">Make this a featured Item</label>
+        <br>
+        <input type="checkbox" id="featured_check" name="featured_check">
+        <br>
+        <button type="submit">Add New Item</button>
+      </form>
+    </section>
+
+    <br>
+
+  </main>
+
+</header>
+

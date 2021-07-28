@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { addNewVendor, getVendorByEmail, getVendorsProducts } = require('./database');
+const { addNewVendor, getVendorByEmail, getVendorsProducts, addNewProduct } = require('./database');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -10,13 +10,13 @@ module.exports = (db) => {
 
   // ---------------------------------------------- HOMEPAGE (RENDER w PRODUCTS & CHECK FOR SESSION COOKIE)
   router.get('/', (req, res) => {
+    console.log("AT ROUTE /");
     // get user email from session cookie
     const vendor = req.session.user;
-    console.log('VENDOR COOKIE: ', vendor);
 
     // Anonymous user landing on homepage - no session cookie
     if (!vendor) {
-       // if vendor lands on /vendors and doesn't have a session cookie, redirect to login
+      // if vendor lands on /vendors and doesn't have a session cookie, redirect to login
       return res.render("../views/urls_login");
 
     } else {
@@ -29,7 +29,6 @@ module.exports = (db) => {
               userObject: vendor,
               products: products,
             };
-            console.log(templateVars);
             // render vendor's profile page:
             return res.render("../views/urls_vendor_profile", templateVars);
           })
@@ -37,7 +36,6 @@ module.exports = (db) => {
             return res.status(500).json({ error: err.message });
           });
       } else {
-        console.log('HERE');
         return res.status(403).json({ error: "not authorized. you are not a vendor" });
       }
     }
@@ -45,47 +43,32 @@ module.exports = (db) => {
   });
 
 
-  // ---------------------------------------------- VENDOR PROFILE (RENDER)
-
-
-
-
     // ---------------------------------------------- LOG IN (RENDER)
-  /*
-  // Render Login Page:
-  router.get('/login', (req, res) => {
-    // Check if session cookie exists,
-    const user = req.session.user;
-    if (user) {
-      res.render("/")
-    }
-    // -----------------------------------TO DO: Change this route to user profile page
-    res.render("../views/urls_login")
-  });
-  */
+    // Handled in userRoutes.js
+  
     // ---------------------------------------------- LOG IN (POST)
 
-	  router.post('/login', (req, res) => {
+	router.post('/login', (req, res) => {
     const {email, password} = req.body;
-    console.log('email: ', email);
 
     // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
 
     getVendorByEmail(email)
       .then(vendor => {
-            if (vendor) {
-              bcrypt.compare(password, vendor.password);
-              req.session.user = vendor;
-            }
-          })
+        if (vendor) {
+          bcrypt.compare(password, vendor.password);
+          req.session.user = vendor;
+        }
+      })
       .then(result => {
         return res.redirect('/vendors/profile');
       })
-      .catch(err => console.error('query error', err.stack))
+      .catch(err => console.error('query error', err.stack));
   });
 
   // ---------------------------------------------- LOG OUT
   // ---------------------------------------------------------TO DO: link to a logout button
+  // Unsure if this will be handled in vendorRoutes or UserRoutes for both
   /*
   router.post('/logout', (req, res) => {
     req.session.user = null;
@@ -121,14 +104,14 @@ module.exports = (db) => {
     // -----------------------------------TO DO: Provide vendor with a relevant error message
     // -----------------------------------TO DO: Validate all inputs, provide vendor with appropriate error messages
     getVendorByEmail(newVendor.email)
-    .then(vendorData => {
-      if (vendorData) {
+      .then(vendorData => {
+        if (vendorData) {
         // if vendor exists in DB vendors table, redirect to login to their account
-        vendorData ? res.send({"existingAccount":"vendors"}) : null;
-        return res.redirect('/login');
-      }
-    })
-    .catch(e => res.send(e));
+          vendorData ? res.send({"existingAccount":"vendors"}) : null;
+          return res.redirect('/login');
+        }
+      })
+      .catch(e => res.send(e));
 
     // if email doesn't exist in DB, register the user by INPUTing their data in user database
     // add a vendor boolean to the cookie
@@ -137,7 +120,7 @@ module.exports = (db) => {
     addNewVendor(newVendor)
       .then(vendor => {
         if (!vendor) {
-          res.send({error: "error"});
+          res.send({error: 'error'});
           return;
         }
         req.session.user = newVendor;
@@ -146,7 +129,45 @@ module.exports = (db) => {
       .catch(e => res.send(e));
 
   });
-  // ---------------------------------------------- END REGISTER NEW VENDOR
+
+
+  // ---------------------------------------------- POST NEW ITEM
+
+  router.post('/new_item', (req, res) => {
+    const vendor = req.session.user;
+
+    const newItem = req.body;
+    newItem.vendor_id = vendor.id;
+    // do some entry validation
+    newItem.price = newItem.price * 100;
+    newItem.abv = newItem.abv * 100;
+    if (newItem.featured_check == 'on') {
+      newItem.featured_check = true;
+    } else {
+      newItem.featured_check = false;
+    }
+
+    // watch for price in cents, mL, and the percentage
+
+    // Placeholder image:
+    // TO DO: Figure out how to handle images properly. Unsure how they get output to page
+    newItem.image = 'https://images.unsplash.com/photo-1523567830207-96731740fa71?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=634&q=80';
+    console.log('newItem: ', newItem);
+    
+
+    addNewProduct(newItem)
+      .then(item => {
+        if (!item) {
+          res.send({error: 'error'});
+          return;
+        }
+        return res.redirect('/vendors');
+      })
+      .catch(e => res.send(e))
+
+  });
+
+
 
 
   return router;
