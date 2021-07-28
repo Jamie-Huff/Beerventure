@@ -15,11 +15,16 @@
 </head>
 
 <body>
-  <%- include('partials/_navbar') %>
+  <% if (userEmail) { %>
+    <%- include('partials/_navbarSignedIn') %>
+  <% } else { %>
+    <%- include('partials/_navbar') %>
+
+  <% } %>
+
   <h1>Profile page</h1>
   <!-- your content here... -->
-  <h1>Welcome Back User!</h1>
-  <p>Looks like you're in IP API</p>
+  <h1>Welcome Back!</h1>
 
   <p>Favourites</p>
   <p>Messages</p>

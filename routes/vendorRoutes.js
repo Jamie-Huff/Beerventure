@@ -29,9 +29,10 @@ module.exports = (db) => {
               userObject: vendor,
               products: products,
             };
-            console.log(templateVars);
+            console.log("PRODUCTS", products);
+            console.log("TEMPLATEVARS", templateVars);
             // render vendor's profile page:
-            return res.render("../views/urls_vendor_profile", templateVars);
+            return res.render("../views/urls_vendor_profile", {templateVars});
           })
           .catch((err) => {
             return res.status(500).json({ error: err.message });
@@ -50,7 +51,7 @@ module.exports = (db) => {
 
 
 
-    // ---------------------------------------------- LOG IN (RENDER)
+  // ---------------------------------------------- LOG IN (RENDER)
   /*
   // Render Login Page:
   router.get('/login', (req, res) => {
@@ -82,7 +83,7 @@ module.exports = (db) => {
         return res.redirect('/vendors/profile');
       })
       .catch(err => console.error('query error', err.stack))
-  });
+    });
 
   // ---------------------------------------------- LOG OUT
   // ---------------------------------------------------------TO DO: link to a logout button
