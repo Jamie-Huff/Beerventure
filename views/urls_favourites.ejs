@@ -15,7 +15,11 @@
 </head>
 
 <body>
-  <%- include('partials/_navbar') %>
+  <% if (userObject) { %>
+    <%- include('partials/_navbar') %>
+    <% } else { %>
+    <%-include('partials/_navbarSignedIn') %>
+    <% } %>
   <h1>Favourites Page</h1>
   <!-- your content here... -->
 
