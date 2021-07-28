@@ -10,9 +10,10 @@ module.exports = (db) => {
 
   // ---------------------------------------------- HOMEPAGE (RENDER w PRODUCTS & CHECK FOR SESSION COOKIE)
   router.get('/', (req, res) => {
+    console.log("AT ROUTE /");
     // get user email from session cookie
     const vendor = req.session.user;
-    console.log('VENDOR COOKIE: ', vendor);
+    // console.log('VENDOR COOKIE: ', vendor);
 
     // Anonymous user landing on homepage - no session cookie
     if (!vendor) {
@@ -29,8 +30,8 @@ module.exports = (db) => {
               userObject: vendor,
               products: products,
             };
-            console.log("PRODUCTS", products);
-            console.log("TEMPLATEVARS", templateVars);
+            // console.log("PRODUCTS", products);
+            // console.log("TEMPLATEVARS", templateVars);
             // render vendor's profile page:
             return res.render("../views/urls_vendor_profile", templateVars);
           })
@@ -49,21 +50,33 @@ module.exports = (db) => {
   // ---------------------------------------------- VENDOR PROFILE (RENDER)
   router.get('/profile', (req, res) => {
     // get user email from session cookie
-    // getVendorsProducts(vendor.email)
-    //   .then(products => {
-    //     const templateVars = {
-    //       userObject: vendor,
-    //       products: products,
-    //     };
-    //     console.log("PRODUCTS", products);
-    //     console.log("TEMPLATEVARS", templateVars);
-    //     // render vendor's profile page:
-    //     return res.render("../views/urls_vendor_profile", templateVars);
-    //   })
-    //   .catch((err) => {
-    //     return res.status(500).json({ error: err.message });
-    //   });
-    res.redirect('/vendors');
+    const vendor = req.session.user;
+    const vendorEmail = vendor.email;
+
+    if (!vendor) {
+      // if vendor lands on /vendors and doesn't have a session cookie, redirect to login
+    return res.render("../views/urls_login");
+    }
+    res.redirect('/');
+
+    getVendorByEmail(vendorEmail)
+    .then(vendorData => {
+      if (vendorData) {
+        getVendorsProducts(vendorEmail)
+        .then(products => {
+          const templateVars = {
+            userObject: vendor,
+            products: products,
+          };
+          // redirect to vendor's profile page:
+          res.redirect('/', templateVars);
+        })
+        .catch((err) => {
+          return res.status(500).json({ error: err.message });
+        })
+      }
+    })
+
   });
 
 
