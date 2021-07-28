@@ -2,35 +2,49 @@
 .message-page {
   display: flex;
   background: #E0E0E0;
-  border: 2px black solid;
-  margin-bottom: 1em;
+
   width: 90%;
   margin-left: 5%;
+  margin-bottom: 1em;
+
+  border-right: 2px rgb(107, 106, 106) solid;
+  border-left: 2px rgb(107, 106, 106) solid;
+
   font-weight: bold;
-  .sidebar {
+  flex-direction: column;
+
+  .convo-title {
     display: flex;
     flex-direction: column;
-    width: 20%;
-    border-right: 2px rgb(107, 106, 106) solid;
     align-items: center;
+
+    border-bottom: 2px rgb(107, 106, 106) solid;
+    border-top: 2px rgb(107, 106, 106) solid;
+    padding: 1em 1em;
+
   }
   .convos {
     display: flex;
-    width: 80%;
     flex-direction: column;
     justify-content: space-between;
     padding: 1em 1em;
-    .send-message {
-      display:flex;
-      justify-content: space-between;
-      button {
-        border: none;
-        background-color: black;
-        color: white;
-        font-weight: bold;
-        border-radius: 8px;
-        padding: 12px 28px;
-      }
+
+
+  }
+
+  .send-message {
+    display:flex;
+    justify-content: space-between;
+    padding: 1em 1em;
+
+    button {
+      border: none;
+      background-color: black;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      padding: 12px 28px;
+
     }
   }
 }

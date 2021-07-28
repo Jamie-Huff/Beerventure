@@ -7,7 +7,7 @@
 
 const express = require('express');
 const router  = express.Router();
-const { getUserByEmail, getVendorByEmail, getMessages } = require('./database');
+const { getUserByEmail, getVendorByEmail, getMessages, addMessages } = require('./database');
 
 module.exports = (db) => {
 
@@ -95,6 +95,7 @@ module.exports = (db) => {
     const user = req.session.user;
     const userID = user.id;
     const userEmail = user.email;
+    isVendor = false;
 
     console.log("POST REQUEST: USER: ", user)
 
@@ -108,37 +109,44 @@ module.exports = (db) => {
         // helper function to retrieve products from DB
         getVendorByEmail(userEmail)
         .then(vendorData => {
+
+          if (userData) {
+            isVendor = false;
+            const reply = {
+              text: req.body.text,
+              vendor_id: req.body.vendor_id,
+              userID
+            };
+            addMessages([userID, reply.vendor_id, reply.text, isVendor])
+            .then(data => {
+              return res.redirect(`/messages/${userID}`);
+            })
+            .catch(err => {
+              res
+                .status(500)
+                .json({ error: err.message });
+            });
+          } else if (vendorData) {
+            isVendor = true;
+            const reply = {
+              text: req.body.text,
+              vendor_id: req.body.vendor_id,
+              userID
+            };
+            addMessages([userID, reply.vendor_id, reply.text, isVendor])
+            .then(data => {
+              return res.redirect(`/messages/${userID}`);
+            })
+            .catch(err => {
+              res
+                .status(500)
+                .json({ error: err.message });
+            });
+          }
+
         })
-        // -----------------------------------TO DO: BUG! CURRENTLY TRYING TO SEND AN ERROR BEFORE REGISTERING NEW USER
       .catch(e => res.send(e));
     });
-
-
-
-    const reply = {
-      text: req.body.text,
-      vendor_id: req.body.vendor_id,
-      userID
-    };
-
-    return db.query(`
-    INSERT INTO messages
-    (user_id, vendor_id, message, is_vendor)
-    VALUES
-    ($1, $2, $3, $4)
-    `, [userID, reply.vendor_id, reply.text, false])
-      .then(data => {
-        const messages = data.rows;
-        return res.redirect(`/messages/${userID}`);
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
-      });
-
-
-
   });
 
   return router;

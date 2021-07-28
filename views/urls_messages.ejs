@@ -18,68 +18,52 @@
   <%- include('partials/_navbar') %>
 
   <% if (!userEmail) { %>
-  <%- include('partials/_error') %>
+    <%- include('partials/_error') %>
   <% } else { %>
 
     <h1>My Messages</h1>
 
-    <% for (let message of messages) { %>
-      <div class="message-page">
-
-        <div class="sidebar">
-          <p>Conversation with:</p>
-          <a href='#'><%= message.name %></a>
-          <p>Vendor ID:</p>
-          <%= message.vendor_id %>
+    <section class="message-page">
+      <% for (const convo of arrayofConvos) { %>
+        <div class="convo-title">
+          CONVERATION WITH: <%= convo[0].name %>
         </div>
 
         <div class="convos">
-          <p><%= message.message %></p>
-          <% if (message.vendor_id == reply.vendor_id) { %>
-          <div>
-            <%= reply.text %>
-          </div>
+
+
+        <% for (let i = 0; i < convo.length; i++) { %>
+
+          <% if (convo[i].is_vendor === isVendor) { %>
+
+            <div>
+              <p>User: <%= convo[i].message %> </p>
+            </div>
+
+          <% } else { %>
+
+            <div>
+              <p>Vendor: <%= convo[i].message %> </p>
+            </div>
+
           <% } %>
-          <form class="send-message" action="/messages/<%= userID %>" method="POST">
-            <input type="hidden" value="<%= message.vendor_id %>" name="vendor_id"/>
-            <textarea name="text" placeholder="Type message here..."></textarea>
-            <button type="submit">Send</button>
-          </form>
-
-        </div>
-
-      </div>
-
-    <% } %>
-  <% } %>
-
-  <section>
-    <% for (const convo of arrayofConvos) { %>
-      <% console.log(convo) %>
-      <div>
-        CONVO WITH: <%= convo[0].name %>
-      </div>
-      <% for (let i = 0; i < convo.length; i++) { %>
-
-        <% if (convo[i].is_vendor === isVendor) { %>
-
-        <div>
-          <p>User: <%= convo[i].message %> </p>
-        </div>
-        <% } else { %>
-
-        <div>
-          <p>Vendor: <%= convo[i].message %> </p>
-        </div>
 
         <% } %>
+        </div>
+
+        <form class="send-message" action="/messages/<%= userID %>" method="POST">
+          <input type="hidden" value="<%= convo.vendor_id %>" name="vendor_id"/>
+          <textarea name="text" placeholder="Type message here..."></textarea>
+          <button type="submit">Send</button>
+        </form>
+
 
       <% } %>
 
+    </section>
 
-    <% } %>
+  <% } %>
 
-  </section>
 
   <%- include('partials/_footer'); %>
 

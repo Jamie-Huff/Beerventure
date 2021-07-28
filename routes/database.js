@@ -123,22 +123,19 @@ const getMessages = (id, isVendor) => {
 exports.getMessages = getMessages;
 
 
-
-
-
-// consts addMessages = (message, reqparams) => {
-//   //adds messages to database
-//   return pool
-//     .query(`
-//       INSERT INTO messages
-//       (item_id, user_id, vendor_id, message)
-//       VALUES
-//       (, , ,$1)
-//       `)
-//     .then((result) => {
-//       console.log(result.rows);
-//       result.rows;
-//     })
-//     .catch(err => console.error('query error', err.stack));
-// };
-// exports.addMessages = addMessages;
+const addMessages = (list) => {
+  //adds messages to database
+  return pool
+    .query(`
+      INSERT INTO messages
+      (user_id, vendor_id, message, is_vendor)
+      VALUES
+      ($1, $2, $3, $4)
+      `, list)
+    .then((result) => {
+      // console.log(result.rows);
+      return result.rows;
+    })
+    .catch(err => console.error('query error', err.stack));
+};
+exports.addMessages = addMessages;
