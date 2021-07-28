@@ -146,7 +146,12 @@ module.exports = (db) => {
       .catch(e => res.send(e));
 
   });
-  // ---------------------------------------------- END REGISTER NEW VENDOR
+
+  // ---------------------------------------------- POST NEW ITEM
+
+
+
+
 
 
   return router;

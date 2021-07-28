@@ -1,0 +1,44 @@
+<head>
+  <link rel="stylesheet" href="/styles/hero.css" type="text/css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<header class="hero">
+
+  <main>
+    <h3>Post a New Item</h3>
+    <<button id="reveal">Post A New Item</button>
+
+    <section id="new-item-slide">
+      <form method="POST" action="/vendors/new_item">
+        <input type="text" name="name" placeholder="Item Name" required>
+        <br>
+        <input type="text" name="description" placeholder="Product description, Tasting or pairing notes">
+        <br>
+        <input type="text" name="price" placeholder="Price" required>
+        <br>
+        <input type="text" name="category" placeholder="category" required>
+        <br>
+        <input type="text" name="abv" placeholder="Alcohol Content (%)" required>
+        <br>
+        <input type="text" name="mliter" placeholder="Volume (mL)" required>
+        <br>
+        <input type="text" name="image" placeholder="Product Image URL">
+        <br>
+        <label for="imageFile">Upload a photo:</label>
+        <input type="file" id="imageFile" capture="environment" accept="image/*" required>
+        <br>
+        <label for="featured-check">Make this a featured Item</label>
+        <br>
+        <input type="checkbox" id="featured-check" name="featured-check">
+        <br>
+        <button type="submit">Add New Item</button>
+      </form>
+    </section>
+
+    <br>
+
+  </main>
+
+</header>
+
