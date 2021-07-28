@@ -32,21 +32,24 @@
       <div class="sidebar">
         <p>Conversation with:</p>
         <a href='#'><%= message.name %></a>
-      </div>
-      <div class="convos">
+        <p>Vendor ID:</p>
         <%= message.vendor_id %>
+      </div>
+
+      <div class="convos">
         <p><%= message.message %></p>
         <% if (message.vendor_id == reply.vendor_id) { %>
         <div>
           <%= reply.text %>
         </div>
         <% } %>
-        <form action="/messages/<%= user_id %>" method="POST">
-          <h5>Reply</h5>
+
+        <form class="send-message" action="/messages/<%= userID %>" method="POST">
           <input type="hidden" value="<%= message.vendor_id %>" name="vendor_id"/>
           <textarea name="text" placeholder="Type message here..."></textarea>
-          <button type="submit">Send Message</button>
+          <button type="submit">Send</button>
         </form>
+
       </div>
 
       <!-- </tr> -->

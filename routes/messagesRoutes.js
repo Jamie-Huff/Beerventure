@@ -12,16 +12,20 @@ const { getUserByEmail, getVendorByEmail } = require('./database');
 module.exports = (db) => {
 
   router.get("/", (req, res) => {
-    const userEmail = req.session.userId
-    console.log(userEmail);
-    if (!userEmail) {
+
+    const user = req.session.user;
+    if (!user) {
+      const userEmail = user.email;
       res.render("../views/urls_messages", {userEmail})
     }
-    res.redirect('/:user_id');
+    const userID = user.id;
+    res.redirect(`/messages/${userID}`);
   })
 
   router.get("/:user_id", (req, res) => {
-    const user_id = req.session.userId;
+    const user = req.session.user;
+    const userEmail = user.email;
+    const userID = user.id;
 
     // getUserByEmail(user_id)
     // .then (userInfo => {
@@ -43,7 +47,7 @@ module.exports = (db) => {
     JOIN vendors ON vendor_id = vendors.id
     WHERE user_id = $1
     ORDER BY vendor_id;
-    `, [user_id])
+    `, [userID])
     .then(data => {
       const messages = data.rows;
       const exists = [];
@@ -56,7 +60,7 @@ module.exports = (db) => {
         }
       }
       console.log(messages);
-      res.render("../views/urls_messages", { messages: messageList, reply, user_id })
+      res.render("../views/urls_messages", { messages: messageList, reply, userID, userEmail })
     })
     .catch(err => {
       res
