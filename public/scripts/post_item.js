@@ -1,13 +1,19 @@
 // reveal add new item to vendor profile page
 
-$(document).ready(function(){
+$(document).ready(function(event){
 
-  $("#hide").click(function(){
-    $("new-item-slide").slideUp();
+  $('.reveal-hide').click(function(event) {
+    // event.preventDefault();
+    const $postItemForm = $('.new-item-slide');
+    if ($postItemForm.is(':visible')) {
+      $postItemForm.slideUp();
+    } else {
+      $postItemForm.slideDown();
+    }
   });
 
-  $("#reveal").click(function(){
-    $("new-item-slide").slideDown();
-  });
-
+  
 });
+
+
+

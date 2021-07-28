@@ -1,15 +1,18 @@
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" src="/public/scripts/post_item.js"></script>
 </head>
 
 <header>
 
   <main>
     <h3>Post a New Item</h3>
-    <button id="reveal">Post A New Item</button>
-    <button id="hide">Post A New Item</button>
+    <div class="reveal-hide">
+      <button class="reveal">Reveal</button>
+      <button class="hide">Hide</button>
+    </div>
 
-    <span id="new-item-slide">
+    <section class="new-item-slide">
       <form method="POST" action="/vendors/new_item">
         <input type="text" name="name" placeholder="Item Name" required>
         <br>
@@ -35,7 +38,7 @@
         <br>
         <button type="submit">Add New Item</button>
       </form>
-    </span>
+    </section>
 
     <br>
 

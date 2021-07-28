@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { addNewVendor, getVendorByEmail, getVendorsProducts } = require('./database');
+const { addNewVendor, getVendorByEmail, getVendorsProducts, addNewProduct } = require('./database');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -12,7 +12,6 @@ module.exports = (db) => {
   router.get('/', (req, res) => {
     // get user email from session cookie
     const vendor = req.session.user;
-    console.log('VENDOR COOKIE: ', vendor);
 
     // Anonymous user landing on homepage - no session cookie
     if (!vendor) {
@@ -29,7 +28,6 @@ module.exports = (db) => {
               userObject: vendor,
               products: products,
             };
-            console.log(templateVars);
             // render vendor's profile page:
             return res.render("../views/urls_vendor_profile", templateVars);
           })
@@ -37,7 +35,6 @@ module.exports = (db) => {
             return res.status(500).json({ error: err.message });
           });
       } else {
-        console.log('HERE');
         return res.status(403).json({ error: "not authorized. you are not a vendor" });
       }
     }
@@ -45,29 +42,13 @@ module.exports = (db) => {
   });
 
 
-  // ---------------------------------------------- VENDOR PROFILE (RENDER)
-
-
-
-
     // ---------------------------------------------- LOG IN (RENDER)
-  /*
-  // Render Login Page:
-  router.get('/login', (req, res) => {
-    // Check if session cookie exists,
-    const user = req.session.user;
-    if (user) {
-      res.render("/")
-    }
-    // -----------------------------------TO DO: Change this route to user profile page
-    res.render("../views/urls_login")
-  });
-  */
+    // Handled in userRoutes.js
+  
     // ---------------------------------------------- LOG IN (POST)
 
 	  router.post('/login', (req, res) => {
     const {email, password} = req.body;
-    console.log('email: ', email);
 
     // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
 
@@ -86,6 +67,7 @@ module.exports = (db) => {
 
   // ---------------------------------------------- LOG OUT
   // ---------------------------------------------------------TO DO: link to a logout button
+  // Unsure if this will be handled in vendorRoutes or UserRoutes for both
   /*
   router.post('/logout', (req, res) => {
     req.session.user = null;
@@ -149,7 +131,22 @@ module.exports = (db) => {
 
   // ---------------------------------------------- POST NEW ITEM
 
+  router.post('/new_item', (req, res) => {
+    const vendor = req.session.user;
 
+    const newItem = req.body;
+    newItem.vendor_id = vendor.id;
+    // do some entry validation
+    console.log('newItem': newItem);
+    // FIGURE OUT HOW TO HANDLE THE IMAGE
+
+
+    addNewItem(newItem)
+      .then(res => res);
+      .catch(e => res.send(e));
+
+
+  });
 
 
 

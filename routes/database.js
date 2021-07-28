@@ -90,6 +90,21 @@ exports.getVendorsProducts = getVendorsProducts;
 
 
 
+const addNewProduct = function(product) {
+  const values = [product.vendor_id, product.name, product.description, product.price, product.category, product.abv, product.mliter, product.image, product.featured_check];
+  return pool
+    .query(`
+    INSERT INTO products (vendor_id, image, name, description, price, featured, category, abv, mliter)
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    RETURNING *;
+    `, values)
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack))
+};
+exports.addNewProduct = addNewProduct;
+
+
+
 /// ----------------------------------------------------- Messages
 
 
