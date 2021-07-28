@@ -17,9 +17,13 @@
   </head>
 
   <body>
+    <% if (userObject) { %>
+    <%-include('partials/_navbarSignedIn') %>
+    <% } else { %>
     <%- include('partials/_navbar') %>
+    <% } %>
+    
     <%- include('partials/_hero') %>
-
 
     <main class="all-products">
       <div class="products">

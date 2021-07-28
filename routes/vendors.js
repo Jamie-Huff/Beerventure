@@ -3,13 +3,26 @@ const router  = express.Router();
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
+    let user = req.session.user
     let query = `SELECT * FROM items`;
     return db.query(query)
       .then(data => {
+        let templateVars;
         const items = data.rows;
-        res.render("urls_search", {items})
+        if (user) {
+          templateVars = {
+            items,
+            userObject: user
+          }
+        } else {
+          templateVars = {
+          items,
+          userObject: null
+          }
+        }
 
-        // return res.json({ items });
+        res.render("urls_search", templateVars)
+
       })
       .catch(err => {
         res

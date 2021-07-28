@@ -15,7 +15,11 @@
 </head>
 
 <body>
-  <%- include('partials/_navbar') %>
+  <% if (userObject) { %>
+    <%-include('partials/_navbarSignedIn') %>
+    <% } else { %>
+    <%- include('partials/_navbar') %>
+    <% } %>
   <h1>Product Information Page</h1>
 
   <% for (const item of items) { %>

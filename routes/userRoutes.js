@@ -12,7 +12,7 @@ module.exports = (db) => {
   router.get('/', (req, res) => {
     // get user email from session cookie
     const user = req.session.user;
-
+    
     // Anonymous user landing on homepage - no session cookie
     if (!user) {
       // helper function to retrieve products from DB
@@ -130,7 +130,7 @@ module.exports = (db) => {
 
 
 
-  
+
 
   // ---------------------------------------------- LOG OUT
   // ---------------------------------------------------------TO DO: link to a logout button

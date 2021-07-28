@@ -23,7 +23,11 @@
 </head>
 
 <body>
-  <%- include('partials/_navbar') %>
+    <% if (userObject) { %>
+    <%-include('partials/_navbarSignedIn') %>
+    <% } else { %>
+    <%- include('partials/_navbar') %>
+    <% } %>
 
   <div class ="search-bar">
   <form action="/search" method="POST" id="search-form" class="search-form">
