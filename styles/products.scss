@@ -16,8 +16,9 @@
 
     margin: 1em 1em;
 
-    .more-info {
+    #more-info {
       size: 100px;
+	    text-decoration: none;
     }
     // .nonfeatured-items {
     //   border: 1px red solid;
@@ -35,7 +36,7 @@
       align-items: center;
       flex-wrap: wrap;
 
-      height: 574px;
+      height: 500px;
       width: 274px;
 
       padding-bottom: 1em;

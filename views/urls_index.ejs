@@ -31,11 +31,11 @@
         <div class="featured-items">
           <a class="nav-bar-links" id="sell" href='/product/:<%=product.name%>&itemId:<%=product.id%>'>Feature Item</a>
           <p class="prod-name"> <%= product.vendor_name %> </p>
-          <p class="prod-name"> <%= product.name %> </p>
+          <a class="nav-bar-links" id="sell" href='/product/:<%=product.name%>&itemId:<%=product.id%>'><%= product.name %></a>
           <img class="product-image" src=<%= product.image %>
           <p> <%= product.category %> </p>
           <p><%= product.price %> </p>
-          <button id="more-info">Tell Me More</button>
+          <button id="more-info"> <a href='/product/:<%=product.name%>&itemId:<%=product.id%>'>Tell Me More</a></button>
 
         </div>
 
