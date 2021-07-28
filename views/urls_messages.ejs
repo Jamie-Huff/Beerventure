@@ -23,61 +23,13 @@
 
     <h1>My Messages</h1>
 
-    <% for (let message of messages) { %>
-      <div class="message-page">
-
-        <div class="sidebar">
-          <p>Conversation with:</p>
-          <a href='#'><%= message.name %></a>
-          <p>Vendor ID:</p>
-          <%= message.vendor_id %>
-        </div>
-
-        <div class="convos">
-          <p><%= message.message %></p>
-          <% if (message.vendor_id == reply.vendor_id) { %>
-          <div>
-            <%= reply.text %>
-          </div>
-          <% } %>
-          <form class="send-message" action="/messages/<%= userID %>" method="POST">
-            <input type="hidden" value="<%= message.vendor_id %>" name="vendor_id"/>
-            <textarea name="text" placeholder="Type message here..."></textarea>
-            <button type="submit">Send</button>
-          </form>
-
-        </div>
-
-      </div>
-
-    <% } %>
-  <% } %>
-
-  <section>
-    <% for (const convo of arrayofConvos) { %>
-      <% console.log(convo) %>
-      <div>
-        CONVO WITH: <%= convo[0].name %>
-      </div>
-      <% for (let i = 0; i < convo.length; i++) { %>
-
-        <% if (convo[i].is_vendor === reply.vendor_id) { %>
-
-        <div>
-          <p>YOU: <%= convo[i].message %> </p>
-        </div>
-        <div>
-          <p>NOT YOU: </p>
-        </div>
-
-        <% } %>
-
-      <% } %>
+  
+    <section id="messages-container">
 
 
-    <% } %>
 
-  </section>
+
+
 
   <%- include('partials/_footer'); %>
 

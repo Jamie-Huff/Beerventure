@@ -28,11 +28,63 @@ module.exports = (db) => {
       // just so i don't get confused:
       const vendor = user;
       // Get all the messages from the database where messages.vendor_id = vendor.id
+
+      /* This works but maybe I don't want to use it
+      const vendorMessages = getVendorMessages(vendor.id);
+
+
+      (async() => {
+        // everything i need to do with the vendor messages
+        await vendorMessages;
+        // ajax thing:
+        // for (const message of vendorMessages) {
+        //   console.log('message: ', message);
+        // }
+
+        console.log('vendorMessages: ', vendorMessages);
+
+
+      })()
+      */
+
       getVendorMessages(vendor.id)
-        .then(res => {
-          console.log(res);
+        .then((err, messages) => {
+          if (err) {
+            res.status(500).json({ error: err.message });
+          } else {
+            res.json(messages);
+          }
         })
-        .catch(e => res.send(e))
+
+      
+
+
+      tweetsRoutes.post("/", function(req, res) {
+        if (!req.body.text) {
+          res.status(400).json({ error: 'invalid request: no data in POST body'});
+          return;
+        }
+    
+        const user = req.body.user ? req.body.user : userHelper.generateRandomUser();
+        const tweet = {
+          user: user,
+          content: {
+            text: req.body.text
+          },
+          created_at: Date.now()
+        };
+    
+        DataHelpers.saveTweet(tweet, (err) => {
+          if (err) {
+            res.status(500).json({ error: err.message });
+          } else {
+            res.status(201).send();
+          }
+        });
+      });
+
+
+      
 
       
 

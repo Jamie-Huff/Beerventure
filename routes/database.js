@@ -99,7 +99,7 @@ const getVendorMessages = function(vendorId) {
     FROM messages
     JOIN users on users.id = user_id
     WHERE vendor_id = $1
-    ORDER BY users.name`, [vendorID])
+    ORDER BY users.name`, [vendorId])
     .then(res => res.rows ? res.rows : null)
     .catch(err => console.error('query error', err.stack))
 }
