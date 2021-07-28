@@ -9,25 +9,6 @@ const express = require('express');
 const router  = express.Router();
 const { getUserByEmail, getVendorByEmail } = require('./database');
 
-// const uniqueConvoForUsers = function(arrayOfObjects, uniqueConvos) {
-//   //create an empty array to keep track of unique vendors
-
-//   //loop through each item in messages
-//     for(let i = 0; i < messages.length; i++) {
-//       //isolating each element in array for easier read
-//       const element = messages[i];
-//       //if the vendorID doesn't exist in this empty array
-//       if (!uniqueConvos.includes(element.vendor_id)) {
-//         //adds
-//         uniqueConvos.push(element.vendor_id);
-//       }
-//     }
-//   //should return an array with vendor ID's
-//   return uniqueConvos
-// }
-
-
-
 module.exports = (db) => {
 
   router.get("/", (req, res) => {
@@ -70,6 +51,20 @@ module.exports = (db) => {
     .then(data => {
       const messages = data.rows;
       console.log("MESSAGES: ", messages)
+      // const exists = [];
+      // const messageList = [];
+      // for (let i = 0; i < messages.length; i++) {
+      //   if (!exists.includes(element.vendor_id)) {
+      //     if (messageList.length < 1) {
+      //       messageList.push([])
+      //     }
+      //     messageList.push(element);
+      //     exists.push(element.vendor_id);
+      //   }
+      // }
+      // console.log("MESSAGELIST: ", messageList);
+      // console.log("EXISTS: ", exists);
+
       const uniqueConvos = [];
 
       //loop through each item in messages
@@ -86,28 +81,24 @@ module.exports = (db) => {
       console.log("UNIQUE CONVOS AFTER FUNCTION: ", uniqueConvos);
 
       let arrayofConvos = [];
+      for(const u of uniqueConvos) {
+        arrayofConvos.push([]);
+      }
 
       console.log("ARRAYOFCONVOS: ", arrayofConvos)
 
       for (let i = 0; i < uniqueConvos.length; i++) {
         for (const item of messages) {
           if (item.vendor_id == uniqueConvos[i]) {
-            if (arrayofConvos.length < 1){
-              arrayofConvos.push([]);
-              console.log("TESTING INSIDE: ", arrayofConvos[i]);
-              arrayofConvos[i].push(item);
-            }
-            else {
-              arrayofConvos[i].push(item);
-            }
+            arrayofConvos[i].push(item);
           }
         }
       }
+      console.log("ARRAY OF CONVOS ALL: ", arrayofConvos)
+      console.log("ARRAY OF CONVOS ARRAY 1: ", arrayofConvos[0])
+      console.log("ARRAY OF CONVOS ARRAY 2: ", arrayofConvos[1])
 
-      console.log("ARRAY OF CONVOS FIRST ELEMENT AFTER: ", arrayofConvos[0])
-
-
-      res.render("../views/urls_messages", { messages: messageList, reply, userID, userEmail })
+      res.render("../views/urls_messages", { messages, reply, userID, userEmail, arrayofConvos, uniqueConvos })
     })
     .catch(err => {
       res
@@ -154,10 +145,3 @@ module.exports = (db) => {
 
   return router;
 };
-
-
-
-
-
-
-
