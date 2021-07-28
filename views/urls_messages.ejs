@@ -22,61 +22,66 @@
   <% } else { %>
 
     <h1>My Messages</h1>
-    <!-- your content here... -->
 
-    <div class="message-page">
-
-      <% for (let number of uniqueConvos) { %>
+    <% for (let message of messages) { %>
+      <div class="message-page">
 
         <div class="sidebar">
           <p>Conversation with:</p>
-          <a href='#'><%= arrayofConvos[0][0].name %></a>
+          <a href='#'><%= message.name %></a>
           <p>Vendor ID:</p>
-          <%= arrayofConvos[0][0].vendor_id %>
+          <%= message.vendor_id %>
         </div>
 
-        <% for (let convo of arrayofConvos) { %>
-          <% for (let i = 0; i < convo.length; i++) { %>
-
-          <div class="convos">
-            <p><%= convo[i].message %></p>
-            <% if (convo[i].vendor_id == reply.vendor_id) { %>
-            <div>
-              <%= reply.text %>
-            </div>
-            <% } %>
-
-            <form class="send-message" action="/messages/<%= userID %>" method="POST">
-              <input type="hidden" value="<%= message.vendor_id %>" name="vendor_id"/>
-              <textarea name="text" placeholder="Type message here..."></textarea>
-              <button type="submit">Send</button>
-            </form>
-
+        <div class="convos">
+          <p><%= message.message %></p>
+          <% if (message.vendor_id == reply.vendor_id) { %>
+          <div>
+            <%= reply.text %>
           </div>
+          <% } %>
+          <form class="send-message" action="/messages/<%= userID %>" method="POST">
+            <input type="hidden" value="<%= message.vendor_id %>" name="vendor_id"/>
+            <textarea name="text" placeholder="Type message here..."></textarea>
+            <button type="submit">Send</button>
+          </form>
 
+        </div>
+
+      </div>
+
+    <% } %>
+  <% } %>
+
+  <section>
+    <% for (const convo of arrayofConvos) { %>
+      <% console.log(convo) %>
+      <div>
+        CONVO WITH: <%= convo[0].name %>
+      </div>
+      <% for (let i = 0; i < convo.length; i++) { %>
+
+        <% if (convo[i].is_vendor === reply.vendor_id) { %>
+
+        <div>
+          <p>YOU: <%= convo[i].message %> </p>
+        </div>
+        <div>
+          <p>NOT YOU: </p>
+        </div>
 
         <% } %>
 
       <% } %>
 
-    </div>
 
-  <% } %>
-
-  <section>
-
-    <div>
-      <p>YOU: </p>
-      <p>%JS for what you said%</p>
-    </div>
-    <div>
-      <p>NOT YOU: </p>
-      <p>%JS for what they said%</p>
-    </div>
+    <% } %>
 
   </section>
 
   <%- include('partials/_footer'); %>
+
+
 
 </body>
 </html>

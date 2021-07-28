@@ -4,26 +4,41 @@
 
     <link rel="stylesheet" href="/styles/hero.css" type="text/css" />
 
-    <div class="hero-content">
+      <% if (userObject.vendor) { %>
 
-      <div class="hero-left">
-        <h2>Thirsty for adventure?</h2>
-        <p>
-          Blurb about finding beer and cider local to user.
-          Who we are and what the site does.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        </p>
+      <div class="hero-content">
+        <div class="hero-left">
+
+        <h2>Hello <%= userObject.name %></h2>
+        <br>
+        <h2>Manage your items for sale</h2>
+        </div>
       </div>
 
-      <div class="hero-right">
-        <form method="post" action="/search" class="hero-form">
-          <label class="auto-location-result" for="hero-input-city">Thirsty? Lets see whats to drink in your city.</label>
-          <button type="submit" class="btn">Take me UwU</button>
-        </form>
-      </div>
+      <% } else { %>
+
+      <div class="hero-content">
+        <div class="hero-left">
+          <h2>Thirsty for adventure?</h2>
+          <p>
+            Blurb about finding beer and cider local to user.
+            Who we are and what the site does.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          </p>
+        </div>
+        
+        <div class="hero-right">
+          <form method="post" action="/search" class="hero-form">
+            <label class="auto-location-result" for="hero-input-city">Thirsty? Lets see whats to drink in your city.</label>
+            <button type="submit" class="btn">Take me UwU</button>
+          </form>
+        </div>
+
+      <% } %>
+
     </div>
   </div>
 
