@@ -106,6 +106,31 @@ const addProduct = function(list) {
 exports.addProduct = addProduct;
 
 
+const addNewProduct = function(product) {
+  const values = [
+    product.name, 
+    product.description, 
+    product.price, 
+    product.vendor_id, 
+    product.featured, 
+    product.category, 
+    product.abv, 
+    product.mliter, 
+    product.image
+  ];
+  return pool
+    .query(`
+    INSERT INTO items (name, description, price, vendor_id, featured, category, abv, mliter, image)
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    RETURNING *;
+    `, values)
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack))
+};
+exports.addNewProduct = addNewProduct;
+
+
+
 /// ----------------------------------------------------- Messages
 
 

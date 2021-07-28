@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { addNewVendor, getVendorByEmail, getVendorsProducts, addProducts, addProduct } = require('./database');
+const { addNewVendor, getVendorByEmail, getVendorsProducts, addNewProduct, addProduct } = require('./database');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -12,7 +12,6 @@ module.exports = (db) => {
   router.get('/', (req, res) => {
     // get user email from session cookie
     const vendor = req.session.user;
-    // console.log('VENDOR COOKIE: ', vendor);
 
     // Anonymous user landing on homepage - no session cookie
     if (!vendor) {
@@ -29,8 +28,6 @@ module.exports = (db) => {
               userObject: vendor,
               products: products,
             };
-            // console.log("PRODUCTS", products);
-            // console.log("TEMPLATEVARS", templateVars);
             // render vendor's profile page:
             return res.render("../views/urls_vendor_profile", templateVars);
           })
@@ -38,7 +35,6 @@ module.exports = (db) => {
             return res.status(500).json({ error: err.message });
           });
       } else {
-        console.log('HERE');
         return res.status(403).json({ error: "not authorized. you are not a vendor" });
       }
     }
@@ -134,7 +130,6 @@ module.exports = (db) => {
 
 	router.post('/login', (req, res) => {
     const {email, password} = req.body;
-    console.log('email: ', email);
 
     // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
 
@@ -153,6 +148,7 @@ module.exports = (db) => {
 
   // ---------------------------------------------- LOG OUT
   // ---------------------------------------------------------TO DO: link to a logout button
+  // Unsure if this will be handled in vendorRoutes or UserRoutes for both
   /*
   router.post('/logout', (req, res) => {
     req.session.user = null;
@@ -204,7 +200,7 @@ module.exports = (db) => {
     addNewVendor(newVendor)
       .then(vendor => {
         if (!vendor) {
-          res.send({error: "error"});
+          res.send({error: 'error'});
           return;
         }
         req.session.user = newVendor;
@@ -213,7 +209,45 @@ module.exports = (db) => {
       .catch(e => res.send(e));
 
   });
-  // ---------------------------------------------- END REGISTER NEW VENDOR
+
+
+  // ---------------------------------------------- POST NEW ITEM
+
+  router.post('/new_item', (req, res) => {
+    const vendor = req.session.user;
+
+    const newItem = req.body;
+    newItem.vendor_id = vendor.id;
+    // do some entry validation
+    newItem.price = newItem.price * 100;
+    newItem.abv = newItem.abv * 100;
+    if (newItem.featured_check == 'on') {
+      newItem.featured_check = true;
+    } else {
+      newItem.featured_check = false;
+    }
+
+    // watch for price in cents, mL, and the percentage
+
+    // Placeholder image:
+    // TO DO: Figure out how to handle images properly. Unsure how they get output to page
+    newItem.image = 'https://images.unsplash.com/photo-1523567830207-96731740fa71?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=634&q=80';
+    console.log('newItem: ', newItem);
+
+
+    addNewProduct(newItem)
+      .then(item => {
+        if (!item) {
+          res.send({error: 'error'});
+          return;
+        }
+        return res.redirect('/vendors');
+      })
+      .catch(e => res.send(e))
+
+  });
+
+
 
 
   return router;
