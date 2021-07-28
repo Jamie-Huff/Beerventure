@@ -35,9 +35,60 @@
         </div>
       <% } %>
 
-    </div>
+      </div>
 
     </main>
+
+    <div class="new-item">
+      ADD A NEW ITEM
+
+      <form class="add-item" action="/vendors/profile" method="POST">
+        Item Name
+        <input type="text" name="item.name">
+        <br><br>
+        Item Description
+        <textarea class="item-description" name="item.description" placeholder="Describe your item..."></textarea>
+        <br><br>
+        Item Price
+        <input type="text"  name="item.price">
+        <br><br>
+        Item Category
+        <input type="text"  name="item.category">
+        <br><br>
+        Item ABV
+        <input type="text"  name="item.abv">
+        <br><br>
+        Item Volume (ml)
+        <input type="text"  name="item.mliter">
+        <br><br>
+        Item Image (url)
+        <input type="text"  name="item.image">
+        <br><br>
+        <button type="submit">Add New Item</button>
+      </form>
+
+    </div>
+
+
+    <div class="email-vendor">
+      CONTACT ME :)
+      <form action="mailto:xiaowei.c.li.com"
+        method="POST"
+        enctype="multipart/form-data"
+        name="EmailForm"
+        >
+        Name:<br>
+        <input type="text" size="19″ name="ContactName"><br><br>
+        Email:<br>
+        <input type="text" size="19″ name="ContactEmail"><br><br>
+        Message:<br>
+        <textarea name="ContactCommentt" rows="6″ cols="20″></textarea>
+        <br><br>
+        <button type="submit">Send Email</button>
+
+      </form>
+
+    </div>
 
     <%- include('partials/_footer') %>
 
