@@ -68,7 +68,7 @@ module.exports = (db) => {
               getMessages(userID, isVendor)
                 .then(data => {
                   const messages = data;
-                  console.log("MESSAGES: ", messages)
+                  // console.log("MESSAGES: ", messages)
 
                   const uniqueConvos = [];
 
@@ -78,13 +78,13 @@ module.exports = (db) => {
                       uniqueConvos.push(element.user_id);
                     }
                   }
-                  console.log("UNIQUE CONVOS AFTER FUNCTION: ", uniqueConvos);
+                  // console.log("UNIQUE CONVOS AFTER FUNCTION: ", uniqueConvos);
 
                   let arrayofConvos = [];
                   for (const u of uniqueConvos) {
                     arrayofConvos.push([]);
                   }
-                  console.log("ARRAYOFCONVOS: ", arrayofConvos)
+                  // console.log("ARRAYOFCONVOS: ", arrayofConvos)
 
                   for (let i = 0; i < uniqueConvos.length; i++) {
                     for (const item of messages) {
@@ -134,13 +134,15 @@ module.exports = (db) => {
     const userID = user.id;
     const userEmail = user.email;
     isVendor = false;
-    console.log("TEST REQ BODY @#$@#$", req.body);
+    // console.log("TEST REQ BODY @#$@#$", req.body);
     // console.log("POST REQUEST: USER: ", user)
 
     if (!req.body.text) {
       res.status(400).json({ error: 'invalid request: no data in POST body'});
       return;
     }
+
+    console.log("REQ BODY: ", req.body)
 
     getUserByEmail(userEmail)
     .then(userData => {
@@ -164,14 +166,16 @@ module.exports = (db) => {
                 .status(500)
                 .json({ error: err.message });
             });
+
           } else if (vendorData) {
             isVendor = true;
             const reply = {
               text: req.body.text,
-              vendor_id: req.body.vendor_id,
+              user_id: req.body.user_id,
               userID
             };
-            addMessages([userID, reply.vendor_id, reply.text, isVendor])
+
+            addMessages([reply.user_id, userID, reply.text, isVendor])
             .then(data => {
               return res.redirect(`/messages/${userID}`);
             })
