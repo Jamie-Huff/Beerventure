@@ -1,15 +1,15 @@
 <head>
-  <link rel="stylesheet" href="/styles/hero.css" type="text/css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
-<header class="hero">
+<header>
 
   <main>
     <h3>Post a New Item</h3>
-    <<button id="reveal">Post A New Item</button>
+    <button id="reveal">Post A New Item</button>
+    <button id="hide">Post A New Item</button>
 
-    <section id="new-item-slide">
+    <span id="new-item-slide">
       <form method="POST" action="/vendors/new_item">
         <input type="text" name="name" placeholder="Item Name" required>
         <br>
@@ -26,6 +26,7 @@
         <input type="text" name="image" placeholder="Product Image URL">
         <br>
         <label for="imageFile">Upload a photo:</label>
+        <br>
         <input type="file" id="imageFile" capture="environment" accept="image/*" required>
         <br>
         <label for="featured-check">Make this a featured Item</label>
@@ -34,7 +35,7 @@
         <br>
         <button type="submit">Add New Item</button>
       </form>
-    </section>
+    </span>
 
     <br>
 

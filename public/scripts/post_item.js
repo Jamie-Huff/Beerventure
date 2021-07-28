@@ -1,9 +1,13 @@
 // reveal add new item to vendor profile page
+
 $(document).ready(function(){
-  $(".reveal").click(function(){
-    $("p").slideUp();
+
+  $("#hide").click(function(){
+    $("new-item-slide").slideUp();
   });
-  $(".reveal").click(function(){
-    $("p").slideDown();
+
+  $("#reveal").click(function(){
+    $("new-item-slide").slideDown();
   });
+
 });
