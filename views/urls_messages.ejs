@@ -24,40 +24,78 @@
     <h1>My Messages</h1>
 
     <section class="message-page">
-      <% for (const convo of arrayofConvos) { %>
-        <div class="convo-title">
-          CONVERATION WITH: <%= convo[0].name %>
-        </div>
 
-        <div class="convos">
+      <% if (!isVendor) { %>
 
+        <% for (const convo of arrayofConvos) { %>
+          <div class="convo-title">
+            CONVERATION WITH: <%= convo[0].vendor_name %>
+          </div>
 
-        <% for (let i = convo.length - 1 ; i >= 0; i--) { %>
+          <div class="convos">
 
-          <% if (convo[i].is_vendor === isVendor) { %>
+          <% for (let i = convo.length - 1 ; i >= 0; i--) { %>
 
-            <div>
-              <p>User: <%= convo[i].message %> </p>
-            </div>
+            <% if (!convo[i].is_vendor) { %>
 
-          <% } else { %>
+              <div>
+                <p>User: <%= convo[i].message %> </p>
+              </div>
 
-            <div>
-              <p>Vendor: <%= convo[i].message %> </p>
-            </div>
+            <% } else { %>
+
+              <div>
+                <p>Vendor: <%= convo[i].message %> </p>
+              </div>
+
+            <% } %>
 
           <% } %>
+          </div>
+          <form class="send-message" action="/messages/<%= userID %>" method="POST">
+            <input type="hidden" value="<%= convo[0].vendor_id %>" name="vendor_id"/>
+            <textarea class="msg" name="text" placeholder="Type message here..."></textarea>
+            <button type="submit">Send</button>
+          </form>
+
 
         <% } %>
-        </div>
-        <form class="send-message" action="/messages/<%= userID %>" method="POST">
-          <input type="hidden" value="<%= convo[0].vendor_id %>" name="vendor_id"/>
-          <textarea class="msg" name="text" placeholder="Type message here..."></textarea>
-          <button type="submit">Send</button>
-        </form>
+      <% } else { %>
 
+        <% for (const convo of arrayofConvos) { %>
+          <div class="convo-title">
+            CONVERATION WITH: <%= convo[0].user_name %>
+          </div>
+
+          <div class="convos">
+
+          <% for (let i = convo.length - 1 ; i >= 0; i--) { %>
+
+            <% if (convo[i].is_vendor) { %>
+
+              <div>
+                <p>Vendor: <%= convo[i].message %> </p>
+              </div>
+
+            <% } else { %>
+
+              <div>
+                <p>User: <%= convo[i].message %> </p>
+              </div>
+
+            <% } %>
+
+          <% } %>
+          </div>
+          <form class="send-message" action="/messages/<%= userID %>" method="POST">
+            <input type="hidden" value="<%= convo[0].vendor_id %>" name="vendor_id"/>
+            <textarea class="msg" name="text" placeholder="Type message here..."></textarea>
+            <button type="submit">Send</button>
+          </form>
+        <% } %>
 
       <% } %>
+
 
     </section>
 

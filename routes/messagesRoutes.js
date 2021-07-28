@@ -11,20 +11,8 @@ const { getUserByEmail, getVendorByEmail, getMessages, addMessages } = require('
 
 module.exports = (db) => {
 
-  router.get("/", (req, res) => {
-
-    const user = req.session.user;
-    if (!user) {
-      const userEmail = user.email;
-      res.render("../views/urls_messages", {userEmail});
-    }
-    const userID = user.id;
-    res.redirect(`/messages/${userID}`);
-  });
-
   router.get("/:user_id", (req, res) => {
     const user = req.session.user;
-    // console.log("USER", user);
     const userEmail = user.email;
     const userID = user.id;
     const reply = {};
@@ -78,6 +66,45 @@ module.exports = (db) => {
             } else if (vendorData) {
               isVendor = true;
               getMessages(userID, isVendor)
+                .then(data => {
+                  const messages = data;
+                  console.log("MESSAGES: ", messages)
+
+                  const uniqueConvos = [];
+
+                  for (let i = 0; i < messages.length; i++) {
+                    const element = messages[i];
+                    if (!uniqueConvos.includes(element.user_id)) {
+                      uniqueConvos.push(element.user_id);
+                    }
+                  }
+                  console.log("UNIQUE CONVOS AFTER FUNCTION: ", uniqueConvos);
+
+                  let arrayofConvos = [];
+                  for (const u of uniqueConvos) {
+                    arrayofConvos.push([]);
+                  }
+                  console.log("ARRAYOFCONVOS: ", arrayofConvos)
+
+                  for (let i = 0; i < uniqueConvos.length; i++) {
+                    for (const item of messages) {
+                      if (item.user_id == uniqueConvos[i]) {
+                        arrayofConvos[i].push(item);
+                      }
+                    }
+                  }
+                  // console.log("ARRAY OF CONVOS ALL: ", arrayofConvos)
+                  // console.log("ARRAY OF CONVOS ARRAY 1: ", arrayofConvos[0])
+                  // console.log("ARRAY OF CONVOS ARRAY 2: ", arrayofConvos[1])
+
+                  res.render("../views/urls_messages", { messages, reply, userID, userEmail, arrayofConvos, uniqueConvos, isVendor });
+                })
+                .catch(err => {
+                  res
+                    .status(500)
+                    .json({ error: err.message });
+                });
+
             }
 
           })
@@ -89,6 +116,17 @@ module.exports = (db) => {
       });
 
 
+  });
+
+  router.get("/", (req, res) => {
+
+    const user = req.session.user;
+    if (!user) {
+      const userEmail = user.email;
+      res.render("../views/urls_messages", {userEmail});
+    }
+    const userID = user.id;
+    res.redirect(`/messages/${userID}`);
   });
 
   router.post("/:user_id", (req, res) => {

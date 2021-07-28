@@ -107,9 +107,10 @@ const getMessages = (id, isVendor) => {
   console.log(list);
   return pool
     .query(`
-    SELECT messages.*, vendors.name as name
+    SELECT messages.*, vendors.name as vendor_name, users.name as user_name
     FROM messages
     JOIN vendors ON vendor_id = vendors.id
+    JOIN users ON user_id = users.id
     WHERE "${column}" = $1
     ORDER BY "${sort}";
       `, list)
