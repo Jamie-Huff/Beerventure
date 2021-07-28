@@ -99,10 +99,10 @@ const getMessages = (id, isVendor) => {
   let column, sort;
   if (isVendor) {
     column = 'vendor_id';
-    sort = 'user_id';
+    // sort = 'user_id';
   } else {
-    sort = 'vendor_id';
     column = 'user_id';
+    // sort = 'vendor_id';
   }
   console.log(list);
   return pool
@@ -112,7 +112,7 @@ const getMessages = (id, isVendor) => {
     JOIN vendors ON vendor_id = vendors.id
     JOIN users ON user_id = users.id
     WHERE "${column}" = $1
-    ORDER BY "${sort}";
+    ORDER BY messages.id;
       `, list)
     .then((result) => {
       // console.log("RESULT.ROWS FROM GETMESSAGES: ",result.rows);
