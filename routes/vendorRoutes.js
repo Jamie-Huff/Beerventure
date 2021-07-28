@@ -12,7 +12,6 @@ module.exports = (db) => {
   router.get('/', (req, res) => {
     // get user email from session cookie
     const vendor = req.session.user;
-    console.log('VENDOR COOKIE: ', vendor);
 
     // Anonymous user landing on homepage - no session cookie
     if (!vendor) {
