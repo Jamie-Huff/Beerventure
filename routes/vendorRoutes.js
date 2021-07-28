@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { addNewVendor, getVendorByEmail, getVendorsProducts } = require('./database');
+const { addNewVendor, getVendorByEmail, getVendorsProducts, addProducts } = require('./database');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -79,6 +79,11 @@ module.exports = (db) => {
 
   });
 
+  router.post('/profile', (req, res) => {
+
+    //(vendor_id, image, name, description, price, category, abv, mliter)
+
+  })
 
   // ---------------------------------------------- LOG IN (RENDER)
   /*
