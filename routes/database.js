@@ -93,24 +93,38 @@ exports.getVendorsProducts = getVendorsProducts;
 /// ----------------------------------------------------- Messages
 
 
-const getMessages = (list) => {
+const getMessages = (id, isVendor) => {
   //to retrieve messags from the database (currently set to return all data)
+  const list = [id]
+  let column, sort;
+  if (isVendor) {
+    column = 'vendor_id';
+    sort = 'user_id';
+  } else {
+    sort = 'vendor_id';
+    column = 'user_id';
+  }
+  console.log(list);
   return pool
     .query(`
     SELECT messages.*, vendors.name as name
     FROM messages
     JOIN vendors ON vendor_id = vendors.id
-    WHERE $2 = $1
-    ORDER BY $3;
+    WHERE "${column}" = $1
+    ORDER BY "${sort}";
       `, list)
     .then((result) => {
-      console.log(result.rows);
-      result.rows;
+      // console.log("RESULT.ROWS FROM GETMESSAGES: ",result.rows);
+      return result.rows;
     })
     .catch(err => console.error('query error', err.stack))
 
 };
 exports.getMessages = getMessages;
+
+
+
+
 
 // consts addMessages = (message, reqparams) => {
 //   //adds messages to database

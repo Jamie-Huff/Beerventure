@@ -16,136 +16,126 @@ module.exports = (db) => {
     const user = req.session.user;
     if (!user) {
       const userEmail = user.email;
-      res.render("../views/urls_messages", {userEmail})
+      res.render("../views/urls_messages", {userEmail});
     }
     const userID = user.id;
     res.redirect(`/messages/${userID}`);
-  })
+  });
 
   router.get("/:user_id", (req, res) => {
     const user = req.session.user;
     // console.log("USER", user);
     const userEmail = user.email;
     const userID = user.id;
-    const reply = {}
+    const reply = {};
     let isVendor = false;
-    let me, them;
-
 
     getUserByEmail(userEmail)
-    .then(userData => {
+      .then(userData => {
         // helper function to retrieve products from DB
         getVendorByEmail(userEmail)
-        .then(vendorData => {
-          // -----------------------------------TO DO: should be updated to better output (failure message)
-          if (userData) {
-            isVendor = false;
-            me = user_id,
-            them = vendor_id;
-            getMessages([userID, me, them])
-            .then ()
-          } else {
+          .then(vendorData => {
+            if (userData) {
+              isVendor = false;
+              getMessages(userID, isVendor)
+                .then(data => {
+                  const messages = data;
 
-          }
+                  const uniqueConvos = [];
 
+                  for (let i = 0; i < messages.length; i++) {
+                    const element = messages[i];
+                    if (!uniqueConvos.includes(element.vendor_id)) {
+                      uniqueConvos.push(element.vendor_id);
+                    }
+                  }
+                  // console.log("UNIQUE CONVOS AFTER FUNCTION: ", uniqueConvos);
 
+                  let arrayofConvos = [];
+                  for (const u of uniqueConvos) {
+                    arrayofConvos.push([]);
+                  }
+                  // console.log("ARRAYOFCONVOS: ", arrayofConvos)
 
+                  for (let i = 0; i < uniqueConvos.length; i++) {
+                    for (const item of messages) {
+                      if (item.vendor_id == uniqueConvos[i]) {
+                        arrayofConvos[i].push(item);
+                      }
+                    }
+                  }
+                  // console.log("ARRAY OF CONVOS ALL: ", arrayofConvos)
+                  // console.log("ARRAY OF CONVOS ARRAY 1: ", arrayofConvos[0])
+                  // console.log("ARRAY OF CONVOS ARRAY 2: ", arrayofConvos[1])
 
-        })
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
-      })
-
-
-
-
-    getUserByEmail(userEmail)
-    .then (userInfo => {
-      console.log("USER INFO FROM GET USER EMAIL: ", userInfo)
-
-
-      return db.query(`
-      SELECT messages.*, vendors.name as name
-      FROM messages
-      JOIN vendors ON vendor_id = vendors.id
-      WHERE $2 = $1
-      ORDER BY $3;
-      `, [userID, me, them])
-      .then(data => {
-        const messages = data.rows;
-
-        const uniqueConvos = [];
-
-        for (let i = 0; i < messages.length; i++) {
-          const element = messages[i];
-          if (!uniqueConvos.includes(element.vendor_id)) {
-            uniqueConvos.push(element.vendor_id);
-          }
-        }
-        // console.log("UNIQUE CONVOS AFTER FUNCTION: ", uniqueConvos);
-
-        let arrayofConvos = [];
-        for(const u of uniqueConvos) {
-          arrayofConvos.push([]);
-        }
-        // console.log("ARRAYOFCONVOS: ", arrayofConvos)
-
-        for (let i = 0; i < uniqueConvos.length; i++) {
-          for (const item of messages) {
-            if (item.vendor_id == uniqueConvos[i]) {
-              arrayofConvos[i].push(item);
+                  res.render("../views/urls_messages", { messages, reply, userID, userEmail, arrayofConvos, uniqueConvos, isVendor });
+                })
+                .catch(err => {
+                  res
+                    .status(500)
+                    .json({ error: err.message });
+                });
+            } else if (vendorData) {
+              isVendor = true;
+              getMessages(userID, isVendor)
             }
-          }
-        }
-        // console.log("ARRAY OF CONVOS ALL: ", arrayofConvos)
-        // console.log("ARRAY OF CONVOS ARRAY 1: ", arrayofConvos[0])
-        // console.log("ARRAY OF CONVOS ARRAY 2: ", arrayofConvos[1])
 
-        res.render("../views/urls_messages", { messages, reply, userID, userEmail, arrayofConvos, uniqueConvos })
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
+          })
+          .catch((err) => {
+            res.status(500).json({ error: err.message });
+          });
+
+
       });
-
-
-    })
 
 
   });
 
   router.post("/:user_id", (req, res) => {
     const user = req.session.user;
+    const userID = user.id;
+    const userEmail = user.email;
 
-    // console.log(req.body)
+    console.log("POST REQUEST: USER: ", user)
 
     if (!req.body.text) {
       res.status(400).json({ error: 'invalid request: no data in POST body'});
       return;
     }
 
+    getUserByEmail(userEmail)
+    .then(userData => {
+        // helper function to retrieve products from DB
+        getVendorByEmail(userEmail)
+        .then(vendorData => {
+        })
+        // -----------------------------------TO DO: BUG! CURRENTLY TRYING TO SEND AN ERROR BEFORE REGISTERING NEW USER
+      .catch(e => res.send(e));
+    });
+
+
+
     const reply = {
       text: req.body.text,
       vendor_id: req.body.vendor_id,
-      user_id
-    }
+      userID
+    };
 
     return db.query(`
     INSERT INTO messages
-    (user_id, vendor_id, message)
+    (user_id, vendor_id, message, is_vendor)
     VALUES
-    ($1, $2, $3)
-    `, [user_id, reply.vendor_id, reply.text])
-    .then(data => {
-      const messages = data.rows;
-      return res.redirect(`/messages/${user_id}`)
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .json({ error: err.message });
-    });
+    ($1, $2, $3, $4)
+    `, [userID, reply.vendor_id, reply.text, false])
+      .then(data => {
+        const messages = data.rows;
+        return res.redirect(`/messages/${userID}`);
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
 
 
 

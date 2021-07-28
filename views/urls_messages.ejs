@@ -61,13 +61,15 @@
       </div>
       <% for (let i = 0; i < convo.length; i++) { %>
 
-        <% if (convo[i].is_vendor === reply.vendor_id) { %>
+        <% if (convo[i].is_vendor === isVendor) { %>
 
         <div>
-          <p>YOU: <%= convo[i].message %> </p>
+          <p>User: <%= convo[i].message %> </p>
         </div>
+        <% } else { %>
+
         <div>
-          <p>NOT YOU: </p>
+          <p>Vendor: <%= convo[i].message %> </p>
         </div>
 
         <% } %>
