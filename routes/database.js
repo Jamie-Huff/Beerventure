@@ -92,7 +92,6 @@ exports.getVendorsProducts = getVendorsProducts;
 
 /// ----------------------------------------------------- Messages
 
-<<<<<<< HEAD
 // repeating code but it makes it simpler:
 const getVendorMessages = function(vendorId) {
   return pool
@@ -102,23 +101,6 @@ const getVendorMessages = function(vendorId) {
     WHERE vendor_id = $1
     ORDER BY users.name`, [vendorID])
     .then(res => res.rows ? res.rows : null)
-=======
-
-const getMessages = (list) => {
-  //to retrieve messags from the database (currently set to return all data)
-  return pool
-    .query(`
-    SELECT messages.*, vendors.name as name
-    FROM messages
-    JOIN vendors ON vendor_id = vendors.id
-    WHERE $2 = $1
-    ORDER BY $3;
-      `, list)
-    .then((result) => {
-      console.log(result.rows);
-      result.rows;
-    })
->>>>>>> master
     .catch(err => console.error('query error', err.stack))
 }
 exports.getVendorMessages = getVendorMessages;

@@ -7,11 +7,7 @@
 
 const express = require('express');
 const router  = express.Router();
-<<<<<<< HEAD
 const { getUserByEmail, getVendorByEmail, getVendorMessages, getUserMessages } = require('./database');
-=======
-const { getUserByEmail, getVendorByEmail, getMessages } = require('./database');
->>>>>>> master
 
 module.exports = (db) => {
 
