@@ -96,8 +96,8 @@ module.exports = (db) => {
     const userID = user.id;
     const userEmail = user.email;
     isVendor = false;
-
-    console.log("POST REQUEST: USER: ", user)
+    console.log("TEST REQ BODY @#$@#$", req.body);
+    // console.log("POST REQUEST: USER: ", user)
 
     if (!req.body.text) {
       res.status(400).json({ error: 'invalid request: no data in POST body'});

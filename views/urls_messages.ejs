@@ -32,7 +32,7 @@
         <div class="convos">
 
 
-        <% for (let i = 0; i < convo.length; i++) { %>
+        <% for (let i = convo.length - 1 ; i >= 0; i--) { %>
 
           <% if (convo[i].is_vendor === isVendor) { %>
 
@@ -50,10 +50,9 @@
 
         <% } %>
         </div>
-
         <form class="send-message" action="/messages/<%= userID %>" method="POST">
-          <input type="hidden" value="<%= convo.vendor_id %>" name="vendor_id"/>
-          <textarea name="text" placeholder="Type message here..."></textarea>
+          <input type="hidden" value="<%= convo[0].vendor_id %>" name="vendor_id"/>
+          <textarea class="msg" name="text" placeholder="Type message here..."></textarea>
           <button type="submit">Send</button>
         </form>
 
