@@ -2,10 +2,12 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
     $(document).ready(function(event){
-      $('.new-item-slide').css("opacity", 0);
+      $('.new-item-slide').css("visibility", "hidden");
+      $('.new-item-slide').slideUp();
 
-      $('.reveal-hide').click(function(event) {
-        
+      $('.reveal').click(function(event) {
+      $('.new-item-slide').css("visibility", "visible");
+
         const $postItemForm = $('.new-item-slide');
         if ($postItemForm.is(':visible')) {
           $postItemForm.slideUp();
