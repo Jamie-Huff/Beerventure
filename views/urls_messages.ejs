@@ -53,16 +53,15 @@
     <% } %>
   <% } %>
 
-
   <section>
     <% for (const convo of arrayofConvos) { %>
-    <% console.log(convo) %>
+      <% console.log(convo) %>
       <div>
-        CONVO WITH: <%= convo[0].name%>
+        CONVO WITH: <%= convo[0].name %>
       </div>
       <% for (let i = 0; i < convo.length; i++) { %>
 
-        <% if (convo[i].is_vendor === ) { %>
+        <% if (convo[i].is_vendor === reply.vendor_id) { %>
 
         <div>
           <p>YOU: <%= convo[i].message %> </p>
@@ -71,13 +70,18 @@
           <p>NOT YOU: </p>
         </div>
 
+        <% } %>
+
       <% } %>
+
 
     <% } %>
 
   </section>
 
   <%- include('partials/_footer'); %>
+
+
 
 </body>
 </html>

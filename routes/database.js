@@ -48,6 +48,19 @@ const getVendorByEmail = function(email) {
 };
 exports.getVendorByEmail = getVendorByEmail;
 
+const addNewVendor = function(vendor) {
+  const values = [vendor.name, vendor.email, vendor.password, vendor.city, vendor.postal_code, vendor.phone, vendor.website, vendor.description];
+  return pool
+    .query(`
+    INSERT INTO vendors (name, email, password, city, postal_code, phone_number, website_url, vendor_description)
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8)
+    RETURNING *;
+    `, values)
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack))
+};
+exports.addNewVendor = addNewVendor;
+
 
 /// ----------------------------------------------------- Products
 
@@ -69,8 +82,8 @@ exports.getFeaturedProducts = getFeaturedProducts;
 const getVendorsProducts = function(email) {
 
   return pool
-    .query(`SELECT * FROM items JOIN vendors ON vendor_id = vendors.id WHERE vendors.email=$1`, [email])
-    .then(res => res.rows[0] ? res.rows[0] : null)
+    .query(`SELECT items.* FROM items JOIN vendors ON vendor_id = vendors.id WHERE vendors.email=$1`, [email])
+    .then(res => res.rows ? res.rows : null)
     .catch(err => console.error('query error', err.stack))
 }
 exports.getVendorsProducts = getVendorsProducts;
@@ -79,6 +92,7 @@ exports.getVendorsProducts = getVendorsProducts;
 
 /// ----------------------------------------------------- Messages
 
+<<<<<<< HEAD
 // repeating code but it makes it simpler:
 const getVendorMessages = function(vendorId) {
   return pool
@@ -88,6 +102,23 @@ const getVendorMessages = function(vendorId) {
     WHERE vendor_id = $1
     ORDER BY users.name`, [vendorID])
     .then(res => res.rows ? res.rows : null)
+=======
+
+const getMessages = (list) => {
+  //to retrieve messags from the database (currently set to return all data)
+  return pool
+    .query(`
+    SELECT messages.*, vendors.name as name
+    FROM messages
+    JOIN vendors ON vendor_id = vendors.id
+    WHERE $2 = $1
+    ORDER BY $3;
+      `, list)
+    .then((result) => {
+      console.log(result.rows);
+      result.rows;
+    })
+>>>>>>> master
     .catch(err => console.error('query error', err.stack))
 }
 exports.getVendorMessages = getVendorMessages;

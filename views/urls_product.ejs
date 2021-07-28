@@ -1,0 +1,39 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <!-- internal css -->
+  <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+
+  <!-- internal js -->
+  <!-- <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script> -->
+
+  <!-- external css -->
+
+  <!-- external js -->
+
+</head>
+
+<body>
+  <%- include('partials/_navbar') %>
+  <h1>Product Information Page</h1>
+
+  <% for (const item of items) { %>
+    <div class="featured-items">
+      <p class="prod-name"> <%= item.vendor %> </p>
+      <p class="prod-name"> <%= item.name %> </p>
+      <img class="product-image" src=<%= item.image %>
+      <p> <%= item.category %> </p>
+      <p><%= item.price %> </p>
+      <button id="more-info">Tell Me More</button>
+
+    </div>
+
+  <% } %>
+
+    <%- include('partials/_footer'); %>
+
+
+</body>
+
+</html>

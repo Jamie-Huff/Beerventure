@@ -2,7 +2,6 @@ const express = require('express');
 const router  = express.Router();
 const { getUserByEmail, getFeaturedProducts, addNewUser, getVendorByEmail } = require('./database');
 
-// Move these two if authenticateUser() moves:
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -29,8 +28,12 @@ module.exports = (db) => {
           return res.status(500).json({ error: err.message });
         });
     } else {
-
       // Session cookie does exist
+      // check if cookie has vendor: true
+      if (user.vendor) {
+        return res.redirect('/vendors');
+      }
+
       // helper function to retrieve products from DB
       getFeaturedProducts()
       .then(products => {
@@ -54,6 +57,21 @@ module.exports = (db) => {
     };
   });
 
+    // ---------------------------------------------- USER PROFILE (RENDER)
+
+  // Render Login Page:
+  router.get('/profile', (req, res) => {
+    const user = req.session.user;
+    if (!user) {
+      return res.render("../views/urls_login");
+    }
+    if (user.vendor) {
+      return res.render("../views/urls_vendor_profile");
+    }
+    return res.render("../views/urls_profile");
+  });
+
+
     // ---------------------------------------------- LOG IN (RENDER)
 
   // Render Login Page:
@@ -61,10 +79,10 @@ module.exports = (db) => {
     // Check if session cookie exists,
     const user = req.session.user;
     if (user) {
-      res.render("/")
+      return res.send({"error":"already logged in"});
     }
     // -----------------------------------TO DO: Change this route to user profile page
-    res.render("../views/urls_login")
+    return res.render("../views/urls_login");
   });
 
     // ---------------------------------------------- LOG IN (POST)
@@ -74,14 +92,45 @@ module.exports = (db) => {
     const {email, password} = req.body;
 
     // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
+
     getUserByEmail(email)
-    .then(user => {
-      bcrypt.compare(password, user.password);
-      req.session.user = user;
-    })
-    .then(result => res.redirect('/'))
-    .catch(err => console.error('query error', err.stack));
+      .then(user => {
+            if (user) {
+              bcrypt.compare(password, user.password);
+              req.session.user = user;
+            }
+          })
+      .then(result => {
+        return res.redirect('/profile');
+      })
+      .catch(err => console.error('query error', err.stack))
+
   });
+
+
+  router.post('/vendors/login', (req, res) => {
+    const {email, password} = req.body;
+    console.log('email: ', email);
+
+    // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
+
+    getVendorByEmail(email)
+      .then(vendor => {
+            if (vendor) {
+              bcrypt.compare(password, vendor.password);
+              vendor.vendor = true;
+              req.session.user = vendor;
+            }
+          })
+      .then(result => {
+        return res.redirect('/vendors');
+      })
+      .catch(err => console.error('query error', err.stack))
+  });
+
+
+
+  
 
   // ---------------------------------------------- LOG OUT
   // ---------------------------------------------------------TO DO: link to a logout button
@@ -99,7 +148,7 @@ module.exports = (db) => {
     // get user email from session cookie
     const user = req.session.user;
     // if session cookie exists, redirect to homepage TO DO - CHANGE THIS TO REDIRECT TO USER'S PAGE
-    if (user) return res.redirect('/');
+    if (user) return res.send({"error":"already logged in"});
     // if user doesn't have a session cookie, show the registration page
     return res.render('../views/urls_register_user');
   });
@@ -129,9 +178,7 @@ module.exports = (db) => {
           }
         })
         // -----------------------------------TO DO: BUG! CURRENTLY TRYING TO SEND AN ERROR BEFORE REGISTERING NEW USER
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
-      })
+      .catch(e => res.send(e));
     });
 
     // if email doesn't exist in DB, register the user by INPUTing their data in user database
@@ -142,14 +189,16 @@ module.exports = (db) => {
           return;
         }
         req.session.user = user;
-        res.redirect('/');
+        res.redirect('/urls_profile');
       })
-      .catch(e => res.send(e));
     // once registered, res.render search page? - TO DO: Decide on age a new user lands on
   });
   // ---------------------------------------------- END REGISTER NEW USER
 
 
+  // ---------------------------------------------- product load page
+
+  // --------------------------------------------------------------------
   return router;
 };
 

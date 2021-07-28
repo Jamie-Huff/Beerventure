@@ -7,7 +7,11 @@
 
 const express = require('express');
 const router  = express.Router();
+<<<<<<< HEAD
 const { getUserByEmail, getVendorByEmail, getVendorMessages, getUserMessages } = require('./database');
+=======
+const { getUserByEmail, getVendorByEmail, getMessages } = require('./database');
+>>>>>>> master
 
 module.exports = (db) => {
 
@@ -118,60 +122,95 @@ module.exports = (db) => {
 
   router.get("/:user_id", (req, res) => {
     const user = req.session.user;
-    console.log("USER", user);
+    // console.log("USER", user);
     const userEmail = user.email;
     const userID = user.id;
+    const reply = {}
+    let isVendor = false;
+    let me, them;
+
+
+    getUserByEmail(userEmail)
+    .then(userData => {
+        // helper function to retrieve products from DB
+        getVendorByEmail(userEmail)
+        .then(vendorData => {
+          // -----------------------------------TO DO: should be updated to better output (failure message)
+          if (userData) {
+            isVendor = false;
+            me = user_id,
+            them = vendor_id;
+            getMessages([userID, me, them])
+            .then ()
+          } else {
+
+          }
+
+
+
+
+        })
+      .catch((err) => {
+        res.status(500).json({ error: err.message });
+      })
+
+
+
 
     getUserByEmail(userEmail)
     .then (userInfo => {
-      //then put everything in here basically
-    })
+      console.log("USER INFO FROM GET USER EMAIL: ", userInfo)
 
-    const reply = {}
-    return db.query(`
-    SELECT messages.*, vendors.name as name
-    FROM messages
-    JOIN vendors ON vendor_id = vendors.id
-    WHERE user_id = $1
-    ORDER BY vendor_id;
-    `, [userID])
-    .then(data => {
-      const messages = data.rows;
 
-      const uniqueConvos = [];
+      return db.query(`
+      SELECT messages.*, vendors.name as name
+      FROM messages
+      JOIN vendors ON vendor_id = vendors.id
+      WHERE $2 = $1
+      ORDER BY $3;
+      `, [userID, me, them])
+      .then(data => {
+        const messages = data.rows;
 
-      for(let i = 0; i < messages.length; i++) {
-        const element = messages[i];
-        if (!uniqueConvos.includes(element.vendor_id)) {
-          uniqueConvos.push(element.vendor_id);
-        }
-      }
-      // console.log("UNIQUE CONVOS AFTER FUNCTION: ", uniqueConvos);
+        const uniqueConvos = [];
 
-      let arrayofConvos = [];
-      for(const u of uniqueConvos) {
-        arrayofConvos.push([]);
-      }
-      // console.log("ARRAYOFCONVOS: ", arrayofConvos)
-
-      for (let i = 0; i < uniqueConvos.length; i++) {
-        for (const item of messages) {
-          if (item.vendor_id == uniqueConvos[i]) {
-            arrayofConvos[i].push(item);
+        for (let i = 0; i < messages.length; i++) {
+          const element = messages[i];
+          if (!uniqueConvos.includes(element.vendor_id)) {
+            uniqueConvos.push(element.vendor_id);
           }
         }
-      }
-      // console.log("ARRAY OF CONVOS ALL: ", arrayofConvos)
-      // console.log("ARRAY OF CONVOS ARRAY 1: ", arrayofConvos[0])
-      // console.log("ARRAY OF CONVOS ARRAY 2: ", arrayofConvos[1])
+        // console.log("UNIQUE CONVOS AFTER FUNCTION: ", uniqueConvos);
 
-      res.render("../views/urls_messages", { messages, reply, userID, userEmail, arrayofConvos, uniqueConvos })
+        let arrayofConvos = [];
+        for(const u of uniqueConvos) {
+          arrayofConvos.push([]);
+        }
+        // console.log("ARRAYOFCONVOS: ", arrayofConvos)
+
+        for (let i = 0; i < uniqueConvos.length; i++) {
+          for (const item of messages) {
+            if (item.vendor_id == uniqueConvos[i]) {
+              arrayofConvos[i].push(item);
+            }
+          }
+        }
+        // console.log("ARRAY OF CONVOS ALL: ", arrayofConvos)
+        // console.log("ARRAY OF CONVOS ARRAY 1: ", arrayofConvos[0])
+        // console.log("ARRAY OF CONVOS ARRAY 2: ", arrayofConvos[1])
+
+        res.render("../views/urls_messages", { messages, reply, userID, userEmail, arrayofConvos, uniqueConvos })
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+
+
     })
-    .catch(err => {
-      res
-        .status(500)
-        .json({ error: err.message });
-    });
+
+
   });
 
   router.post("/:user_id", (req, res) => {
