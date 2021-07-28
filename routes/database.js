@@ -91,10 +91,20 @@ exports.getVendorsProducts = getVendorsProducts;
 
 
 const addNewProduct = function(product) {
-  const values = [product.vendor_id, product.name, product.description, product.price, product.category, product.abv, product.mliter, product.image, product.featured_check];
+  const values = [
+    product.name, 
+    product.description, 
+    product.price, 
+    product.vendor_id, 
+    product.featured, 
+    product.category, 
+    product.abv, 
+    product.mliter, 
+    product.image
+  ];
   return pool
     .query(`
-    INSERT INTO products (vendor_id, image, name, description, price, featured, category, abv, mliter)
+    INSERT INTO items (name, description, price, vendor_id, featured, category, abv, mliter, image)
     VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
     RETURNING *;
     `, values)

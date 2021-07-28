@@ -119,7 +119,7 @@ module.exports = (db) => {
     addNewVendor(newVendor)
       .then(vendor => {
         if (!vendor) {
-          res.send({error: "error"});
+          res.send({error: 'error'});
           return;
         }
         req.session.user = newVendor;
@@ -129,6 +129,7 @@ module.exports = (db) => {
 
   });
 
+
   // ---------------------------------------------- POST NEW ITEM
 
   router.post('/new_item', (req, res) => {
@@ -137,14 +138,31 @@ module.exports = (db) => {
     const newItem = req.body;
     newItem.vendor_id = vendor.id;
     // do some entry validation
-    console.log('newItem': newItem);
-    // FIGURE OUT HOW TO HANDLE THE IMAGE
+    newItem.price = newItem.price * 100;
+    newItem.abv = newItem.abv * 100;
+    if (newItem.featured_check == 'on') {
+      newItem.featured_check = true;
+    } else {
+      newItem.featured_check = false;
+    }
 
+    // watch for price in cents, mL, and the percentage
 
-    addNewItem(newItem)
-      .then(res => res);
-      .catch(e => res.send(e));
+    // Placeholder image:
+    // TO DO: Figure out how to handle images properly. Unsure how they get output to page
+    newItem.image = 'https://images.unsplash.com/photo-1523567830207-96731740fa71?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=634&q=80';
+    console.log('newItem: ', newItem);
+    
 
+    addNewProduct(newItem)
+      .then(item => {
+        if (!item) {
+          res.send({error: 'error'});
+          return;
+        }
+        return res.redirect('/vendors');
+      })
+      .catch(e => res.send(e))
 
   });
 
