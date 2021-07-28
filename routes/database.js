@@ -95,7 +95,7 @@ const addProduct = function(list) {
       INSERT INTO items
         (vendor_id, image, name, description, price, category, abv, mliter)
       VALUES
-        ($1, $2, $3, $4, $5, $6, $8, $9)
+        ($1, $2, $3, $4, $5, $6, $7, $8)
     `, list)
     .then((result) => {
       console.log(result)
@@ -104,7 +104,6 @@ const addProduct = function(list) {
     .catch(err => console.error('query error', err.stack))
 }
 exports.addProduct = addProduct;
-
 
 
 /// ----------------------------------------------------- Messages

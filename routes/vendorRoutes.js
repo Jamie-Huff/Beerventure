@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { addNewVendor, getVendorByEmail, getVendorsProducts, addProducts } = require('./database');
+const { addNewVendor, getVendorByEmail, getVendorsProducts, addProducts, addProduct } = require('./database');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -10,7 +10,6 @@ module.exports = (db) => {
 
   // ---------------------------------------------- HOMEPAGE (RENDER w PRODUCTS & CHECK FOR SESSION COOKIE)
   router.get('/', (req, res) => {
-    console.log("AT ROUTE /");
     // get user email from session cookie
     const vendor = req.session.user;
     // console.log('VENDOR COOKIE: ', vendor);
@@ -57,31 +56,66 @@ module.exports = (db) => {
       // if vendor lands on /vendors and doesn't have a session cookie, redirect to login
       return res.render("../views/urls_login");
     }
-    res.redirect('/');
+    // res.redirect('/');
 
     getVendorByEmail(vendorEmail)
       .then(vendorData => {
         if (vendorData) {
           getVendorsProducts(vendorEmail)
-            .then(products => {
-              const templateVars = {
-                userObject: vendor,
-                products: products,
-              };
+            .then(() => {
               // redirect to vendor's profile page:
-              res.redirect('/', templateVars);
+              res.redirect('/');
             })
             .catch((err) => {
               return res.status(500).json({ error: err.message });
             });
         }
+      })
+      .catch((err) => {
+        return res.status(500).json({ error: err.message });
       });
-
   });
 
   router.post('/profile', (req, res) => {
 
+    const vendor = req.session.user;
+    // console.log("VENDOR: ", vendor);
+    // console.log("REQ BODY: ", req.body)
+    if (!req.body) {
+      res.status(400).json({ error: 'invalid request: no data in POST body'});
+      return;
+    }
+
+    const vendorID = vendor.id
+    const itemImage = req.body.item_image
+    const itemName = req.body.item_name
+    const itemDescription = req.body.item_description
+    const itemPrice = req.body.item_price
+    const itemCategory = req.body.item_category
+    const itemAbv = req.body.item_abv
+    const itemMliter = req.body.item_mliter
+
     //(vendor_id, image, name, description, price, category, abv, mliter)
+    const productDetails = [
+      vendorID,
+      itemImage,
+      itemName,
+      itemDescription,
+      Number(itemPrice),
+      itemCategory,
+      parseInt(itemAbv),
+      Number(itemMliter)
+    ]
+    // console.log("PRODUCTDETAILS: ", productDetails)
+    addProduct(productDetails)
+    .then((newProduct) => {
+      return res.redirect('/vendors/profile')
+    })
+    .catch((error) => {
+      res.status(500).json({ error: err.message })
+    })
+
+
 
   })
 
