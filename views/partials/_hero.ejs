@@ -1,4 +1,26 @@
 
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function(event){
+
+    $('.reveal-hide').click(function(event) {
+      // event.preventDefault();
+      const $postItemForm = $('.new-item-slide');
+      if ($postItemForm.is(':visible')) {
+        $postItemForm.slideUp();
+      } else {
+        $postItemForm.slideDown();
+      }
+    });
+
+
+    });
+
+  </script>
+</head>
+
+
 <header class="hero">
   <div class="overlay">
 
@@ -12,10 +34,10 @@
         <h2>Hello <%= userObject.name %></h2>
         <br>
         <h2>Manage your items for sale</h2>
+        <%- include('_post_item') %>
         </div>
       </div>
 
-      <%- include('_post_item') %>
 
 
       <% } else { %>

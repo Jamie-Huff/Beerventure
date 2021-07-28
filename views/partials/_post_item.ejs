@@ -1,15 +1,29 @@
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script type="text/javascript" src="../../public/scripts/post_item.js"></script>
+  <script>
+    $(document).ready(function(event){
+
+    $('.reveal-hide').click(function(event) {
+      // event.preventDefault();
+      const $postItemForm = $('.new-item-slide');
+      if ($postItemForm.is(':visible')) {
+        $postItemForm.slideUp();
+      } else {
+        $postItemForm.slideDown();
+      }
+    });
+
+
+    });
+
+  </script>
 </head>
 
 <header>
 
   <main>
-    <h3>Post a New Item</h3>
     <div class="reveal-hide">
-      <button class="reveal">Reveal</button>
-      <button class="hide">Hide</button>
+      <button class="reveal">Post New Item</button>
     </div>
 
     <section class="new-item-slide">
