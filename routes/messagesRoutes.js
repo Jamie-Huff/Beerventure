@@ -7,7 +7,7 @@
 
 const express = require('express');
 const router  = express.Router();
-const { getUserByEmail, getVendorByEmail, getMessages, addMessages } = require('./database');
+const { getUserByEmail, getVendorByEmail, getMessages, addMessages, getVendorByName, getUserByName } = require('./database');
 
 module.exports = (db) => {
 
@@ -121,40 +121,40 @@ module.exports = (db) => {
   router.get("/", (req, res) => {
 
     const user = req.session.user;
+    console.log(req.session)
     if (!user) {
-      const userEmail = user.email;
-      res.render("../views/urls_messages", {userEmail});
+      res.redirect('/login')
     }
     const userID = user.id;
     res.redirect(`/messages/${userID}`);
   });
 
-  router.post("/:user_id", (req, res) => {
+
+  router.post("/:user_id", async (req, res) => {
     const user = req.session.user;
     const userID = user.id;
     const userEmail = user.email;
     isVendor = false;
-    // console.log("TEST REQ BODY @#$@#$", req.body);
-    // console.log("POST REQUEST: USER: ", user)
+    // console.log("POST REQUEST: USER: ", user);
 
     if (!req.body.text) {
       res.status(400).json({ error: 'invalid request: no data in POST body'});
       return;
     }
 
-    console.log("REQ BODY: ", req.body)
-
     getUserByEmail(userEmail)
-    .then(userData => {
-        // helper function to retrieve products from DB
+    .then(async userData => {
+      // helper function to retrieve products from DB
+      const vendor = req.body.name ? await getVendorByName(req.body.name) : null;
+      const user = req.body.name ? await getUserByName(req.body.name) : null;
+
         getVendorByEmail(userEmail)
         .then(vendorData => {
-
           if (userData) {
             isVendor = false;
             const reply = {
               text: req.body.text,
-              vendor_id: req.body.vendor_id,
+              vendor_id: req.body.vendor_id || vendor.id,
               userID
             };
             addMessages([userID, reply.vendor_id, reply.text, isVendor])
@@ -166,15 +166,13 @@ module.exports = (db) => {
                 .status(500)
                 .json({ error: err.message });
             });
-
           } else if (vendorData) {
             isVendor = true;
             const reply = {
               text: req.body.text,
-              user_id: req.body.user_id,
+              user_id: req.body.user_id || user.id,
               userID
             };
-
             addMessages([reply.user_id, userID, reply.text, isVendor])
             .then(data => {
               return res.redirect(`/messages/${userID}`);
@@ -185,10 +183,12 @@ module.exports = (db) => {
                 .json({ error: err.message });
             });
           }
-
         })
-      .catch(e => res.send(e));
-    });
+        .catch(e => res.send(e));
+
+    })
+    .catch(e => res.send(e));
+
   });
 
   return router;
