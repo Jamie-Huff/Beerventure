@@ -2,7 +2,7 @@ const express = require('express');
 const router  = express.Router();
 
 
-const { toggleProductsSoldStatus, deleteProduct, getItemObject } = require('./database');
+const { toggleSoldStatus, toggleFeaturedStatus, deleteProduct, getItemObject } = require('./database');
 
 module.exports = (db) => {
 
@@ -54,23 +54,23 @@ module.exports = (db) => {
       getItemObject(itemId)
         .then(result => {
           console.log('result: ', result);
+          console.log('result.sold: ', result.sold);
+
           let newStatus = result.sold ? false : true;
-          newStatus = result.sold ? true : false;
+
           console.log('newStatus line 57: ', newStatus);
           // db call to make item featured
-          toggleProductsSoldStatus(itemId, newStatus)
+          toggleSoldStatus(itemId, newStatus)
           .then(after => {
             // refresh the page they're on
             return res.redirect('/vendors/');
           })
         })
       .catch(e => console.error({e: e.error }));
-      
     } else {
       // user is not authorized to delete
       return res.status(403).json("not authorized. you are not a vendor");
     }
-    
   })
 
 
@@ -79,24 +79,29 @@ module.exports = (db) => {
     const vendor = req.session.user;
     const responseObject = req.body;
     const itemId = Number(Object.keys(responseObject)[0]);
-    console.log('itemId: ', itemId);
-    console.log('typeof itemId: ', typeof itemId);
 
     // check cookie to see if user is a vendor (workaround since ejs logic isn't working)
     if (vendor.vendor) {
-      // db call to make item featured
-      toggleProductStatus(itemId)
-      .then(res => {
-        // refresh the page they're on
-        return res.redirect('/item_sale_status');
-      })
+      // db call to get item object
+      getItemObject(itemId)
+        .then(result => {
+          console.log('result: ', result);
+
+          let newStatus = result.featured ? false : true;
+
+          console.log('newStatus line 89: ', newStatus);
+          // db call to make item featured
+          toggleFeaturedStatus(itemId, newStatus)
+          .then(after => {
+            // refresh the page they're on
+            return res.redirect('/vendors/');
+          })
+        })
       .catch(e => console.error({e: e.error }));
-      
     } else {
       // user is not authorized to delete
       return res.status(403).json("not authorized. you are not a vendor");
     }
-    
   })
 
 
@@ -110,20 +115,17 @@ module.exports = (db) => {
 
     // check cookie to see if user is a vendor (workaround since ejs logic isn't working)
     if (vendor.vendor) {
-
       // db call to delete item
       deleteProduct(itemId)
-      .then(res => {
+      .then(result => {
         // Take the vendor back to their profile page
         return res.redirect('/vendors');
       })
       .catch(e => console.error({e: e.error }));
-      
     } else {
       // user is not authorized to delete
       return res.status(403).json("not authorized. you are not a vendor");
     }
-
   })
 
 

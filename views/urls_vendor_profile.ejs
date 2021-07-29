@@ -27,7 +27,11 @@
 
       <% for (const product of products) { %>
         <div class="featured-items">
+          <% if (product.featured) { %>
           <h4>Featured Item</h4>
+          <% } else { %>
+          <h4></h4>
+          <% } %>
           <p class="prod-name"> <%= product.name %> </p>
           <img class="product-image" src=<%= product.image %>
           <p> <%= product.category %> </p>
