@@ -1,6 +1,14 @@
 const express = require('express');
 const router  = express.Router();
-const { getUserByEmail, getFeaturedProducts, addNewUser, getVendorByEmail } = require('./database');
+const {
+  getUserByEmail,
+  getFeaturedProducts,
+  addNewUser,
+  getVendorByEmail,
+  getUserFavourites,
+  unFavouriteItem,
+  addFavouriteItem
+} = require('./database');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -104,7 +112,7 @@ module.exports = (db) => {
       .then(result => {
         return res.redirect('/profile');
       })
-      .catch(err => console.error('query error', err.stack))
+      .catch(err => console.error('error', err.stack))
 
   });
 
@@ -126,7 +134,7 @@ module.exports = (db) => {
       .then(result => {
         return res.redirect('/vendors');
       })
-      .catch(err => console.error('query error', err.stack))
+      .catch(err => console.error('error', err.stack))
   });
 
 
@@ -186,108 +194,101 @@ module.exports = (db) => {
           return;
         }
         req.session.user = user;
-        res.redirect('/profile');
+        return res.redirect('/profile');
       })
     // once registered, res.render search page? - TO DO: Decide on age a new user lands on
   });
-  // ---------------------------------------------- END REGISTER NEW USER
 
 
-  // ---------------------------------------------- product load page
-    router.get('/favourites', (req, res) => {
-      const userObject = req.session.user
-      const userId = userObject.id
-      let user = req.session.user
-      console.log(userId)
-        let query = `SELECT items.name as item_name,
-                        vendors.name as vendor_name,
-                        items.price as item_price,
-                        items.category as item_category,
-                        items.image as item_image,
-                        favourites.id as favourite_id
-        FROM items
-        JOIN favourites ON items.id = favourites.item_id
-        JOIN vendors ON vendors.id = items.vendor_id
-        WHERE ${userId} = favourites.user_id
-        `;
-        return db.query(query)
-          .then(data => {
-            let templateVars;
-            const favourites = data.rows;
-            if (user) {
-              templateVars = {
-                favourites: data.rows,
-                userObject,
-              }
-            } else {
-              templateVars = {
-              favourites: data.rows,
-              userObject: null
-              }
-            }
-            res.render("urls_favourites", templateVars)
-          })
-          .catch(err => {
-            res
-              .status(500)
-              .json({ error: err.message });
-          });
-      });
 
-  // ----------------------------------------------------------------- remove favourited item
-  router.post('/favourites', (req, res) => {
-    let favouriteId = req.body
-    favouriteId = JSON.stringify(favouriteId)
-    favouriteId = favouriteId.substring(1, favouriteId.length - 1)
-    favouriteId = favouriteId.split(':')[0]
-    favouriteId = JSON.parse(favouriteId)
-    favouriteId = Number(favouriteId)
-    // favouriteId = the fav id of our table
-    let query = `DELETE FROM favourites WHERE $1 = favourites.id`
-    db.query(query, [favouriteId])
-      .then (data => {
-        res.redirect('/favourites')
+  // ---------------------------------------------- PRODUCT LOAD PAGE
+  router.get('/favourites', (req, res) => {
+    // get user cookie if exists
+    const user = req.session.user
+
+    if (user) {
+      // user is logged in
+      getUserFavourites(user.id)
+      .then(data => {
+        let templateVars;
+        if (user) {
+          templateVars = {
+            userObject,
+            favourites: data
+          }
+        } else {
+          templateVars = {
+            userObject: null,
+            favourites: data
+          }
+        }
+        return res.render("urls_favourites", templateVars)
+      })
       .catch(err => {
         res
-          .status(500)
-          .json({ error: err.message });
-        });
-      })
-  })
-  // --------------------------------------------------------------------
-  router.post('/favourites/add', (req, res) => {
-    let favouriteId = req.body
+        .status(500)
+        .json({ error: err.message });
+      });
+    } else {
+      // user is not logged in
+      return res.redirect('/login');
+    }
+  });
+
+
+  // ----------------------------------------------------------------- REMOVE FAVOURITED ITEM
+  router.post('/favourites', (req, res) => {
+    // favouriteId = the fav id of our table
+    const favouriteId = req.body
     favouriteId = JSON.stringify(favouriteId)
     favouriteId = favouriteId.substring(1, favouriteId.length - 1)
     favouriteId = favouriteId.split(':')[0]
     favouriteId = JSON.parse(favouriteId)
     favouriteId = Number(favouriteId)
-    // favouriteId = the fav id of our table
-    let query = `SELECT * FROM items WHERE id = $1`
-    db.query(query, [favouriteId])
-      .then (data => {
-        // for some reason its not always sending in the proper name to add to the table
-        vendorId = data.rows[0].vendor_id
-        userId = req.session.user.id
-          let query = `
-          INSERT INTO favourites
-            (item_id, user_id, vendor_id)
-          VALUES
-            ($1, $2, $3)
-            `
-          db.query(query, [favouriteId, userId, vendorId])
-            .then (data => {
-              console.log(data)
-              res.redirect('/favourites')
-            .catch(err => {
-              res
-                .status(500)
-                .json({ error: err.message });
-              });
-            })
-      })
 
-  })
+    // get user cookie if exists
+    const user = req.session.user;
+
+    if (user) {
+      // user is logged in
+      unFavouriteItem(favouriteId)
+      .then (data => {
+        return res.redirect('/favourites')
+        .catch(err => console.error('error', err.stack))
+      })
+    } else {      
+      // user is not logged in
+      return res.redirect('/login');
+    }
+  });
+
+
+  // ----------------------------------------------------------------- ADD FAVOURITE ITEM
+  router.post('/favourites/add', (req, res) => {
+    // favouriteId = the fav id of our table
+    const favouriteId = req.body
+    favouriteId = JSON.stringify(favouriteId)
+    favouriteId = favouriteId.substring(1, favouriteId.length - 1)
+    favouriteId = favouriteId.split(':')[0]
+    favouriteId = JSON.parse(favouriteId)
+    favouriteId = Number(favouriteId)
+
+    // get user cookie if exists
+    const user = req.session.user;
+
+    if (user) {
+      // user is logged in:
+      addFavouriteItem(favouriteId, user.id)
+        .then (data => {
+          console.log(data);
+          return res.redirect('/favourites')
+        })
+        .catch(err => console.error('error', err.stack))
+    } else {
+      // user is not logged in
+      return res.redirect('/login');
+    }
+  });
 
   return router;
 };
