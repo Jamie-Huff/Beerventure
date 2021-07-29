@@ -49,11 +49,11 @@
   <% for (const item of items) { %>
     <div class="featured-items">
       <p class="prod-name"> <%= item.vendor %> </p>
-      <p class="prod-name"> <%= item.name %> </p>
-      <img class="product-image" src=<%= item.image %>
+      <a class="nav-bar-links" id="sell" href='/product/:<%=item.name%>&itemId:<%=item.id%>'> <%=item.name%></a>
+      <img class="product-image" alt="photo of releative item" src=<%= item.image %>>
       <p> <%= item.category %> </p>
       <p><%= item.price %> </p>
-      <button id="more-info">Tell Me More</button>
+      <button id="more-info"> <a href='/product/:<%=item.name%>&itemId:<%=item.id%>'>More about this item</a></button>
 
     </div>
 
