@@ -7,7 +7,7 @@
 
 const express = require('express');
 const router  = express.Router();
-const { getUserByEmail, getVendorByEmail, getMessages, addMessages, getVendorByName } = require('./database');
+const { getUserByEmail, getVendorByEmail, getMessages, addMessages, getVendorByName, getUserByName } = require('./database');
 
 module.exports = (db) => {
 
@@ -129,27 +129,24 @@ module.exports = (db) => {
     res.redirect(`/messages/${userID}`);
   });
 
-  router.post("/:user_id", (req, res) => {
+
+  router.post("/:user_id", async (req, res) => {
     const user = req.session.user;
     const userID = user.id;
     const userEmail = user.email;
     isVendor = false;
-    // console.log("TEST REQ BODY @#$@#$", req.body);
-    console.log("POST REQUEST: USER: ", user)
+    // console.log("POST REQUEST: USER: ", user);
 
     if (!req.body.text) {
       res.status(400).json({ error: 'invalid request: no data in POST body'});
       return;
     }
 
-    console.log("REQ BODY: ", req.body)
-
     getUserByEmail(userEmail)
-    .then(userData => {
+    .then(async userData => {
       // helper function to retrieve products from DB
-
-      getVendorByName(req.body.vendor_name)
-      .then(vendorData => {
+      const vendor = req.body.name ? await getVendorByName(req.body.name) : null;
+      const user = req.body.name ? await getUserByName(req.body.name) : null;
 
         getVendorByEmail(userEmail)
         .then(vendorData => {
@@ -157,7 +154,7 @@ module.exports = (db) => {
             isVendor = false;
             const reply = {
               text: req.body.text,
-              vendor_id: req.body.vendor_id,
+              vendor_id: req.body.vendor_id || vendor.id,
               userID
             };
             addMessages([userID, reply.vendor_id, reply.text, isVendor])
@@ -173,7 +170,7 @@ module.exports = (db) => {
             isVendor = true;
             const reply = {
               text: req.body.text,
-              user_id: req.body.user_id,
+              user_id: req.body.user_id || user.id,
               userID
             };
             addMessages([reply.user_id, userID, reply.text, isVendor])
@@ -188,8 +185,7 @@ module.exports = (db) => {
           }
         })
         .catch(e => res.send(e));
-      })
-      .catch(e => res.send(e));
+
     })
     .catch(e => res.send(e));
 

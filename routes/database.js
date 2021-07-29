@@ -35,6 +35,16 @@ const addNewUser = function(user) {
 };
 exports.addNewUser = addNewUser;
 
+const getUserByName = function(name) {
+  console.log("NAME:", name);
+  const insertName = `%${name.slice(1)}%`
+  console.log("INSERT NAME: ", insertName)
+  return pool
+  .query(`SELECT * FROM users WHERE name LIKE $1`, [insertName])
+  .then(res => res.rows[0] ? res.rows[0] : null)
+  .catch(err => console.error('query error', err.stack))
+}
+exports.getUserByName = getUserByName;
 
 
 /// ----------------------------------------------------- Vendors
@@ -62,7 +72,9 @@ const addNewVendor = function(vendor) {
 exports.addNewVendor = addNewVendor;
 
 const getVendorByName = function(name) {
-  const insertName = `%${name}%`
+  console.log("NAME:", name);
+  const insertName = `%${name.slice(1)}%`
+  console.log("INSERT NAME: ", insertName)
   return pool
   .query(`SELECT * FROM vendors WHERE name LIKE $1`, [insertName])
   .then(res => res.rows[0] ? res.rows[0] : null)

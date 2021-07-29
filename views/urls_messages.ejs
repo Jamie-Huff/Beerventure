@@ -27,6 +27,22 @@
 
     <section class="message-page">
 
+      <div class="new-message">
+
+        START A NEW CONVERSATION
+        <form action="/messages/<%= userID %>" method="POST">
+          Name:<br>
+          <input type="text" name="name"><br><br>
+          Message:<br>
+          <input type="hidden"/>
+          <textarea name="text" placeholder="Describe your item..."></textarea>
+          <br><br>
+          <button type="submit">Start Conversation</button>
+        </form>
+
+      </div>
+
+
       <% if (!isVendor) { %>
 
         <% for (const convo of arrayofConvos) { %>
@@ -63,23 +79,6 @@
 
         <% } %>
 
-        <div class="msg-vendor">
-
-          CONTACT A VENDOR)
-          <form action="/messages/<%= userID %>" method="POST">
-            Name of Vendor:<br>
-            <input type="text" name="vendor_name"><br><br>
-            Message:<br>
-            <input type="hidden"/>
-            <textarea name="text" placeholder="Describe your item..."></textarea>
-            <br><br>
-            <button type="submit">Start Conversation</button>
-          </form>
-
-        </div>
-
-
-
       <% } else { %>
 
         <% for (const convo of arrayofConvos) { %>
@@ -113,21 +112,6 @@
             <button type="submit">Send</button>
           </form>
         <% } %>
-
-        <div class="msg-user">
-
-          CONTACT A USER)
-          <form action="/messages/<%= userID %>" method="POST">
-            Name of USER:<br>
-            <input type="text" name="user_name"><br><br>
-            Message:<br>
-            <input type="hidden"/>
-            <textarea name="text" placeholder="Describe your item..."></textarea>
-            <br><br>
-            <button type="submit">Start Conversation</button>
-          </form>
-
-        </div>
 
       <% } %>
 
