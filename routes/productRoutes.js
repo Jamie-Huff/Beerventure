@@ -2,7 +2,7 @@ const express = require('express');
 const router  = express.Router();
 
 
-const { toggleProductStatus, deleteProduct } = require('./database');
+const { toggleProductsSoldStatus, deleteProduct, getItemObject } = require('./database');
 
 module.exports = (db) => {
 
@@ -29,7 +29,6 @@ module.exports = (db) => {
           items: value.rows
         }
       }
-      console.log('templateVars: ', templateVars);
       return res.render('urls_product', templateVars)
     })
     .catch(err => {
@@ -51,14 +50,19 @@ module.exports = (db) => {
 
     // check cookie to see if user is a vendor (workaround since ejs logic isn't working)
     if (vendor.vendor) {
-
-      // db call to make item featured
-      toggleProductStatus(itemId)
-      .then(res => {
-        // refresh the page they're on
-        return res.redirect('/item_sale_status/:productID');
-      })
-      .catch(e => console.log({e: e.error }));
+      // db call to get item object
+      getItemObject(itemId)
+        .then(result => {
+          const newStatus = result.sold ? false : true;
+          console.log('newStatus line 57: ', newStatus);
+          // db call to make item featured
+          toggleProductsSoldStatus(item, newStatus)
+          .then(res => {
+            // refresh the page they're on
+            return res.redirect('/item_sale_status/:productID');
+          })
+        })
+      .catch(e => console.error({e: e.error }));
       
     } else {
       // user is not authorized to delete
@@ -84,7 +88,7 @@ module.exports = (db) => {
         // refresh the page they're on
         return res.redirect(`/item_sale_status/${itemId}`);
       })
-      .catch(e => console.log({e: e.error }));
+      .catch(e => console.error({e: e.error }));
       
     } else {
       // user is not authorized to delete
@@ -103,14 +107,14 @@ module.exports = (db) => {
       console.log('typeof itemId: ', typeof itemId);
   
       // check cookie to see if user is a vendor (workaround since ejs logic isn't working)
-      if (vendor.vendor) {
+      if (vendor.vendor) {       
         // db call to make item featured
-        toggleProductStatus(itemId)
+        toggleProductStatus(itemObject)
         .then(res => {
           // refresh the page they're on
-          return res.redirect(`/item_sale_status/${itemId}`);
+          return res.redirect(`/products/${itemId}`);
         })
-        .catch(e => console.log({e: e.error }));
+        .catch(e => console.error({e: e.error }));
         
       } else {
         // user is not authorized to delete
@@ -120,13 +124,12 @@ module.exports = (db) => {
     })
 
   // ----------- Delete an item from database
-
-
-  // For deleting an item
   router.post('/delete_item', (req, res) => {
     const vendor = req.session.user;
-    const itemId = req.params.productURL;
-    console.log('itemId to delete: ', itemId);
+    const responseObject = req.body;
+    const itemId = Object.keys(responseObject)[0];
+    console.log('itemId: ', itemId);
+    console.log('typeof itemId: ', typeof itemId);
 
     // check cookie to see if user is a vendor (workaround since ejs logic isn't working)
     if (vendor.vendor) {
@@ -137,7 +140,7 @@ module.exports = (db) => {
         // Take the vendor back to their profile page
         return res.redirect('/vendors');
       })
-      .catch(e => console.log({e: e.error }));
+      .catch(e => console.error({e: e.error }));
       
     } else {
       // user is not authorized to delete

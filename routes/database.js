@@ -149,9 +149,8 @@ exports.addNewProduct = addNewProduct;
 
 
 const deleteProduct = function(itemId) {
-
   return pool
-    .query(`DELETE FROM items WHERE item.id = $1 RETURNING *;`, [itemId])
+    .query(`DELETE FROM items WHERE $1 = items.id RETURNING *;`, [itemId])
     .then(res => res.rows)
     .catch(err => console.error('query error', err.stack))
 };
@@ -159,14 +158,22 @@ exports.deleteProduct = deleteProduct;
 
 
 
-const toggleProductStatus = function(itemId) {
-
-  return pool
-    .query(`UPDATE items SET item.vendor = $1 WHERE item.id = $1 RETURNING *;`, [itemId])
+const toggleProductsSoldStatus = function(item, newStatus) {
+    return pool
+    .query(`UPDATE items SET item.sold = $@ WHERE items.id = $1 RETURNING *;`, [item, newStatus])
     .then(res => res.rows)
     .catch(err => console.error('query error', err.stack))
 };
-exports.toggleProductStatus = toggleProductStatus;
+exports.toggleProductsSoldStatus = toggleProductsSoldStatus;
+
+
+const getItemObject = function(itemId) {
+    return pool
+    .query(`SELECT * FROM items WHERE items.id = $1 RETURNING *;`, [itemId])
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack))
+};
+exports.getItemObject = getItemObject;
 
 
 // ----------------------------------------------------- Products > Users's Favourite Items
