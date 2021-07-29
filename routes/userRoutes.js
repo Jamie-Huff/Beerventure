@@ -180,7 +180,7 @@ module.exports = (db) => {
   // ---------------------------------------------- LOG OUT
   // ---------------------------------------------------------TO DO: link to a logout button
 
-  router.post('/logout', (req, res) => {
+  router.get('/logout', (req, res) => {
     req.session.user = null;
     res.redirect("/")
   });
