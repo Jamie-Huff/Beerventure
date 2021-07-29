@@ -194,7 +194,69 @@ module.exports = (db) => {
 
 
   // ---------------------------------------------- product load page
+    router.get('/favourites', (req, res) => {
+      const userObject = req.session.user
+      const userId = userObject.id
+      let user = req.session.user
+      console.log(userId)
+        let query = `SELECT items.name as item_name,
+                        vendors.name as vendor_name,
+                        items.price as item_price,
+                        items.category as item_category,
+                        items.image as item_image,
+                        favourites.id as favourite_id
+        FROM items
+        JOIN favourites ON items.id = favourites.item_id
+        JOIN vendors ON vendors.id = items.vendor_id
+        WHERE ${userId} = favourites.user_id
+        `;
+        return db.query(query)
+          .then(data => {
+            console.log(query)
+            let templateVars;
+            const favourites = data.rows;
+            if (user) {
+              templateVars = {
+                favourites: data.rows,
+                userObject,
+              }
+            } else {
+              templateVars = {
+              favourites: data.rows,
+              userObject: null
+              }
+            }
+            console.log(templateVars.favourites)
+            res.render("urls_favourites", templateVars)
+          })
+          .catch(err => {
+            res
+              .status(500)
+              .json({ error: err.message });
+          });
+      });
 
+  // ----------------------------------------------------------------- remove favourited item
+  router.post('/favourites', (req, res) => {
+    let favouriteId = req.body
+    favouriteId = JSON.stringify(favouriteId)
+    favouriteId = favouriteId.substring(1, favouriteId.length - 1)
+    favouriteId = favouriteId.split(':')[0]
+    favouriteId = JSON.parse(favouriteId)
+    favouriteId = Number(favouriteId)
+    // favouriteId = the fav id of our table
+    let query = `DELETE FROM favourites WHERE $1 = favourites.id`
+    db.query(query, [favouriteId])
+      .then (data => {
+        res.redirect('/favourites')
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+        });
+      })
+
+  })
   // --------------------------------------------------------------------
   return router;
 };
