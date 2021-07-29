@@ -114,6 +114,27 @@ const addNewProduct = function(product) {
 exports.addNewProduct = addNewProduct;
 
 
+const deleteProduct = function(itemId) {
+
+  return pool
+    .query(`DELETE FROM items WHERE item.id = $1 RETURNING *;`, [itemId])
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack))
+};
+exports.deleteProduct = deleteProduct;
+
+
+
+const toggleProductStatus = function(itemId) {
+
+  return pool
+    .query(`UPDATE items SET item.vendor = $1 WHERE item.id = $1 RETURNING *;`, [itemId])
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack))
+};
+exports.toggleProductStatus = toggleProductStatus;
+
+
 
 /// ----------------------------------------------------- Messages
 
