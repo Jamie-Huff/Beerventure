@@ -29,7 +29,7 @@ module.exports = (db) => {
           items: value.rows
         }
       }
-      // console.log('templateVars: ', templateVars);
+      console.log('templateVars: ', templateVars);
       return res.render('urls_product', templateVars)
     })
     .catch(err => {
@@ -42,8 +42,9 @@ module.exports = (db) => {
 
 
   // ---------------------------------------------- POST (Item Management for Vendors)
-  // For toggling the on sale status of an item
-  router.post('/item_sale_status/:productID', (req, res) => {
+
+  // ----------- Toggle item 'For Sale' status
+  router.post('/item_sale_status', (req, res) => {
     const vendor = req.session.user;
     const itemId = req.params.productURL;
     console.log('itemId to toggle: ', itemId);
@@ -51,11 +52,11 @@ module.exports = (db) => {
     // check cookie to see if user is a vendor (workaround since ejs logic isn't working)
     if (vendor.vendor) {
 
-      // db call to delete item
+      // db call to make item featured
       toggleProductStatus(itemId)
       .then(res => {
         // refresh the page they're on
-        return res.redirect('/');
+        return res.redirect('/item_sale_status/:productID');
       })
       .catch(e => console.log({e: e.error }));
       
@@ -67,18 +68,62 @@ module.exports = (db) => {
   })
 
 
-  // FIGURE OUT THIS LOGIC AND FIX THE ACTION LINKS FOR THE FORM
+  // ----------- Toggle an item's 'featured' status off
+  router.post('/featured_status/off', (req, res) => {
+    const vendor = req.session.user;
+    const responseObject = req.body;
+    const itemId = Object.keys(responseObject)[0];
+    console.log('itemId: ', itemId);
+    console.log('typeof itemId: ', typeof itemId);
 
-  // this ejs logic in the urls_product.ejs file wasn't working. I'm not sure why:
-  // <% if (userObject[vendor]) { %>
-  // <p>Currently <%= items[0].sold ? 'On Sale' : 'Sold Out' %></p>
-  // <% } %>
-  // <%= I don't know why my EJS logic isn't working for making this only appear when the user is a vendor %>
-  // <%= Currently it's appearing for everyone %>
+    // check cookie to see if user is a vendor (workaround since ejs logic isn't working)
+    if (vendor.vendor) {
+      // db call to make item featured
+      toggleProductStatus(itemId)
+      .then(res => {
+        // refresh the page they're on
+        return res.redirect(`/item_sale_status/${itemId}`);
+      })
+      .catch(e => console.log({e: e.error }));
+      
+    } else {
+      // user is not authorized to delete
+      return res.status(403).json("not authorized. you are not a vendor");
+    }
+    
+  })
+
+
+    // ----------- Toggle an item's 'featured' status on
+    router.post('/featured_status/off', (req, res) => {
+      const vendor = req.session.user;
+      const responseObject = req.body;
+      const itemId = Object.keys(responseObject)[0];
+      console.log('itemId: ', itemId);
+      console.log('typeof itemId: ', typeof itemId);
+  
+      // check cookie to see if user is a vendor (workaround since ejs logic isn't working)
+      if (vendor.vendor) {
+        // db call to make item featured
+        toggleProductStatus(itemId)
+        .then(res => {
+          // refresh the page they're on
+          return res.redirect(`/item_sale_status/${itemId}`);
+        })
+        .catch(e => console.log({e: e.error }));
+        
+      } else {
+        // user is not authorized to delete
+        return res.status(403).json("not authorized. you are not a vendor");
+      }
+      
+    })
+
+  // ----------- Delete an item from database
 
 
   // For deleting an item
-  router.post('/delete_item/:productID', (req, res) => {
+  router.post('/delete_item', (req, res) => {
     const vendor = req.session.user;
     const itemId = req.params.productURL;
     console.log('itemId to delete: ', itemId);
