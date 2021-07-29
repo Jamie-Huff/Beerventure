@@ -36,7 +36,7 @@
             <br>
             <h5>This is currently a Featured item</h5>
 
-              <form method="POST" action="/product/featured_status/off">
+              <form method="POST" action="/product/featured_status">
                 <button type="submit" name="<%= items[0].id %>" class="btn">Remove From Featured Items</button>
               </form>
               <br>
@@ -45,7 +45,7 @@
             
             <h5>This is not Featured item</h5>
 
-            <form method="POST" action="/product/featured_status/on">
+            <form method="POST" action="/product/featured_status">
               <button type="submit" name="<%= items[0].id %>" class="btn">Add to Featured Items</button>
             </form>
             <br>
@@ -67,7 +67,7 @@
 
               <h5>This item is currently for sale</h5>
               
-              <form method="POST" action="/product/delete_item">
+              <form method="POST" action="/product/item_sale_status">
                 <button type="submit" name="<%= items[0].id %>" class="btn">De-list Item</button>
               </form>
 

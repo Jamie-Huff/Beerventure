@@ -156,11 +156,11 @@ const deleteProduct = function(itemId) {
 };
 exports.deleteProduct = deleteProduct;
 
-
+`UPDATE items SET sold = true WHERE items.id = 1 RETURNING *;`
 
 const toggleProductsSoldStatus = function(item, newStatus) {
     return pool
-    .query(`UPDATE items SET item.sold = $@ WHERE items.id = $1 RETURNING *;`, [item, newStatus])
+    .query(`UPDATE items SET sold = $2 WHERE items.id = $1 RETURNING *;`, [item, newStatus])
     .then(res => res.rows)
     .catch(err => console.error('query error', err.stack))
 };
@@ -169,7 +169,7 @@ exports.toggleProductsSoldStatus = toggleProductsSoldStatus;
 
 const getItemObject = function(itemId) {
     return pool
-    .query(`SELECT * FROM items WHERE items.id = $1 RETURNING *;`, [itemId])
+    .query(`SELECT * FROM items WHERE items.id = $1;`, [itemId])
     .then(res => res.rows)
     .catch(err => console.error('query error', err.stack))
 };

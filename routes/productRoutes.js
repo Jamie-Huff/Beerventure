@@ -45,21 +45,23 @@ module.exports = (db) => {
   // ----------- Toggle item 'For Sale' status
   router.post('/item_sale_status', (req, res) => {
     const vendor = req.session.user;
-    const itemId = req.params.productURL;
-    console.log('itemId to toggle: ', itemId);
+    const responseObject = req.body;
+    const itemId = Number(Object.keys(responseObject)[0]);
 
     // check cookie to see if user is a vendor (workaround since ejs logic isn't working)
     if (vendor.vendor) {
       // db call to get item object
       getItemObject(itemId)
         .then(result => {
-          const newStatus = result.sold ? false : true;
+          console.log('result: ', result);
+          let newStatus = result.sold ? false : true;
+          newStatus = result.sold ? true : false;
           console.log('newStatus line 57: ', newStatus);
           // db call to make item featured
-          toggleProductsSoldStatus(item, newStatus)
-          .then(res => {
+          toggleProductsSoldStatus(itemId, newStatus)
+          .then(after => {
             // refresh the page they're on
-            return res.redirect('/item_sale_status/:productID');
+            return res.redirect('/vendors/');
           })
         })
       .catch(e => console.error({e: e.error }));
@@ -72,11 +74,11 @@ module.exports = (db) => {
   })
 
 
-  // ----------- Toggle an item's 'featured' status off
-  router.post('/featured_status/off', (req, res) => {
+  // ----------- Toggle an item's 'featured' status 
+  router.post('/featured_status', (req, res) => {
     const vendor = req.session.user;
     const responseObject = req.body;
-    const itemId = Object.keys(responseObject)[0];
+    const itemId = Number(Object.keys(responseObject)[0]);
     console.log('itemId: ', itemId);
     console.log('typeof itemId: ', typeof itemId);
 
@@ -86,7 +88,7 @@ module.exports = (db) => {
       toggleProductStatus(itemId)
       .then(res => {
         // refresh the page they're on
-        return res.redirect(`/item_sale_status/${itemId}`);
+        return res.redirect('/item_sale_status');
       })
       .catch(e => console.error({e: e.error }));
       
@@ -97,31 +99,6 @@ module.exports = (db) => {
     
   })
 
-
-    // ----------- Toggle an item's 'featured' status on
-    router.post('/featured_status/off', (req, res) => {
-      const vendor = req.session.user;
-      const responseObject = req.body;
-      const itemId = Object.keys(responseObject)[0];
-      console.log('itemId: ', itemId);
-      console.log('typeof itemId: ', typeof itemId);
-  
-      // check cookie to see if user is a vendor (workaround since ejs logic isn't working)
-      if (vendor.vendor) {       
-        // db call to make item featured
-        toggleProductStatus(itemObject)
-        .then(res => {
-          // refresh the page they're on
-          return res.redirect(`/products/${itemId}`);
-        })
-        .catch(e => console.error({e: e.error }));
-        
-      } else {
-        // user is not authorized to delete
-        return res.status(403).json("not authorized. you are not a vendor");
-      }
-      
-    })
 
   // ----------- Delete an item from database
   router.post('/delete_item', (req, res) => {
