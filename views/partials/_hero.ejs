@@ -9,7 +9,7 @@
 
     <link rel="stylesheet" href="/styles/hero.css" type="text/css" />
 
-      <% if (userObject) { %>
+      <% if (userObject && userObject.vendor) { %>
 
       <div class="hero-content">
 
@@ -19,7 +19,6 @@
 
         <%- include('_post_item') %>
       </div>
-
 
 
       <% } else { %>
