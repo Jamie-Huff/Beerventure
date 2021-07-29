@@ -71,8 +71,6 @@ module.exports = (db) => {
     res.redirect("/")
   });
 
-
-
   // ---------------------------------------------- REGISTER NEW VENDOR
   // ---------------------------------------------------------TO DO: link to a register button on homepage
 

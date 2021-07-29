@@ -61,6 +61,15 @@ const addNewVendor = function(vendor) {
 };
 exports.addNewVendor = addNewVendor;
 
+const getVendorByName = function(name) {
+  const insertName = `%${name}%`
+  return pool
+  .query(`SELECT * FROM vendors WHERE name LIKE $1`, [insertName])
+  .then(res => res.rows[0] ? res.rows[0] : null)
+  .catch(err => console.error('query error', err.stack))
+}
+exports.getVendorByName = getVendorByName;
+
 
 /// ----------------------------------------------------- Products
 
@@ -92,14 +101,14 @@ exports.getVendorsProducts = getVendorsProducts;
 
 const addNewProduct = function(product) {
   const values = [
-    product.name, 
-    product.description, 
-    product.price, 
-    product.vendor_id, 
-    product.featured, 
-    product.category, 
-    product.abv, 
-    product.mliter, 
+    product.name,
+    product.description,
+    product.price,
+    product.vendor_id,
+    product.featured,
+    product.category,
+    product.abv,
+    product.mliter,
     product.image
   ];
   return pool

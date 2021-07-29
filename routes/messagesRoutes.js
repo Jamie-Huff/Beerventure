@@ -7,7 +7,7 @@
 
 const express = require('express');
 const router  = express.Router();
-const { getUserByEmail, getVendorByEmail, getMessages, addMessages } = require('./database');
+const { getUserByEmail, getVendorByEmail, getMessages, addMessages, getVendorByName } = require('./database');
 
 module.exports = (db) => {
 
@@ -135,7 +135,7 @@ module.exports = (db) => {
     const userEmail = user.email;
     isVendor = false;
     // console.log("TEST REQ BODY @#$@#$", req.body);
-    // console.log("POST REQUEST: USER: ", user)
+    console.log("POST REQUEST: USER: ", user)
 
     if (!req.body.text) {
       res.status(400).json({ error: 'invalid request: no data in POST body'});
@@ -146,10 +146,13 @@ module.exports = (db) => {
 
     getUserByEmail(userEmail)
     .then(userData => {
-        // helper function to retrieve products from DB
+      // helper function to retrieve products from DB
+
+      getVendorByName(req.body.vendor_name)
+      .then(vendorData => {
+
         getVendorByEmail(userEmail)
         .then(vendorData => {
-
           if (userData) {
             isVendor = false;
             const reply = {
@@ -166,7 +169,6 @@ module.exports = (db) => {
                 .status(500)
                 .json({ error: err.message });
             });
-
           } else if (vendorData) {
             isVendor = true;
             const reply = {
@@ -174,7 +176,6 @@ module.exports = (db) => {
               user_id: req.body.user_id,
               userID
             };
-
             addMessages([reply.user_id, userID, reply.text, isVendor])
             .then(data => {
               return res.redirect(`/messages/${userID}`);
@@ -185,10 +186,13 @@ module.exports = (db) => {
                 .json({ error: err.message });
             });
           }
-
         })
+        .catch(e => res.send(e));
+      })
       .catch(e => res.send(e));
-    });
+    })
+    .catch(e => res.send(e));
+
   });
 
   return router;
