@@ -203,12 +203,12 @@ module.exports = (db) => {
                         vendors.name as vendor_name,
                         items.price as item_price,
                         items.category as item_category,
-                        items.image as item_image
+                        items.image as item_image,
+                        favourites.id as favourite_id
         FROM items
         JOIN favourites ON items.id = favourites.item_id
         JOIN vendors ON vendors.id = items.vendor_id
         WHERE ${userId} = favourites.user_id
-
         `;
         return db.query(query)
           .then(data => {
@@ -235,6 +235,28 @@ module.exports = (db) => {
               .json({ error: err.message });
           });
       });
+
+  // ----------------------------------------------------------------- remove favourited item
+  router.post('/favourites', (req, res) => {
+    let favouriteId = req.body
+    favouriteId = JSON.stringify(favouriteId)
+    favouriteId = favouriteId.substring(1, favouriteId.length - 1)
+    favouriteId = favouriteId.split(':')[0]
+    favouriteId = JSON.parse(favouriteId)
+    favouriteId = Number(favouriteId)
+    // favouriteId = the fav id of our table
+    let query = `DELETE FROM favourites WHERE $1 = favourites.id`
+    db.query(query, [favouriteId])
+      .then (data => {
+        res.redirect('/favourites')
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+        });
+      })
+
+  })
   // --------------------------------------------------------------------
   return router;
 };
