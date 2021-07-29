@@ -244,9 +244,12 @@ module.exports = (db) => {
   // ---------------------------------------------- product load page
     router.get('/favourites', (req, res) => {
       const userObject = req.session.user
+      if (!userObject) {
+        return res.redirect('/login')
+      }
       const userId = userObject.id
       let user = req.session.user
-      console.log(userId)
+      console.log('is a user logged in:', userId)
         let query = `SELECT items.name as item_name,
                         vendors.name as vendor_name,
                         items.price as item_price,
@@ -256,12 +259,11 @@ module.exports = (db) => {
         FROM items
         JOIN favourites ON items.id = favourites.item_id
         JOIN vendors ON vendors.id = items.vendor_id
-        WHERE ${userId} = favourites.user_id
+        WHERE $1 = favourites.user_id
         `;
-        return db.query(query)
+        return db.query(query, [userId])
           .then(data => {
             let templateVars;
-            const favourites = data.rows;
             if (user) {
               templateVars = {
                 favourites: data.rows,
@@ -305,6 +307,7 @@ module.exports = (db) => {
   // --------------------------------------------------------------------
   router.post('/favourites/add', (req, res) => {
     let favouriteId = req.body
+    
     favouriteId = JSON.stringify(favouriteId)
     favouriteId = favouriteId.substring(1, favouriteId.length - 1)
     favouriteId = favouriteId.split(':')[0]
