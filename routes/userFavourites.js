@@ -53,7 +53,7 @@ module.exports = (db) => {
         return res.redirect('/favourites')
         .catch(err => console.error('error', err.stack))
       })
-    } else {      
+    } else {
       // user is not logged in
       return res.redirect('/login');
     }
@@ -69,7 +69,6 @@ module.exports = (db) => {
     favouriteId = favouriteId.split(':')[0]
     favouriteId = JSON.parse(favouriteId)
     favouriteId = Number(favouriteId)
-
     // get user cookie if exists
     const user = req.session.user;
 
