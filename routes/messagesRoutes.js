@@ -121,10 +121,9 @@ module.exports = (db) => {
   router.get("/", (req, res) => {
 
     const user = req.session.user;
+    console.log(req.session)
     if (!user) {
-      return res.redirect('/login');
-      // const userEmail = user.email;
-      // res.render("../views/urls_messages", {userEmail});
+      res.redirect('/login')
     }
     const userID = user.id;
     res.redirect(`/messages/${userID}`);
