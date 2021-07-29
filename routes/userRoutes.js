@@ -1,6 +1,11 @@
 const express = require('express');
 const router  = express.Router();
-const { getUserByEmail, getFeaturedProducts, addNewUser, getVendorByEmail, addMessages } = require('./database');
+const {
+  getUserByEmail,
+  getFeaturedProducts,
+  addNewUser,
+  getVendorByEmail
+} = require('./database');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -148,7 +153,7 @@ module.exports = (db) => {
       .then(result => {
         return res.redirect('/profile');
       })
-      .catch(err => console.error('query error', err.stack))
+      .catch(err => console.error('error', err.stack))
 
   });
 
@@ -170,7 +175,7 @@ module.exports = (db) => {
       .then(result => {
         return res.redirect('/vendors');
       })
-      .catch(err => console.error('query error', err.stack))
+      .catch(err => console.error('error', err.stack))
   });
 
 
@@ -234,7 +239,7 @@ module.exports = (db) => {
           return;
         }
         req.session.user = user;
-        res.redirect('/urls_profile');
+        return res.redirect('/profile');
       })
     // once registered, res.render search page? - TO DO: Decide on age a new user lands on
   });
@@ -307,7 +312,7 @@ module.exports = (db) => {
   // --------------------------------------------------------------------
   router.post('/favourites/add', (req, res) => {
     let favouriteId = req.body
-    
+
     favouriteId = JSON.stringify(favouriteId)
     favouriteId = favouriteId.substring(1, favouriteId.length - 1)
     favouriteId = favouriteId.split(':')[0]
