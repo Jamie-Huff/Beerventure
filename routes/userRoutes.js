@@ -62,14 +62,14 @@ module.exports = (db) => {
   // Render Login Page:
   router.get('/profile', (req, res) => {
     const user = req.session.user;
-    const templateVars = {userObject: user}
+    console.log("USER: ", user);
     if (!user) {
       return res.render("../views/urls_login");
     }
     if (user.vendor) {
       return res.render("../views/urls_vendor_profile");
     }
-    return res.render("../views/urls_profile", templateVars);
+    return res.render("../views/urls_profile");
   });
 
 
@@ -134,13 +134,17 @@ module.exports = (db) => {
 
 
   // ---------------------------------------------- LOG OUT
-  router.get('/logout', (req, res) => {
-    req.session = null;
+  // ---------------------------------------------------------TO DO: link to a logout button
+
+  router.post('/logout', (req, res) => {
+    req.session.user = null;
     res.redirect("/")
   });
 
 
   // ---------------------------------------------- REGISTER NEW USER
+  // ---------------------------------------------------------TO DO: link to a register button on homepage
+
   router.get('/register', (req, res) => {
     // get user email from session cookie
     const user = req.session.user;
@@ -186,7 +190,7 @@ module.exports = (db) => {
           return;
         }
         req.session.user = user;
-        res.redirect('/profile');
+        res.redirect('/urls_profile');
       })
     // once registered, res.render search page? - TO DO: Decide on age a new user lands on
   });
