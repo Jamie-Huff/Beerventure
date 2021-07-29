@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
   <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
   <link rel="stylesheet" href="/styles/products.css" type="text/css" />
-
+  <link rel="stylesheet" href="/styles/favourites.css" type="text/css" />
   <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
 
   <!-- internal js -->
@@ -27,7 +27,7 @@
     <% } else { %>
     <%- include('partials/_navbar') %>
     <% } %>
-  <h1>Favourites Page</h1>
+  <h2 class="favourite-title">My Favourites</h2>
   <!-- your content here... -->
 
 
@@ -36,7 +36,7 @@
     <main class="all-products">
       <div class="products">
       <% for (const favourite of favourites) { %>
-        <div class="featured-items">
+        <div class="favourite-items">
           <p class="prod-name"> <%= favourite.vendor_name%> </p>
           <p class="prod-name"> <%= favourite.item_name%> </p>
           <img class="product-image" src=<%= favourite.item_image %>

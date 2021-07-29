@@ -1,0 +1,25 @@
+.favourite-title {
+  text-align: center;
+  font-size: 40px;
+}
+
+.all-products {
+  border: 1px solid black;
+  display: flex;
+  .favourite-items {
+    background-color: #8FD694;
+    border-radius: 1%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+
+    height: 500px;
+    width: 274px;
+
+    padding-bottom: 1em;
+
+    margin: 1em 1em;
+  }
+}
+
