@@ -202,7 +202,7 @@ exports.unFavouriteItem = unFavouriteItem;
 
 const addFavouriteItem = function(favId, userId) {
   return pool
-    .query(`INSERT INTO favourites (item_id, user_id) VALUES($1, $2, $3) RETURNING *;`, [favId, userId])
+    .query(`INSERT INTO favourites (item_id, user_id) VALUES($1, $2) RETURNING *;`, [favId, userId])
     .then(res => res.rows)
     .catch(err => console.error('query error', err.stack))
 };
