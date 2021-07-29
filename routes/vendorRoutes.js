@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { addNewVendor, getVendorByEmail, getVendorsProducts, addNewProduct, addProduct } = require('./database');
+const { addNewVendor, getVendorByEmail, getVendorsProducts, addNewProduct } = require('./database');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -42,90 +42,7 @@ module.exports = (db) => {
   });
 
 
-  // ---------------------------------------------- VENDOR PROFILE (RENDER)
-  router.get('/profile', (req, res) => {
-    // get user email from session cookie
-    const vendor = req.session.user;
-    const vendorEmail = vendor.email;
 
-    if (!vendor) {
-      // if vendor lands on /vendors and doesn't have a session cookie, redirect to login
-      return res.render("../views/urls_login");
-    }
-    // res.redirect('/');
-
-    getVendorByEmail(vendorEmail)
-      .then(vendorData => {
-        if (vendorData) {
-          getVendorsProducts(vendorEmail)
-            .then(() => {
-              // redirect to vendor's profile page:
-              res.redirect('/');
-            })
-            .catch((err) => {
-              return res.status(500).json({ error: err.message });
-            });
-        }
-      })
-      .catch((err) => {
-        return res.status(500).json({ error: err.message });
-      });
-  });
-
-  router.post('/profile', (req, res) => {
-
-    const vendor = req.session.user;
-    // console.log("VENDOR: ", vendor);
-    // console.log("REQ BODY: ", req.body)
-    if (!req.body) {
-      res.status(400).json({ error: 'invalid request: no data in POST body'});
-      return;
-    }
-
-    const vendorID = vendor.id
-    const itemImage = req.body.item_image
-    const itemName = req.body.item_name
-    const itemDescription = req.body.item_description
-    const itemPrice = req.body.item_price
-    const itemCategory = req.body.item_category
-    const itemAbv = req.body.item_abv
-    const itemMliter = req.body.item_mliter
-
-    //(vendor_id, image, name, description, price, category, abv, mliter)
-    const productDetails = [
-      vendorID,
-      itemImage,
-      itemName,
-      itemDescription,
-      Number(itemPrice),
-      itemCategory,
-      parseInt(itemAbv),
-      Number(itemMliter)
-    ]
-    // console.log("PRODUCTDETAILS: ", productDetails)
-    addProduct(productDetails)
-    .then((newProduct) => {
-      return res.redirect('/vendors/profile')
-    })
-    .catch((error) => {
-      res.status(500).json({ error: err.message })
-    })
-
-  })
-
-  // ---------------------------------------------- LOG IN (RENDER)
-  /*
-  // Render Login Page:
-  router.get('/login', (req, res) => {
-    // Check if session cookie exists,
-    const user = req.session.user;
-    if (user) {
-      res.render("/")
-    }
-    // -----------------------------------TO DO: Change this route to user profile page
-    res.render("../views/urls_login")
-  });
-  */
   // ---------------------------------------------- LOG IN (POST)
 
 	router.post('/login', (req, res) => {
@@ -147,8 +64,7 @@ module.exports = (db) => {
   });
 
   // ---------------------------------------------- LOG OUT
-  // ---------------------------------------------------------TO DO: link to a logout button
-  // Unsure if this will be handled in vendorRoutes or UserRoutes for both
+  // Unsure if this will be handled in vendorRoutes or UserRoutes for both user types
   /*
   router.post('/logout', (req, res) => {
     req.session.user = null;
@@ -221,13 +137,12 @@ module.exports = (db) => {
     // do some entry validation
     newItem.price = newItem.price * 100;
     newItem.abv = newItem.abv * 100;
+
     if (newItem.featured_check == 'on') {
       newItem.featured_check = true;
     } else {
       newItem.featured_check = false;
     }
-
-    // watch for price in cents, mL, and the percentage
 
     // Placeholder image:
     // TO DO: Figure out how to handle images properly. Unsure how they get output to page
@@ -246,8 +161,6 @@ module.exports = (db) => {
       .catch(e => res.send(e))
 
   });
-
-
 
 
   return router;
