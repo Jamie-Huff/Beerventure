@@ -5,6 +5,8 @@
   <!-- internal css -->
   <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
   <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/each_item.css" type="text/css" />
+
 
   <!-- internal js -->
   <!-- <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script> -->
@@ -30,7 +32,43 @@
       <img class="product-image" src=<%= item.image %>
       <p> <%= item.category %> </p>
       <p><%= item.price %> </p>
-      <button id="more-info">Tell Me More</button>
+
+      
+
+
+    <% if (userObject.vendor) %>
+    <h4>Item Management</h4>
+    <form method="POST" action="/vendors/new_item">
+      <label for="featured-check">Make this a featured Item</label>
+      <br>
+      <input type="checkbox" id="featured_check" name="featured_check">
+      <br>
+    </form>
+
+      <% if (userObject.id === items[0].vendor_id) %>
+
+      <!-- <p>Currently <%= items[0].sold ? 'On Sale' : 'Sold Out' %></p> -->
+      <form method="POST" action="/product/item_sale_status/:itemId:<%=product.id%>"> 
+        <label class="switch">
+          <input type="checkbox">
+          <span class="slider round"></span>
+        </label>
+      </form>
+
+      <br>
+
+      <form method="POST" action="/product/delete_item/:itemId:<%=product.id%>">
+        <button class="btn danger">Delete This Item</button>
+      </form>
+
+
+      <% } %>
+    <% } %>
+
+
+      
+
+  
 
     </div>
 

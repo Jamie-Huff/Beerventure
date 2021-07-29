@@ -2,11 +2,9 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (db) => {
- router.get(`/:productURL`, (req, res) => {
+  router.get(`/:productURL`, (req, res) => {
     const user = req.session.user
     let value = req.params.productURL.split('&')
-    console.log(user)
-    const productName = value[0].substr(1, value[0].length)
     const itemId = value[1].substr(7)
     const query = (`SELECT *
     FROM items
@@ -27,7 +25,7 @@ module.exports = (db) => {
           items: value.rows
         }
       }
-      console.log(templateVars)
+      console.log('templateVars: ', templateVars);
       res.render('urls_product', templateVars)
     })
     .catch(err => {
@@ -36,5 +34,27 @@ module.exports = (db) => {
         .json({ error: err.message });
     });
   })
+
+  // ---------------------------------------------- POST (Item Management for Vendors)
+  // For toggling the on sale status of an item
+  router.post('/item_sale_status/:productID', (req, res) => {
+    const itemId = req.params.productURL;
+    console.log('itemId to toggle: ', itemId);
+
+    
+  })
+
+
+  // For deleting an item
+  router.post('/item_sale_status/:productID', (req, res) => {
+    //
+    const itemId = req.params.productURL;
+    console.log('itemId to delete: ', itemId);
+
+
+  })
+
+
+
   return router
 }
