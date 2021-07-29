@@ -25,6 +25,9 @@
     <% } %>
   <h1>Product Information Page</h1>
 
+  
+
+
   <% for (const item of items) { %>
     <div class="featured-items">
       <p class="prod-name"> <%= item.vendor %> </p>
@@ -32,11 +35,8 @@
       <img class="product-image" src=<%= item.image %>
       <p> <%= item.category %> </p>
       <p><%= item.price %> </p>
+    </div>
 
-      
-
-
-    <% if (userObject.vendor) %>
     <h4>Item Management</h4>
     <form method="POST" action="/vendors/new_item">
       <label for="featured-check">Make this a featured Item</label>
@@ -44,35 +44,36 @@
       <input type="checkbox" id="featured_check" name="featured_check">
       <br>
     </form>
-
-      <% if (userObject.id === items[0].vendor_id) %>
-
-      <!-- <p>Currently <%= items[0].sold ? 'On Sale' : 'Sold Out' %></p> -->
-      <form method="POST" action="/product/item_sale_status/:itemId:<%=product.id%>"> 
-        <label class="switch">
-          <input type="checkbox">
-          <span class="slider round"></span>
-        </label>
-      </form>
-
-      <br>
-
-      <form method="POST" action="/product/delete_item/:itemId:<%=product.id%>">
-        <button class="btn danger">Delete This Item</button>
-      </form>
-
-
-      <% } %>
-    <% } %>
-
-
-      
-
   
+  
+    <form method="POST" action="/product/item_sale_status/:itemId:"> 
+      <label class="switch">
+        <input type="checkbox">
+        <span class="slider round"></span>
+      </label>
+    </form>
+  
+    <br>
+  
+    <form method="POST" action="/product/delete_item/:itemId:">
+      <button class="btn danger">Delete This Item</button>
+    </form>
 
-    </div>
+
 
   <% } %>
+
+
+
+
+
+
+
+
+
+
+
+
 
     <%- include('partials/_footer'); %>
 

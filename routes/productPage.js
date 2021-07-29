@@ -25,7 +25,7 @@ module.exports = (db) => {
           items: value.rows
         }
       }
-      console.log('templateVars: ', templateVars);
+      // console.log('templateVars: ', templateVars);
       res.render('urls_product', templateVars)
     })
     .catch(err => {
@@ -45,8 +45,18 @@ module.exports = (db) => {
   })
 
 
+  // FIGURE OUT THIS LOGIC AND FIX THE ACTION LINKS FOR THE FORM
+  
+  // this ejs logic in the urls_product.ejs file wasn't working. I'm not sure why:
+  // <% if (userObject[vendor]) { %>
+  // <p>Currently <%= items[0].sold ? 'On Sale' : 'Sold Out' %></p>
+  // <% } %>
+  // <%= I don't know why my EJS logic isn't working for making this only appear when the user is a vendor %>
+  // <%= Currently it's appearing for everyone %>
+
+
   // For deleting an item
-  router.post('/item_sale_status/:productID', (req, res) => {
+  router.post('/delete_item/:productID', (req, res) => {
     //
     const itemId = req.params.productURL;
     console.log('itemId to delete: ', itemId);
