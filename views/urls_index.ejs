@@ -37,7 +37,7 @@
           <p><%= product.price %> </p>
           <button id="more-info"> <a href='/product/:<%=product.name%>&itemId:<%=product.id%>'>Tell Me More</a></button>
           <form method="POST" action="/favourites/add">
-            <input type="submit" name="<%= product.id%>"/>
+            <input type="submit" name="<%= product.id%>" value="Add To Favourites"/>
         </form>
         </div>
 
