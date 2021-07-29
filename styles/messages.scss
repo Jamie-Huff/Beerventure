@@ -12,7 +12,6 @@
 
   font-weight: bold;
 
-
   .title-of-page {
     margin-left: 6%;
   }
@@ -20,11 +19,17 @@
   .new-message {
     display: flex;
     flex-direction: column;
-    padding: 1em 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 1em;
     width: 30%;
     // background: #E0E0E0;
     border: 2px rgb(107, 106, 106) solid;
     margin: 0em 1em;
+
+    #start-new-convo {
+      text-align: center;
+    }
   }
 
   .sent-messages {
