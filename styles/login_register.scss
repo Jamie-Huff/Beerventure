@@ -1,0 +1,34 @@
+.login-register-main {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+
+  .returning {
+
+    display: flex;
+    flex-direction: column;
+
+    // .greeting {
+
+    // }
+    .column12 {
+
+      display: flex;
+
+      .user-login {
+        padding: 1em 1em;
+
+      }
+      .vendor-login {
+        padding: 1em 1em;
+
+      }
+    }
+
+  }
+
+  .neither {
+    padding: 1em 1em;
+
+  }
+}
