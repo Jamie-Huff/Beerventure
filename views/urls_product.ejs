@@ -109,7 +109,32 @@
   <% } %>
 <h1>Product Information Page</h1>
 <body>
+  <% if (userObject.vendor) { %>
+    <h2>I'm a vendor</h2>
+    <section class="item-management" id="item-management">
+      <h4>Item Management</h4>
+          <form method="POST" action="/products/item_sale_status/:">
+            <label for="featured-check">Make this a featured Item</label>
+            <br>
+            <input type="checkbox" id="featured_check" name="${item.id}">
+            <br>
+          </form>
+          
+          <form method="POST" action="/product/item_sale_status/:${item.id}"> 
+            <label class="switch">
+              <input type="checkbox">
+              <span class="slider round"></span>
+            </label>
+          </form>
+          
+          <br>
+          
+          <form method="POST" action="/product/delete_item/:">
+            <button type="submit" name="${item.id}" class="btn danger">Delete This Item</button>
+          </form>
+    </section>
 
+  <% } %>
   
   <main class="all-products">
     <div class="products">
@@ -137,7 +162,6 @@
     </div>
 
 
-    <section class="item-management" id="item-management">Test</section>
 
 
 
