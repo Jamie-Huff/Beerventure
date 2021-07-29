@@ -27,6 +27,22 @@
 
     <section class="message-page">
 
+      <div class="new-message">
+
+        START A NEW CONVERSATION
+        <form action="/messages/<%= userID %>" method="POST">
+          Name:<br>
+          <input type="text" name="name"><br><br>
+          Message:<br>
+          <input type="hidden"/>
+          <textarea name="text" placeholder="Describe your item..."></textarea>
+          <br><br>
+          <button type="submit">Start Conversation</button>
+        </form>
+
+      </div>
+
+
       <% if (!isVendor) { %>
 
         <% for (const convo of arrayofConvos) { %>
@@ -103,7 +119,6 @@
     </section>
 
   <% } %>
-
 
   <%- include('partials/_footer'); %>
 

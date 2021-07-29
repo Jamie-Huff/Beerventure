@@ -65,13 +65,11 @@ module.exports = (db) => {
 
   // ---------------------------------------------- LOG OUT
   // Unsure if this will be handled in vendorRoutes or UserRoutes for both user types
-  /*
-  router.post('/logout', (req, res) => {
+
+  router.get('/logout', (req, res) => {
     req.session.user = null;
     res.redirect("/")
   });
-  */
-
 
   // ---------------------------------------------- REGISTER NEW VENDOR
   // ---------------------------------------------------------TO DO: link to a register button on homepage

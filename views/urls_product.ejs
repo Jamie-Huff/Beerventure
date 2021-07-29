@@ -25,7 +25,7 @@
 <h1>Product Information Page</h1>
 <body>
 
-  
+
 
 
   <% for (const item of items) { %>
@@ -36,7 +36,7 @@
       <p> <%= item.category %> </p>
       <p><%= item.price %> </p>
     </div>
-    
+
 
     <h4>Item Management</h4>
     <form method="POST" action="/vendors/new_item">
@@ -45,17 +45,17 @@
       <input type="checkbox" id="featured_check" name="featured_check">
       <br>
     </form>
-  
-  
-    <form method="POST" action="/product/item_sale_status/:itemId:"> 
+
+
+    <form method="POST" action="/product/item_sale_status/:itemId:">
       <label class="switch">
         <input type="checkbox">
         <span class="slider round"></span>
       </label>
     </form>
-  
+
     <br>
-  
+
     <form method="POST" action="/product/delete_item">
       <button type="submit" name="tempname" class="btn danger">Delete This Item</button>
     </form>
