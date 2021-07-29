@@ -1,3 +1,6 @@
+.title-of-page {
+  margin-left: 6%;
+}
 
 .message-page {
 
@@ -19,16 +22,43 @@
   .new-message {
     display: flex;
     flex-direction: column;
-    padding-left: 1em;
-    padding-right: 1em;
-    padding-bottom: 1em;
+
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    padding-bottom: 2em;
+
     width: 30%;
-    // background: #E0E0E0;
-    border: 2px rgb(107, 106, 106) solid;
+
+    background-color: #8fd694;
     margin: 0em 1em;
+    margin-right: 3em;
+
+    border-radius: 16px;
 
     #start-new-convo {
-      text-align: center;
+      margin:auto;
+      padding-top: 1em;
+    }
+
+    .new-message-form {
+      margin: 0.3em 0.3em;
+
+      #name {
+        width: 100%;
+      }
+
+      textarea {
+        width: 100%;
+      }
+    }
+
+    button {
+      border: none;
+      background-color: #181f1c;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      padding: 12px 28px;
     }
   }
 
@@ -36,47 +66,75 @@
     display: flex;
     flex-direction: column;
     width: 70%;
-    background: #E0E0E0;
-    border-right: 2px rgb(107, 106, 106) solid;
-    border-left: 2px rgb(107, 106, 106) solid;
 
-    .convo-title {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .convo-box {
 
-      border-bottom: 2px rgb(107, 106, 106) solid;
-      border-top: 2px rgb(107, 106, 106) solid;
-      padding: 1em 1em;
+      margin-bottom: 2em;
+      background: #7dba84;
 
-    }
-    .convos {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 1em 1em;
+      .convo-title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-    }
-
-    .send-message {
-      display:flex;
-      justify-content: space-between;
-      padding: 1em 1em;
-
-      .msg {
-        width: 80%;
-      }
-
-      button {
-        border: none;
-        background-color: black;
+        padding: 1em 1em;
+        background-color: #181f1c;
         color: white;
-        font-weight: bold;
-        border-radius: 8px;
-        padding: 12px 28px;
 
       }
+      .convos {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 0em 0.5em;
+        padding: 1em 0.5em;
+        background-color: #E0E0E0;
+
+        .actual-msg {
+          border: 1px solid rgb(165, 165, 165) !important;
+          margin: 0.2em 0em;
+          padding: 0em 1em;
+          border-radius: 16px;
+          background-color: white;
+          width: 80%;
+
+          &.you {
+            align-self: flex-end;
+            background-color: #C4FFCB;
+          }
+
+          &.notyou {
+            align-self: flex-start;
+          }
+        }
+
+      }
+
+      .send-message {
+        display:flex;
+        justify-content: space-between;
+        padding: 1em 1em;
+        margin: 0em 1em;
+
+
+        .msg {
+          width: 80%;
+        }
+
+        button {
+          border: none;
+          background-color: #181f1c;
+          color: white;
+          font-weight: bold;
+          border-radius: 8px;
+          padding: 12px 28px;
+
+        }
+      }
+
     }
+
+
   }
 
 }
