@@ -60,13 +60,13 @@
 
                   <% if (!convo[i].is_vendor) { %>
 
-                    <div class="actual-msg">
+                    <div class="actual-msg you">
                       <p>User: <%= convo[i].message %> </p>
                     </div>
 
                   <% } else { %>
 
-                    <div class="actual-msg">
+                    <div class="actual-msg notyou">
                       <p>Vendor: <%= convo[i].message %> </p>
                     </div>
 
@@ -102,13 +102,13 @@
 
                   <% if (convo[i].is_vendor) { %>
 
-                    <div class="actual-msg">
+                    <div class="actual-msg you">
                       <p>Vendor: <%= convo[i].message %> </p>
                     </div>
 
                   <% } else { %>
 
-                    <div class="actual-msg">
+                    <div class="actual-msg notyou">
                       <p>User: <%= convo[i].message %> </p>
                     </div>
 

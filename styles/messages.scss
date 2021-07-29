@@ -96,6 +96,16 @@
           padding: 0em 1em;
           border-radius: 16px;
           background-color: white;
+          width: 80%;
+
+          &.you {
+            align-self: flex-end;
+            background-color: #C4FFCB;
+          }
+
+          &.notyou {
+            align-self: flex-start;
+          }
         }
 
       }
