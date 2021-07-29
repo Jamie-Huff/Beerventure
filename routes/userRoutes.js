@@ -84,39 +84,6 @@ module.exports = (db) => {
     return res.render("../views/urls_profile", templateVars);
   });
 
-  router.post('/profile', (req, res) => {
-    const user = req.session.user;
-    const message = req.body.message
-    const vendorEmail = req.body.vendor_email
-
-    const userEmail = user.email;
-
-    console.log("USER:", user)
-    console.log("BODY:", body)
-    getUserByEmail(userEmail)
-    .then((userData) => {
-
-      if (userData) {
-        isVendor = false;
-        getVendorByEmail(vendorEmail)
-        .then((vendorData)=>{
-          if (vendorData) {
-            // (user_id, vendor_id, message, is_vendor)
-            // addMessages([user.id, ,message,isVendor])
-            // .then()
-            // .catch((error) => {console.log(error)})
-          }
-
-        })
-        .catch((error) => {console.log(error)})
-
-      }
-
-    })
-    .catch((error) => {console.log(error)})
-  })
-
-
     // ---------------------------------------------- LOG IN (RENDER)
 
   // Render Login Page:
@@ -180,7 +147,7 @@ module.exports = (db) => {
   // ---------------------------------------------- LOG OUT
   // ---------------------------------------------------------TO DO: link to a logout button
 
-  router.post('/logout', (req, res) => {
+  router.get('/logout', (req, res) => {
     req.session.user = null;
     res.redirect("/")
   });
