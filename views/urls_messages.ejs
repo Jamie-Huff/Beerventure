@@ -32,10 +32,10 @@
         <h3 id="start-new-convo">Start A New Conversation</h3>
         <form class="new-message-form" action="/messages/<%= userID %>" method="POST">
           Name:<br>
-          <input type="text" name="name"><br><br>
+          <input id="name" type="text" name="name"><br><br>
           Message:<br>
           <input type="hidden"/>
-          <textarea name="text" placeholder="Your message..."></textarea>
+          <textarea id="nm" name="text" placeholder="Your message..."></textarea>
           <br><br>
           <button type="submit">Start Conversation</button>
         </form>
@@ -51,28 +51,28 @@
             <div class="convo-box">
 
               <div class="convo-title">
-                CONVERATION WITH: <%= convo[0].vendor_name %>
+                Chatting With:   <%= convo[0].vendor_name %>
               </div>
 
               <div class="convos">
 
-              <% for (let i = 0 ; i < convo.length; i++) { %>
+                <% for (let i = 0 ; i < convo.length; i++) { %>
 
-                <% if (!convo[i].is_vendor) { %>
+                  <% if (!convo[i].is_vendor) { %>
 
-                  <div>
-                    <p>User: <%= convo[i].message %> </p>
-                  </div>
+                    <div class="actual-msg">
+                      <p>User: <%= convo[i].message %> </p>
+                    </div>
 
-                <% } else { %>
+                  <% } else { %>
 
-                  <div>
-                    <p>Vendor: <%= convo[i].message %> </p>
-                  </div>
+                    <div class="actual-msg">
+                      <p>Vendor: <%= convo[i].message %> </p>
+                    </div>
+
+                  <% } %>
 
                 <% } %>
-
-              <% } %>
 
               </div>
 
@@ -93,7 +93,7 @@
             <div class="convo-box">
 
               <div class="convo-title">
-                CONVERATION WITH: <%= convo[0].user_name %>
+                Chatting With:   <%= convo[0].user_name %>
               </div>
 
               <div class="convos">
@@ -102,13 +102,13 @@
 
                   <% if (convo[i].is_vendor) { %>
 
-                    <div>
+                    <div class="actual-msg">
                       <p>Vendor: <%= convo[i].message %> </p>
                     </div>
 
                   <% } else { %>
 
-                    <div>
+                    <div class="actual-msg">
                       <p>User: <%= convo[i].message %> </p>
                     </div>
 
