@@ -40,32 +40,36 @@ app.use(cookieSession({
   keys: ['beer', 'cider']
 }));
 
+
+
+
 // Separated Routes for each Resource
 // Note: Feel free to replace the example routes below with your own
+
 const usersRoutes = require("./routes/users");
 const homepage = require("./routes/userRoutes");
 const vendorsRoutes = require("./routes/vendorRoutes");
+const userfavourites = require("./routes/userFavourites");
 // how come search is routing to /vendors? can we rename that to search?
 const search = require("./routes/vendors")
 const messages = require("./routes/messagesRoutes")
 const productPage = require("./routes/productPage")
+
+
+
+
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
+
 app.use("/api/users", usersRoutes(db));
 app.use("/product/", productPage(db));
 app.use("/", homepage(db));
 app.use("/vendors", vendorsRoutes(db));
 app.use("/search", search(db));
 app.use("/messages", messages(db));
-
-// Note: mount other resources here, using the same pattern above
-
+app.use("/favourites", userfavourites(db));
 
 
-
-// Home page
-// Warning: avoid creating more routes in this file!
-// Separate them into separate routes files (see above).
 
 
 app.listen(PORT, () => {

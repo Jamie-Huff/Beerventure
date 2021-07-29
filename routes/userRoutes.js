@@ -1,6 +1,11 @@
 const express = require('express');
 const router  = express.Router();
-const { getUserByEmail, getFeaturedProducts, addNewUser, getVendorByEmail, addMessages } = require('./database');
+const {
+  getUserByEmail,
+  getFeaturedProducts,
+  addNewUser,
+  getVendorByEmail
+} = require('./database');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -115,7 +120,7 @@ module.exports = (db) => {
       .then(result => {
         return res.redirect('/profile');
       })
-      .catch(err => console.error('query error', err.stack))
+      .catch(err => console.error('error', err.stack))
 
   });
 
@@ -137,7 +142,7 @@ module.exports = (db) => {
       .then(result => {
         return res.redirect('/vendors');
       })
-      .catch(err => console.error('query error', err.stack))
+      .catch(err => console.error('error', err.stack))
   });
 
 
@@ -201,7 +206,7 @@ module.exports = (db) => {
           return;
         }
         req.session.user = user;
-        res.redirect('/urls_profile');
+        return res.redirect('/profile');
       })
     // once registered, res.render search page? - TO DO: Decide on age a new user lands on
   });
@@ -211,25 +216,26 @@ module.exports = (db) => {
   // ---------------------------------------------- product load page
     router.get('/favourites', (req, res) => {
       const userObject = req.session.user
+      if (!userObject) {
+        return res.redirect('/login')
+      }
       const userId = userObject.id
       let user = req.session.user
-      console.log(userId)
+      console.log('is a user logged in:', userId)
         let query = `SELECT items.name as item_name,
                         vendors.name as vendor_name,
                         items.price as item_price,
                         items.category as item_category,
-                        items.image as item_image
+                        items.image as item_image,
+                        favourites.id as favourite_id
         FROM items
         JOIN favourites ON items.id = favourites.item_id
         JOIN vendors ON vendors.id = items.vendor_id
-        WHERE ${userId} = favourites.user_id
-
+        WHERE $1 = favourites.user_id
         `;
-        return db.query(query)
+        return db.query(query, [userId])
           .then(data => {
-            console.log(query)
             let templateVars;
-            const favourites = data.rows;
             if (user) {
               templateVars = {
                 favourites: data.rows,
@@ -241,7 +247,6 @@ module.exports = (db) => {
               userObject: null
               }
             }
-            console.log(templateVars.favourites)
             res.render("urls_favourites", templateVars)
           })
           .catch(err => {
@@ -250,7 +255,63 @@ module.exports = (db) => {
               .json({ error: err.message });
           });
       });
+
+  // ----------------------------------------------------------------- remove favourited item
+  router.post('/favourites', (req, res) => {
+    let favouriteId = req.body
+    favouriteId = JSON.stringify(favouriteId)
+    favouriteId = favouriteId.substring(1, favouriteId.length - 1)
+    favouriteId = favouriteId.split(':')[0]
+    favouriteId = JSON.parse(favouriteId)
+    favouriteId = Number(favouriteId)
+    // favouriteId = the fav id of our table
+    let query = `DELETE FROM favourites WHERE $1 = favourites.id`
+    db.query(query, [favouriteId])
+      .then (data => {
+        res.redirect('/favourites')
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+        });
+      })
+  })
   // --------------------------------------------------------------------
+  router.post('/favourites/add', (req, res) => {
+    let favouriteId = req.body
+
+    favouriteId = JSON.stringify(favouriteId)
+    favouriteId = favouriteId.substring(1, favouriteId.length - 1)
+    favouriteId = favouriteId.split(':')[0]
+    favouriteId = JSON.parse(favouriteId)
+    favouriteId = Number(favouriteId)
+    // favouriteId = the fav id of our table
+    let query = `SELECT * FROM items WHERE id = $1`
+    db.query(query, [favouriteId])
+      .then (data => {
+        // for some reason its not always sending in the proper name to add to the table
+        vendorId = data.rows[0].vendor_id
+        userId = req.session.user.id
+          let query = `
+          INSERT INTO favourites
+            (item_id, user_id, vendor_id)
+          VALUES
+            ($1, $2, $3)
+            `
+          db.query(query, [favouriteId, userId, vendorId])
+            .then (data => {
+              console.log(data)
+              res.redirect('/favourites')
+            .catch(err => {
+              res
+                .status(500)
+                .json({ error: err.message });
+              });
+            })
+      })
+
+  })
+
   return router;
 };
 

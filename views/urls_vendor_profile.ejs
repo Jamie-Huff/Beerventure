@@ -32,7 +32,7 @@
           <img class="product-image" src=<%= product.image %>
           <p> <%= product.category %> </p>
           <p><%= product.price %> </p>
-          <button id="more-info">Manage Item</button>
+          <button id="more-info"><a href='/product/:<%=product.name%>&itemId:<%=product.id%>'>Manage Item</a></button>
         </div>
       <% } %>
 

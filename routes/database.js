@@ -1,3 +1,11 @@
+/*
+
+This file contains all queries to the database.
+It uses node-postgres 'require('pg')'
+Documentation: https://node-postgres.com/
+
+*/
+
 const { Pool } = require('pg');
 const dbParams = require('../lib/db.js');
 
@@ -11,7 +19,8 @@ pool.connect().then(() => {
 });
 
 
-/// ----------------------------------------------------- Users
+
+// ----------------------------------------------------- Users
 
 const getUserByEmail = function(email) {
   return pool
@@ -47,7 +56,7 @@ const getUserByName = function(name) {
 exports.getUserByName = getUserByName;
 
 
-/// ----------------------------------------------------- Vendors
+// ----------------------------------------------------- Vendors
 
 // We could combine this with getUserByEmail and just JOIN tables, search both for a match?
 const getVendorByEmail = function(email) {
@@ -83,15 +92,16 @@ const getVendorByName = function(name) {
 exports.getVendorByName = getVendorByName;
 
 
-/// ----------------------------------------------------- Products
+// ----------------------------------------------------- Products
 
 const getFeaturedProducts = function() {
   // Make this modular so 3 different sets of products are returned for different user types?
   return pool
-    .query(`SELECT items.*, vendors.name as vendor_name
-    FROM items
-    JOIN vendors ON vendors.id = vendor_id
-    WHERE featured=TRUE`)
+    .query(`
+      SELECT items.*, vendors.name as vendor_name
+      FROM items
+      JOIN vendors ON vendors.id = vendor_id
+      WHERE featured=TRUE`)
     .then(res => res.rows ? res.rows : null)
     .catch(err => console.error('query error', err.stack))
 }
@@ -103,7 +113,10 @@ exports.getFeaturedProducts = getFeaturedProducts;
 const getVendorsProducts = function(email) {
 
   return pool
-    .query(`SELECT items.* FROM items JOIN vendors ON vendor_id = vendors.id WHERE vendors.email=$1`, [email])
+    .query(`SELECT items.*
+      FROM items
+      JOIN vendors ON vendor_id = vendors.id
+      WHERE vendors.email=$1`, [email])
     .then(res => res.rows ? res.rows : null)
     .catch(err => console.error('query error', err.stack))
 }
@@ -125,9 +138,9 @@ const addNewProduct = function(product) {
   ];
   return pool
     .query(`
-    INSERT INTO items (name, description, price, vendor_id, featured, category, abv, mliter, image)
-    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
-    RETURNING *;
+      INSERT INTO items (name, description, price, vendor_id, featured, category, abv, mliter, image)
+      VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      RETURNING *;
     `, values)
     .then(res => res.rows)
     .catch(err => console.error('query error', err.stack))
@@ -135,9 +148,68 @@ const addNewProduct = function(product) {
 exports.addNewProduct = addNewProduct;
 
 
+const deleteProduct = function(itemId) {
 
-/// ----------------------------------------------------- Messages
+  return pool
+    .query(`DELETE FROM items WHERE item.id = $1 RETURNING *;`, [itemId])
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack))
+};
+exports.deleteProduct = deleteProduct;
 
+
+
+const toggleProductStatus = function(itemId) {
+
+  return pool
+    .query(`UPDATE items SET item.vendor = $1 WHERE item.id = $1 RETURNING *;`, [itemId])
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack))
+};
+exports.toggleProductStatus = toggleProductStatus;
+
+
+// ----------------------------------------------------- Products > Users's Favourite Items
+
+const getUserFavourites = function(userId) {
+
+  return pool
+    .query(`SELECT items.name as item_name,
+      vendors.name as vendor_name,
+      items.price as item_price,
+      items.category as item_category,
+      items.image as item_image,
+      favourites.id as favourite_id
+      FROM items
+      JOIN favourites ON items.id = favourites.item_id
+      JOIN vendors ON vendors.id = items.vendor_id
+      WHERE $1 = favourites.user_id;
+    `, [userId])
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack))
+};
+exports.getUserFavourites = getUserFavourites;
+
+
+const unFavouriteItem = function(favId) {
+  return pool
+    .query(`DELETE FROM favourites WHERE $1 = favourites.id;`, [favId])
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack))
+};
+exports.unFavouriteItem = unFavouriteItem;
+
+
+const addFavouriteItem = function(favId, userId) {
+  return pool
+    .query(`INSERT INTO favourites (item_id, user_id) VALUES($1, $2, $3) RETURNING *;`, [favId, userId])
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack))
+};
+exports.addFavouriteItem = addFavouriteItem;
+
+
+// ----------------------------------------------------- Messages
 
 const getMessages = (id, isVendor) => {
   //to retrieve messags from the database (currently set to return all data)
@@ -150,18 +222,16 @@ const getMessages = (id, isVendor) => {
     column = 'user_id';
     // sort = 'vendor_id';
   }
-  console.log(list);
   return pool
     .query(`
-    SELECT messages.*, vendors.name as vendor_name, users.name as user_name
-    FROM messages
-    JOIN vendors ON vendor_id = vendors.id
-    JOIN users ON user_id = users.id
-    WHERE "${column}" = $1
-    ORDER BY messages.id;
+      SELECT messages.*, vendors.name as vendor_name, users.name as user_name
+      FROM messages
+      JOIN vendors ON vendor_id = vendors.id
+      JOIN users ON user_id = users.id
+      WHERE "${column}" = $1
+      ORDER BY messages.id;
       `, list)
     .then((result) => {
-      // console.log("RESULT.ROWS FROM GETMESSAGES: ",result.rows);
       return result.rows;
     })
     .catch(err => console.error('query error', err.stack))
@@ -171,7 +241,6 @@ exports.getMessages = getMessages;
 
 
 const addMessages = (list) => {
-  //adds messages to database
   return pool
     .query(`
       INSERT INTO messages

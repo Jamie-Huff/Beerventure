@@ -42,11 +42,10 @@
           <img class="product-image" src=<%= favourite.item_image %>
           <p class="prod-name"> <%= favourite.item_category%> </p>
           <p class="prod-name"> <%= favourite.item_price%> </p>
-
-
-
+          <form method="POST" action="/favourites">
+            <button type="submit" name="<%= favourite.favourite_id%>" class="">Remove</button>
+        </form>
         </div>
-
       <% } %>
 
     </div>

@@ -5,6 +5,8 @@
   <!-- internal css -->
   <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
   <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/each_item.css" type="text/css" />
+
 
   <!-- internal js -->
   <!-- <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script> -->
@@ -15,13 +17,16 @@
 
 </head>
 
+<% if (userObject) { %>
+  <%- include('partials/_navbarSignedIn') %>
+  <% } else { %>
+  <%- include('partials/_navbar') %>
+  <% } %>
+<h1>Product Information Page</h1>
 <body>
-  <% if (userObject) { %>
-    <%-include('partials/_navbarSignedIn') %>
-    <% } else { %>
-    <%- include('partials/_navbar') %>
-    <% } %>
-  <h1>Product Information Page</h1>
+
+
+
 
   <% for (const item of items) { %>
     <div class="featured-items">
@@ -30,26 +35,46 @@
       <img class="product-image" src=<%= item.image %>
       <p> <%= item.category %> </p>
       <p><%= item.price %> </p>
-      <button id="more-info">Tell Me More</button>
-
     </div>
+
+
+    <h4>Item Management</h4>
+    <form method="POST" action="/vendors/new_item">
+      <label for="featured-check">Make this a featured Item</label>
+      <br>
+      <input type="checkbox" id="featured_check" name="featured_check">
+      <br>
+    </form>
+
+
+    <form method="POST" action="/product/item_sale_status/:itemId:">
+      <label class="switch">
+        <input type="checkbox">
+        <span class="slider round"></span>
+      </label>
+    </form>
+
+    <br>
+
+    <form method="POST" action="/product/delete_item">
+      <button type="submit" name="tempname" class="btn danger">Delete This Item</button>
+    </form>
+
+
+
 
   <% } %>
 
 
-  <div class="send-message">
 
-    CONTACT ME (vendor contact user)
-    <form action="/profile" method="POST">
-      Name:<br>
-      <input type="text" name="name"><br><br>
-      Message:<br>
-      <textarea name="message" placeholder="Describe your item..."></textarea>
-      <br><br>
-      <button type="submit">Send Message</button>
-    </form>
 
-  </div>
+
+
+
+
+
+
+
 
 
     <%- include('partials/_footer'); %>
