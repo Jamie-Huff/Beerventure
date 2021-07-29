@@ -26,6 +26,7 @@
   <%- include('partials/_navbar') %>
   <% } %>
 <body>
+  <% if (userObject) { %>
   <% if (userObject.vendor) { %>
     <h2>I'm a vendor</h2>
     <section class="item-management" id="item-management">
@@ -88,7 +89,8 @@
 
 
     </section>
-
+  
+  <% } %>
   <% } %>
   
   <main class="all-products">
