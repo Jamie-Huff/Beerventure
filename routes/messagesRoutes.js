@@ -122,8 +122,9 @@ module.exports = (db) => {
 
     const user = req.session.user;
     if (!user) {
-      const userEmail = user.email;
-      res.render("../views/urls_messages", {userEmail});
+      return res.redirect('/login');
+      // const userEmail = user.email;
+      // res.render("../views/urls_messages", {userEmail});
     }
     const userID = user.id;
     res.redirect(`/messages/${userID}`);
