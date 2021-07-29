@@ -17,13 +17,13 @@
 
 </head>
 
+<% if (userObject) { %>
+  <%- include('partials/_navbarSignedIn') %>
+  <% } else { %>
+  <%- include('partials/_navbar') %>
+  <% } %>
+<h1>Product Information Page</h1>
 <body>
-  <% if (userObject) { %>
-    <%-include('partials/_navbarSignedIn') %>
-    <% } else { %>
-    <%- include('partials/_navbar') %>
-    <% } %>
-  <h1>Product Information Page</h1>
 
   
 
@@ -36,6 +36,7 @@
       <p> <%= item.category %> </p>
       <p><%= item.price %> </p>
     </div>
+    
 
     <h4>Item Management</h4>
     <form method="POST" action="/vendors/new_item">
@@ -58,6 +59,7 @@
     <form method="POST" action="/product/delete_item/:itemId:">
       <button class="btn danger">Delete This Item</button>
     </form>
+
 
 
 

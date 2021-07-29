@@ -114,28 +114,25 @@ const addNewProduct = function(product) {
 exports.addNewProduct = addNewProduct;
 
 
-const deleteProduct = function(product) {
-  const values = [
-    product.name, 
-    product.description, 
-    product.price, 
-    product.vendor_id, 
-    product.featured, 
-    product.category, 
-    product.abv, 
-    product.mliter, 
-    product.image
-  ];
+const deleteProduct = function(itemId) {
+
   return pool
-    .query(`
-    INSERT INTO items (name, description, price, vendor_id, featured, category, abv, mliter, image)
-    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
-    RETURNING *;
-    `, values)
+    .query(`DELETE FROM items WHERE item.id = $1 RETURNING *;`, [itemId])
     .then(res => res.rows)
     .catch(err => console.error('query error', err.stack))
 };
-exports.addNewProduct = addNewProduct;
+exports.deleteProduct = deleteProduct;
+
+
+
+const toggleProductStatus = function(itemId) {
+
+  return pool
+    .query(`UPDATE items SET item.vendor = $1 WHERE item.id = $1 RETURNING *;`, [itemId])
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack))
+};
+exports.toggleProductStatus = toggleProductStatus;
 
 
 
