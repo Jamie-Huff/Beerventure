@@ -67,15 +67,59 @@ module.exports = (db) => {
   // Render Login Page:
   router.get('/profile', (req, res) => {
     const user = req.session.user;
-    const templateVars = {userObject: user}
+    // console.log("USER: ", user);
     if (!user) {
       return res.render("../views/urls_login");
     }
     if (user.vendor) {
-      return res.render("../views/urls_vendor_profile");
+      getFeaturedProducts()
+      .then(products => {
+        const templateVars = {
+          userObject: user,
+          products: products,
+          isVendor: true
+        };
+        return res.render("../views/urls_vendor_profile", templateVars);
+      });
+    }
+    const templateVars = {
+      userObject: user,
+      isVendor: false
     }
     return res.render("../views/urls_profile", templateVars);
   });
+
+  router.post('/profile', (req, res) => {
+    const user = req.session.user;
+    const message = req.body.message
+    const vendorEmail = req.body.vendor_email
+
+    const userEmail = user.email;
+
+    console.log("USER:", user)
+    console.log("BODY:", body)
+    getUserByEmail(userEmail)
+    .then((userData) => {
+
+      if (userData) {
+        isVendor = false;
+        getVendorByEmail(vendorEmail)
+        .then((vendorData)=>{
+          if (vendorData) {
+            // (user_id, vendor_id, message, is_vendor)
+            // addMessages([user.id, ,message,isVendor])
+            // .then()
+            // .catch((error) => {console.log(error)})
+          }
+
+        })
+        .catch((error) => {console.log(error)})
+
+      }
+
+    })
+    .catch((error) => {console.log(error)})
+  })
 
 
     // ---------------------------------------------- LOG IN (RENDER)
@@ -139,13 +183,17 @@ module.exports = (db) => {
 
 
   // ---------------------------------------------- LOG OUT
+  // ---------------------------------------------------------TO DO: link to a logout button
+
   router.get('/logout', (req, res) => {
-    req.session = null;
+    req.session.user = null;
     res.redirect("/")
   });
 
 
   // ---------------------------------------------- REGISTER NEW USER
+  // ---------------------------------------------------------TO DO: link to a register button on homepage
+
   router.get('/register', (req, res) => {
     // get user email from session cookie
     const user = req.session.user;
