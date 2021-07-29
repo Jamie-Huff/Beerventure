@@ -53,7 +53,7 @@ const userfavourites = require("./routes/userFavourites");
 // how come search is routing to /vendors? can we rename that to search?
 const search = require("./routes/vendors")
 const messages = require("./routes/messagesRoutes")
-const productPage = require("./routes/productPage")
+const productRoutes = require("./routes/productRoutes")
 
 
 
@@ -62,7 +62,7 @@ const productPage = require("./routes/productPage")
 // Note: Feel free to replace the example routes below with your own
 
 app.use("/api/users", usersRoutes(db));
-app.use("/product/", productPage(db));
+app.use("/product/", productRoutes(db));
 app.use("/", homepage(db));
 app.use("/vendors", vendorsRoutes(db));
 app.use("/search", search(db));

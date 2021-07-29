@@ -111,7 +111,6 @@ exports.getFeaturedProducts = getFeaturedProducts;
 
 // Products from only one vendor
 const getVendorsProducts = function(email) {
-
   return pool
     .query(`SELECT items.*
       FROM items
@@ -121,7 +120,6 @@ const getVendorsProducts = function(email) {
     .catch(err => console.error('query error', err.stack))
 }
 exports.getVendorsProducts = getVendorsProducts;
-
 
 
 const addNewProduct = function(product) {
@@ -149,24 +147,39 @@ exports.addNewProduct = addNewProduct;
 
 
 const deleteProduct = function(itemId) {
-
   return pool
-    .query(`DELETE FROM items WHERE item.id = $1 RETURNING *;`, [itemId])
+    .query(`DELETE FROM items WHERE $1 = items.id RETURNING *;`, [itemId])
     .then(res => res.rows)
     .catch(err => console.error('query error', err.stack))
 };
 exports.deleteProduct = deleteProduct;
 
 
-
-const toggleProductStatus = function(itemId) {
-
-  return pool
-    .query(`UPDATE items SET item.vendor = $1 WHERE item.id = $1 RETURNING *;`, [itemId])
+const toggleSoldStatus = function(item, newStatus) {
+    return pool
+    .query(`UPDATE items SET sold = $2 WHERE items.id = $1 RETURNING *;`, [item, newStatus])
     .then(res => res.rows)
     .catch(err => console.error('query error', err.stack))
 };
-exports.toggleProductStatus = toggleProductStatus;
+exports.toggleSoldStatus = toggleSoldStatus;
+
+
+const toggleFeaturedStatus = function(item, newStatus) {
+    return pool
+    .query(`UPDATE items SET featured = $2 WHERE items.id = $1 RETURNING *;`, [item, newStatus])
+    .then(res => res.rows)
+    .catch(err => console.error('query error', err.stack))
+};
+exports.toggleFeaturedStatus = toggleFeaturedStatus;
+
+
+const getItemObject = function(itemId) {
+    return pool
+    .query(`SELECT * FROM items WHERE items.id = $1;`, [itemId])
+    .then(res => res.rows[0])
+    .catch(err => console.error('query error', err.stack))
+};
+exports.getItemObject = getItemObject;
 
 
 // ----------------------------------------------------- Products > Users's Favourite Items
