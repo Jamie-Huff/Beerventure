@@ -64,22 +64,19 @@
         return $article.html(html);
       };
 
-      // const $cookie = $(document.cookie);
-      console.log(Cookies.get('vendor'));
-      console.log('document.cookie: ', session.user);
 
 
-      // const loadItemManagement = function(_, dataInput) {
-      //   $.ajax('/', { method: 'GET' })
-      //     .then(function(dataInput) {
-      //       console.log('dataInput line 73: ', dataInput);
+      const loadItemManagement = function(dataInput) {
+        $.ajax(getIt)
+          .then(function(dataInput) {
+            console.log('dataInput line 73: ', dataInput);
 
 
-      //       $('.item-management').css("visibility", "visible");
+            $('.item-management').css("visibility", "visible");
 
-      //       $('#item-management').prepend(createItemManagement(dataInput));
-      //     });
-      // };
+            $('#item-management').prepend(createItemManagement(dataInput));
+          });
+      };
 
       // FOR TESTING - LOAD ITEM MANAGEMENT REGARDLESS OF WHETHER A USER.VENDOR = TRUE
       loadItemManagement();
