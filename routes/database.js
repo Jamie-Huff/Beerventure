@@ -162,7 +162,7 @@ const getUserFavourites = function(userId) {
       FROM items
       JOIN favourites ON items.id = favourites.item_id
       JOIN vendors ON vendors.id = items.vendor_id
-      WHERE ${userId} = favourites.user_id;
+      WHERE $1 = favourites.user_id;
     `, [userId])
     .then(res => res.rows)
     .catch(err => console.error('query error', err.stack))

@@ -4,10 +4,7 @@ const {
   getUserByEmail,
   getFeaturedProducts,
   addNewUser,
-  getVendorByEmail,
-  getUserFavourites,
-  unFavouriteItem,
-  addFavouriteItem
+  getVendorByEmail
 } = require('./database');
 
 const bcrypt = require('bcrypt');
@@ -201,94 +198,94 @@ module.exports = (db) => {
 
 
 
-  // ---------------------------------------------- PRODUCT LOAD PAGE
-  router.get('/favourites', (req, res) => {
-    // get user cookie if exists
-    const user = req.session.user
+  // // ---------------------------------------------- PRODUCT LOAD PAGE
+  // router.get('/favourites', (req, res) => {
+  //   // get user cookie if exists
+  //   const user = req.session.user
 
-    if (user) {
-      // user is logged in
-      getUserFavourites(user.id)
-      .then(data => {
-        let templateVars;
-        if (user) {
-          templateVars = {
-            userObject,
-            favourites: data
-          }
-        } else {
-          templateVars = {
-            userObject: null,
-            favourites: data
-          }
-        }
-        return res.render("urls_favourites", templateVars)
-      })
-      .catch(err => {
-        res
-        .status(500)
-        .json({ error: err.message });
-      });
-    } else {
-      // user is not logged in
-      return res.redirect('/login');
-    }
-  });
-
-
-  // ----------------------------------------------------------------- REMOVE FAVOURITED ITEM
-  router.post('/favourites', (req, res) => {
-    // favouriteId = the fav id of our table
-    const favouriteId = req.body
-    favouriteId = JSON.stringify(favouriteId)
-    favouriteId = favouriteId.substring(1, favouriteId.length - 1)
-    favouriteId = favouriteId.split(':')[0]
-    favouriteId = JSON.parse(favouriteId)
-    favouriteId = Number(favouriteId)
-
-    // get user cookie if exists
-    const user = req.session.user;
-
-    if (user) {
-      // user is logged in
-      unFavouriteItem(favouriteId)
-      .then (data => {
-        return res.redirect('/favourites')
-        .catch(err => console.error('error', err.stack))
-      })
-    } else {      
-      // user is not logged in
-      return res.redirect('/login');
-    }
-  });
+  //   if (user) {
+  //     // user is logged in
+  //     getUserFavourites(user.id)
+  //     .then(data => {
+  //       let templateVars;
+  //       if (user) {
+  //         templateVars = {
+  //           userObject,
+  //           favourites: data
+  //         }
+  //       } else {
+  //         templateVars = {
+  //           userObject: null,
+  //           favourites: data
+  //         }
+  //       }
+  //       return res.render("urls_favourites", templateVars)
+  //     })
+  //     .catch(err => {
+  //       res
+  //       .status(500)
+  //       .json({ error: err.message });
+  //     });
+  //   } else {
+  //     // user is not logged in
+  //     return res.redirect('/login');
+  //   }
+  // });
 
 
-  // ----------------------------------------------------------------- ADD FAVOURITE ITEM
-  router.post('/favourites/add', (req, res) => {
-    // favouriteId = the fav id of our table
-    const favouriteId = req.body
-    favouriteId = JSON.stringify(favouriteId)
-    favouriteId = favouriteId.substring(1, favouriteId.length - 1)
-    favouriteId = favouriteId.split(':')[0]
-    favouriteId = JSON.parse(favouriteId)
-    favouriteId = Number(favouriteId)
+  // // ----------------------------------------------------------------- REMOVE FAVOURITED ITEM
+  // router.post('/favourites', (req, res) => {
+  //   // favouriteId = the fav id of our table
+  //   const favouriteId = req.body
+  //   favouriteId = JSON.stringify(favouriteId)
+  //   favouriteId = favouriteId.substring(1, favouriteId.length - 1)
+  //   favouriteId = favouriteId.split(':')[0]
+  //   favouriteId = JSON.parse(favouriteId)
+  //   favouriteId = Number(favouriteId)
 
-    // get user cookie if exists
-    const user = req.session.user;
+  //   // get user cookie if exists
+  //   const user = req.session.user;
 
-    if (user) {
-      // user is logged in:
-      addFavouriteItem(favouriteId, user.id)
-        .then (data => {
-          console.log(data);
-          return res.redirect('/favourites')
-        })
-        .catch(err => console.error('error', err.stack))
-    } else {
-      // user is not logged in
-      return res.redirect('/login');
-    }
-  });
+  //   if (user) {
+  //     // user is logged in
+  //     unFavouriteItem(favouriteId)
+  //     .then (data => {
+  //       return res.redirect('/favourites')
+  //       .catch(err => console.error('error', err.stack))
+  //     })
+  //   } else {      
+  //     // user is not logged in
+  //     return res.redirect('/login');
+  //   }
+  // });
+
+
+  // // ----------------------------------------------------------------- ADD FAVOURITE ITEM
+  // router.post('/favourites/add', (req, res) => {
+  //   // favouriteId = the fav id of our table
+  //   const favouriteId = req.body
+  //   favouriteId = JSON.stringify(favouriteId)
+  //   favouriteId = favouriteId.substring(1, favouriteId.length - 1)
+  //   favouriteId = favouriteId.split(':')[0]
+  //   favouriteId = JSON.parse(favouriteId)
+  //   favouriteId = Number(favouriteId)
+
+  //   // get user cookie if exists
+  //   const user = req.session.user;
+
+  //   if (user) {
+  //     // user is logged in:
+  //     addFavouriteItem(favouriteId, user.id)
+  //       .then (data => {
+  //         console.log(data);
+  //         return res.redirect('/favourites')
+  //       })
+  //       .catch(err => console.error('error', err.stack))
+  //   } else {
+  //     // user is not logged in
+  //     return res.redirect('/login');
+  //   }
+  // });
 
   return router;
 };

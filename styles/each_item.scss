@@ -76,3 +76,13 @@ input:checked + .slider:before {
   background: #f44336;
   color: white;
 }
+
+.edit-item {
+  border-color: #f44336;
+  color: gray
+}
+
+.edit-item:hover {
+  background: #f44336;
+  color: gray;
+}

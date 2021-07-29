@@ -56,7 +56,8 @@
   
     <br>
   
-    <form method="POST" action="/product/delete_item/:itemId:">
+    <form method="POST" action="/product/delete_item">
+      <input type="submit" name="<%= item.id or something %>"/>
       <button class="btn danger">Delete This Item</button>
     </form>
 
