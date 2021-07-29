@@ -4,17 +4,102 @@
 <head>
   <!-- internal css -->
   <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+  <link rel="stylesheet" href="/styles/searchPage.css" type="text/css" />
   <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+  <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/products.css" type="text/css" />
   <link rel="stylesheet" href="/styles/each_item.css" type="text/css" />
-
+  
 
   <!-- internal js -->
-  <!-- <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script> -->
 
   <!-- external css -->
 
   <!-- external js -->
 
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+
+    $(document).ready(() =>{
+      console.log('ready');
+
+      const createItemManagement = function (dataInput) {
+        const { user, items } = dataInput;
+
+        console.log('user line 28: ', user);
+        console.log('items line 29: ', items);
+
+        const $article = $("<article class=\"item-management-article\">");
+        const escape = function (str) {
+          let div = document.createElement("div");
+          div.appendChild(document.createTextNode(str));
+          return div.innerHTML;
+        };
+
+        const html = `
+          <h4>Item Management</h4>
+          <form method="POST" action="/products/item_sale_status/:">
+            <label for="featured-check">Make this a featured Item</label>
+            <br>
+            <input type="checkbox" id="featured_check" name="${item.id}">
+            <br>
+          </form>
+          
+          <form method="POST" action="/product/item_sale_status/:${item.id}"> 
+            <label class="switch">
+              <input type="checkbox">
+              <span class="slider round"></span>
+            </label>
+          </form>
+          
+          <br>
+          
+          <form method="POST" action="/product/delete_item/:">
+            <button type="submit" name="${item.id}" class="btn danger">Delete This Item</button>
+          </form>
+          `;
+        return $article.html(html);
+      };
+
+
+
+      const loadItemManagement = function(dataInput) {
+        $.ajax(getIt)
+          .then(function(dataInput) {
+            console.log('dataInput line 73: ', dataInput);
+
+
+            $('.item-management').css("visibility", "visible");
+
+            $('#item-management').prepend(createItemManagement(dataInput));
+          });
+      };
+
+      // FOR TESTING - LOAD ITEM MANAGEMENT REGARDLESS OF WHETHER A USER.VENDOR = TRUE
+      loadItemManagement();
+
+
+      // AJAX POST request that sends the form data to the server.
+      $("#featured_check").submit(function(event) {
+        event.preventDefault();
+
+        const sliderAction = $(event.target);
+
+        console.log('sliderAction line 77:', sliderAction);
+
+        $.post('/products/item_sale_status/', sliderAction);
+      });
+
+      // repeat the above function for the checkbox and the delete button
+
+
+
+    });
+
+  </script>
 </head>
 
 <% if (userObject) { %>
@@ -25,7 +110,13 @@
 <h1>Product Information Page</h1>
 <body>
 
+<<<<<<< HEAD
+  
+  <main class="all-products">
+    <div class="products">
+=======
 
+>>>>>>> master
 
 
   <% for (const item of items) { %>
@@ -36,6 +127,13 @@
       <p> <%= item.category %> </p>
       <p><%= item.price %> </p>
     </div>
+<<<<<<< HEAD
+    
+    <div class="product-description">
+      <p> <%= item.description %> </p>
+    </div>
+
+=======
 
 
     <h4>Item Management</h4>
@@ -59,20 +157,21 @@
     <form method="POST" action="/product/delete_item">
       <button type="submit" name="tempname" class="btn danger">Delete This Item</button>
     </form>
+>>>>>>> master
 
 
 
 
   <% } %>
 
+    </div>
+
+
+    <section class="item-management" id="item-management">Test</section>
 
 
 
-
-
-
-
-
+  </main>
 
 
 

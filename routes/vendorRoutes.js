@@ -1,6 +1,11 @@
 const express = require('express');
 const router  = express.Router();
-const { addNewVendor, getVendorByEmail, getVendorsProducts, addNewProduct } = require('./database');
+const {
+  addNewVendor,
+  getVendorByEmail,
+  getVendorsProducts,
+  addNewProduct
+} = require('./database');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -42,7 +47,6 @@ module.exports = (db) => {
   });
 
 
-
   // ---------------------------------------------- LOG IN (POST)
 
 	router.post('/login', (req, res) => {
@@ -63,17 +67,8 @@ module.exports = (db) => {
       .catch(err => console.error('query error', err.stack));
   });
 
-  // ---------------------------------------------- LOG OUT
-  // Unsure if this will be handled in vendorRoutes or UserRoutes for both user types
-
-  router.get('/logout', (req, res) => {
-    req.session.user = null;
-    res.redirect("/")
-  });
 
   // ---------------------------------------------- REGISTER NEW VENDOR
-  // ---------------------------------------------------------TO DO: link to a register button on homepage
-
   router.get('/register', (req, res) => {
     // get vendor email from session cookie
     const user = req.session.user;
@@ -117,6 +112,7 @@ module.exports = (db) => {
           res.send({error: 'error'});
           return;
         }
+        // set a session cookie
         req.session.user = newVendor;
         return res.redirect('/profile');
       })

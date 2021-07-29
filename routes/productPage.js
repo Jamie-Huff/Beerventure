@@ -5,6 +5,7 @@ const router  = express.Router();
 const { toggleProductStatus, deleteProduct } = require('./database');
 
 module.exports = (db) => {
+
   router.get(`/:productURL`, (req, res) => {
     const user = req.session.user
     let value = req.params.productURL.split('&')
@@ -29,10 +30,10 @@ module.exports = (db) => {
         }
       }
       // console.log('templateVars: ', templateVars);
-      res.render('urls_product', templateVars)
+      return res.render('urls_product', templateVars)
     })
     .catch(err => {
-      res
+      return res
         .status(500)
         .json({ error: err.message });
     });
