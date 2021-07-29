@@ -194,7 +194,47 @@ module.exports = (db) => {
 
 
   // ---------------------------------------------- product load page
+    router.get('/favourites', (req, res) => {
+      const userObject = req.session.user
+      const userId = userObject.id
+      let user = req.session.user
+      console.log(userId)
+        let query = `SELECT items.name as item_name,
+                        vendors.name as vendor_name,
+                        items.price as item_price,
+                        items.category as item_category,
+                        items.image as item_image
+        FROM items
+        JOIN favourites ON items.id = favourites.item_id
+        JOIN vendors ON vendors.id = items.vendor_id
+        WHERE ${userId} = favourites.user_id
 
+        `;
+        return db.query(query)
+          .then(data => {
+            console.log(query)
+            let templateVars;
+            const favourites = data.rows;
+            if (user) {
+              templateVars = {
+                favourites: data.rows,
+                userObject,
+              }
+            } else {
+              templateVars = {
+              favourites: data.rows,
+              userObject: null
+              }
+            }
+            console.log(templateVars.favourites)
+            res.render("urls_favourites", templateVars)
+          })
+          .catch(err => {
+            res
+              .status(500)
+              .json({ error: err.message });
+          });
+      });
   // --------------------------------------------------------------------
   return router;
 };
