@@ -212,7 +212,6 @@ module.exports = (db) => {
         `;
         return db.query(query)
           .then(data => {
-            console.log(query)
             let templateVars;
             const favourites = data.rows;
             if (user) {
@@ -226,7 +225,6 @@ module.exports = (db) => {
               userObject: null
               }
             }
-            console.log(templateVars.favourites)
             res.render("urls_favourites", templateVars)
           })
           .catch(err => {
@@ -255,9 +253,42 @@ module.exports = (db) => {
           .json({ error: err.message });
         });
       })
-
   })
   // --------------------------------------------------------------------
+  router.post('/favourites/add', (req, res) => {
+    let favouriteId = req.body
+    favouriteId = JSON.stringify(favouriteId)
+    favouriteId = favouriteId.substring(1, favouriteId.length - 1)
+    favouriteId = favouriteId.split(':')[0]
+    favouriteId = JSON.parse(favouriteId)
+    favouriteId = Number(favouriteId)
+    // favouriteId = the fav id of our table
+    let query = `SELECT * FROM items WHERE id = $1`
+    db.query(query, [favouriteId])
+      .then (data => {
+        // for some reason its not always sending in the proper name to add to the table
+        vendorId = data.rows[0].vendor_id
+        userId = req.session.user.id
+          let query = `
+          INSERT INTO favourites
+            (item_id, user_id, vendor_id)
+          VALUES
+            ($1, $2, $3)
+            `
+          db.query(query, [favouriteId, userId, vendorId])
+            .then (data => {
+              console.log(data)
+              res.redirect('/favourites')
+            .catch(err => {
+              res
+                .status(500)
+                .json({ error: err.message });
+              });
+            })
+      })
+
+  })
+
   return router;
 };
 

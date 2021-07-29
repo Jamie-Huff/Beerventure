@@ -55,6 +55,10 @@
       <p><%= item.price %> </p>
       <button id="more-info"> <a href='/product/:<%=item.name%>&itemId:<%=item.id%>'>More about this item</a></button>
 
+      <form method="POST" action="/favourites/add">
+        <input type="submit" name="<%= item.id%>"/>
+    </form>
+
     </div>
 
   <% } %>
