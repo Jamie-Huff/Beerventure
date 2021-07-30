@@ -91,7 +91,6 @@ const getVendorByName = function(name) {
 }
 exports.getVendorByName = getVendorByName;
 
-
 // ----------------------------------------------------- Products
 
 const getFeaturedProducts = function() {
@@ -227,13 +226,11 @@ exports.addFavouriteItem = addFavouriteItem;
 const getMessages = (id, isVendor) => {
   //to retrieve messags from the database (currently set to return all data)
   const list = [id]
-  let column, sort;
+  let column;
   if (isVendor) {
     column = 'vendor_id';
-    // sort = 'user_id';
   } else {
     column = 'user_id';
-    // sort = 'vendor_id';
   }
   return pool
     .query(`

@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
   <link rel="stylesheet" href="/styles/products.css" type="text/css" />
   <link rel="stylesheet" href="/styles/each_item.css" type="text/css" />
-  
+
 
   <!-- internal js -->
 
@@ -43,7 +43,7 @@
               <br>
 
           <% } else { %>
-            
+
             <h5>This is not a Featured item</h5>
 
             <form method="POST" action="/product/featured_status">
@@ -67,7 +67,7 @@
             <% } else { %>
 
               <h5>This item is currently for sale</h5>
-              
+
               <form method="POST" action="/product/item_sale_status">
                 <button type="submit" name="<%= items[0].id %>" class="btn">De-list Item</button>
               </form>
@@ -89,29 +89,31 @@
 
 
     </section>
-  
+
   <% } %>
   <% } %>
-  
+
   <main class="all-products">
     <div class="products">
 
 
   <% for (const item of items) { %>
     <div class="featured-items">
-      <p class="prod-name"> <%= item.vendor %> </p>
+      <p class="prod-name"> <%= item.vendorID %> </p>
       <p class="prod-name"> <%= item.name %> </p>
       <img class="product-image" src=<%= item.image %>
       <p> <%= item.category %> </p>
-      <p><%= item.price %> </p>
+      <p> <%= '$' + item.price / 100 + '.00' %> </p>
+      <p> <%= item.abv / 100 + '% alc./vol'%> </p>
+      <p> <%= item.mliter + ' mL' %> </p>
     </div>
-    
+
     <div class="product-description">
-      <p> <%= item.description %> </p>
+      <h2>Product Description</h2>
+      <div class="description">
+        <p> <%= item.description %> </p>
+      </div>
     </div>
-
-
-
 
 
   <% } %>
@@ -119,12 +121,7 @@
     </div>
 
 
-
-
-
   </main>
-
-
 
 
     <%- include('partials/_footer'); %>

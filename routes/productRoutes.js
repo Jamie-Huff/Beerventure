@@ -2,7 +2,7 @@ const express = require('express');
 const router  = express.Router();
 
 
-const { toggleSoldStatus, toggleFeaturedStatus, deleteProduct, getItemObject } = require('./database');
+const { toggleSoldStatus, toggleFeaturedStatus, deleteProduct, getItemObject} = require('./database');
 
 module.exports = (db) => {
 
@@ -17,6 +17,7 @@ module.exports = (db) => {
 
     return db.query(query, [itemId])
     .then(value => {
+
       let templateVars = {}
       if (!user) {
         templateVars = {
@@ -74,7 +75,7 @@ module.exports = (db) => {
   })
 
 
-  // ----------- Toggle an item's 'featured' status 
+  // ----------- Toggle an item's 'featured' status
   router.post('/featured_status', (req, res) => {
     const vendor = req.session.user;
     const responseObject = req.body;

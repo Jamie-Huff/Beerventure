@@ -48,6 +48,25 @@
       -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
       transition: all 0.4s ease 0s;
     }
+
+    .product-description {
+
+      background-color: #d8d5d5;
+      padding: 1em 2em;
+      margin: 2em 2em;
+
+      border-radius: 2%;
+
+
+      .description {
+        padding: 1em 1em;
+        margin-bottom: 1em;
+        background-color: #EEE;
+        height: 200px;
+      }
+
+    }
+
   }
 
 }
