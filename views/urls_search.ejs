@@ -72,41 +72,26 @@
 
 <main class="all-products">
   <div class="products">
-
   <% for (const item of items) { %>
     <div class="featured-items">
-      <p class="prod-name"> <%= item.vendor %> </p>
-      <a class="item-title" id="sell" href='/product/:<%=item.name%>&itemId:<%=item.id%>'> <%=item.name%></a>
-      <img class="product-image" alt="photo of releative item" src=<%= item.image %>>
+      <a class="item-title" id="sell" href='/product/:<%=item.name%>&itemId:<%=item.id%>'>Feature Item</a>
+      <h3 class="prod-name"> <%= item.vendor_name %> </h3>
+      <a class="item-title" id="sell" href='/product/:<%=item.name%>&itemId:<%=item.id%>'><%= item.name %></a>
+      <img class="product-image" src=<%= item.image %>
       <p class="item-category"> <%= item.category %> </p>
-      <p><%= item.price %> </p>
+      <p><%= '$' + item.price / 100 + '.00'%> </p>
       <form class="add-fav" method="GET" action="/product/:<%=item.name%>&itemId:<%=item.id%>">
         <input class="add-fav" type="submit" name="<%= item.id%>" value="More About This Item"/>
         </form>
       <form class="add-fav" method="POST" action="/favourites/add">
         <input class="add-fav" type="submit" name="<%= item.id%>" value="Add To Favourites"/>
     </form>
-
     </div>
-
   <% } %>
 
 </div>
 
 </main>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   <!-- your content here... -->
 

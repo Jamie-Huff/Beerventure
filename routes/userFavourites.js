@@ -63,6 +63,8 @@ module.exports = (db) => {
   // ----------------------------------------------------------------- ADD FAVOURITE ITEM
   router.post('/add', (req, res) => {
     // favouriteId = the fav id of our table
+    console.log(req.body)
+    console.log(req.params)
     let favouriteId = req.body
     favouriteId = JSON.stringify(favouriteId)
     favouriteId = favouriteId.substring(1, favouriteId.length - 1)
