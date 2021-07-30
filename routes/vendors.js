@@ -6,7 +6,7 @@ module.exports = (db) => {
   router.get("/", (req, res) => {
     let user = req.session.user
     let query = `
-    SELECT price, items.name, category, vendors.city as city, date_posted, image, vendors.name as vendor
+    SELECT items.id, price, items.name, category, vendors.city as city, date_posted, image, vendors.name as vendor
     FROM items
     JOIN vendors ON vendors.id = vendor_id
     `;
@@ -42,7 +42,7 @@ module.exports = (db) => {
     let user = req.session.user
     const city = req.query.city
     let query = `
-    SELECT price, items.name, category, vendors.city as city, date_posted, image, vendors.name as vendor
+    SELECT price, items.id, items.name, category, vendors.city as city, date_posted, image, vendors.name as vendor
     FROM items
     JOIN vendors ON vendors.id = vendor_id
     WHERE city = $1
