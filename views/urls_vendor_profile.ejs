@@ -35,7 +35,7 @@
           <p class="prod-name"> <%= product.name %> </p>
           <img class="product-image" src=<%= product.image %>
           <p> <%= product.category %> </p>
-          <p><%= product.price %> </p>
+          <p> <%= '$' + product.price / 100 + '.00'%>  </p>
           <button id="more-info"><a href='/product/:<%=product.name%>&itemId:<%=product.id%>'>Manage Item</a></button>
         </div>
       <% } %>
