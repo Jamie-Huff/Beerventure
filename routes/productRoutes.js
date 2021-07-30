@@ -74,7 +74,7 @@ module.exports = (db) => {
   })
 
 
-  // ----------- Toggle an item's 'featured' status 
+  // ----------- Toggle an item's 'featured' status
   router.post('/featured_status', (req, res) => {
     const vendor = req.session.user;
     const responseObject = req.body;
