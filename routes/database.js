@@ -186,7 +186,8 @@ exports.getItemObject = getItemObject;
 const getUserFavourites = function(userId) {
 
   return pool
-    .query(`SELECT items.name as item_name,
+    .query(`SELECT items.id as item_id,
+      items.name as item_name,
       vendors.name as vendor_name,
       items.price as item_price,
       items.category as item_category,

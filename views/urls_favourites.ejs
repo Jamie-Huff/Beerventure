@@ -36,7 +36,7 @@
       <% for (const favourite of favourites) { %>
         <div class="featured-items">
           <h3 class="prod-name"><%= favourite.vendor_name%></h3>
-          <p class="prod-name"> <%= favourite.item_name%> </p>
+          <a class="item-title" id="sell" href='/product/:<%=favourite.item_name%>&itemId:<%=favourite.item_id%>'><%= favourite.item_name %></a>
           <img class="product-image" src=<%= favourite.item_image %>
           <p> <%= favourite.item_category%> </p>
           <p class="prod-name"> <%= '$' + favourite.item_price / 100 + '.00'%> </p>
