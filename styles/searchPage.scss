@@ -1,12 +1,78 @@
-.search-bar {
+.all-search {
   display: flex;
-  padding: 100px;
-  margin-bottom: 20px;
-  height: 100px;
-}
+  height: 180px;
+  padding-left: 100px;
+  background-color: #d8d5d5;
 
-#search-city {
-  width: 100%;
+  .search-bar {
+    display: flex;
+    padding: 20px 20px;
+    margin-bottom: 20px;
+    height: 100px;
+
+    .search-form-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+
+    }
+
+    #searchbutton {
+      border: none;
+      background-color: black;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      padding: 12px 28px;
+    }
+  }
+
+  #search-city {
+    width: 100%;
+  }
+
+  .all-filters {
+    flex-direction: column;
+
+    .filter-lowhigh {
+      padding: 20px 20px;
+
+      #lowhighbutton {
+        border: none;
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 12px 28px;
+        margin: 0em 1em;
+
+      }
+    }
+
+    .filter-highlow {
+      padding: 20px 20px;
+      margin-bottom: 5px;
+
+      #highlowbutton {
+        border: none;
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 12px 28px;
+        margin: 0em 1em;
+      }
+
+    }
+  }
+
+
+
+  .citysearch {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
 }
 
 .search-result {
@@ -23,8 +89,12 @@
   width: 185px;
 }
 
+
+
 .info-container {
   display: block;
   height: 100%;
 }
+
+
 

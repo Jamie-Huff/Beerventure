@@ -33,32 +33,41 @@
     <%-include('partials/_hero') %>
     <% } %>
 
-  <div class ="search-bar">
-  <form action="/search/searchByCity" method="GET" id="search-form" class="search-form">
-    <div class="search-form-box">
-      <label for="search-form-box">Lets see whats to drink in your city!</label>
-      <input type="text" name="city" placeholder="City" id="search-city">
+    <div class="all-search">
+      <div class ="search-bar">
+        <form action="/search/searchByCity" method="GET" id="search-form" class="search-form">
+          <div class="search-form-box">
+            <label class="citysearch" for="search-form-box">Lets see whats to drink in your city!</label>
+            <br>
+            <input type="text" name="city" placeholder="City" id="search-city">
+          </div>
+            <br>
+          <div class="search-form">
+              <button id="searchbutton" type="submit">Search</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="all-filters">
+        <div class="filter-lowhigh">
+          <form action="/search/lowToHigh" method="GET">
+            <label class="citysearch" for="Filter by Price: low > high">Filter by Price: (Low to High)</label>
+            <input type="hidden" name="city" placeholder="City" id="search-city" value="<%= city %>">
+            <button id="lowhighbutton" type="submit">Filter</button>
+          </form>
+        </div>
+
+        <div class="filter-highlow">
+          <form action="/search/highToLow" method="GET">
+            <label class="citysearch" for="Filter by Price: low > high">Filter by Price: (High to Low)</label>
+            <input type="hidden" name="city" placeholder="City" id="search-city" value="<%= city %>">
+            <button id="highlowbutton" type="submit">Filter</button>
+          </form>
+        </div>
+      </div>
+
     </div>
 
-    <div class="search-form">
-        <button type="submit">Search</button>
-    </div>
-  </form>
-</div>
-<div>
-  <form action="/search/lowToHigh" method="GET">
-    <label for="Filter by Price: low > high">Filter by Price: Low -> High</label>
-    <input type="hidden" name="city" placeholder="City" id="search-city" value="<%= city %>">
-    <button type="submit">Filter</button>
-  </form>
-</div>
-<div>
-  <form action="/search/highToLow" method="GET">
-    <label for="Filter by Price: low > high">Filter by Price: High -> Low</label>
-    <input type="hidden" name="city" placeholder="City" id="search-city" value="<%= city %>">
-    <button type="submit">Filter</button>
-  </form>
-</div>
 
 
 <main class="all-products">
