@@ -74,8 +74,8 @@
   <div class="products">
   <% for (const item of items) { %>
     <div class="featured-items">
-      <a class="item-title" id="sell" href='/product/:<%=item.name%>&itemId:<%=item.id%>'>Feature Item</a>
-      <h3 class="prod-name"> <%= item.vendor_name %> </h3>
+      <a class="item-title" id="sell" href='/product/:<%=item.name%>&itemId:<%=item.id%>'><%= item.name %></a>
+      <h3 class="prod-name"> <%= item.vendor %> </h3>
       <a class="item-title" id="sell" href='/product/:<%=item.name%>&itemId:<%=item.id%>'><%= item.name %></a>
       <img class="product-image" src=<%= item.image %>
       <p class="item-category"> <%= item.category %> </p>
