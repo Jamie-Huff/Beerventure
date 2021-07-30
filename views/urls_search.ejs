@@ -27,8 +27,10 @@
 <body>
     <% if (userObject) { %>
     <%-include('partials/_navbarSignedIn') %>
+    <%-include('partials/_hero') %>
     <% } else { %>
     <%- include('partials/_navbar') %>
+    <%-include('partials/_hero') %>
     <% } %>
 
   <div class ="search-bar">

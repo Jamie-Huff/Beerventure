@@ -40,7 +40,12 @@ module.exports = (db) => {
             return res.status(500).json({ error: err.message });
           });
       } else {
-        return res.status(403).json({ error: "not authorized. you are not a vendor" });
+        const user = vendor;
+        const templateVars = {
+          userObject: user,
+          products: null,
+        }
+        return res.render("../views/urls_login", templateVars);
       }
     }
 
