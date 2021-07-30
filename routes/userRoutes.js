@@ -154,21 +154,24 @@ module.exports = (db) => {
   // ---------------------------------------------------------TO DO: link to a register button on homepage
 
   router.get('/register', (req, res) => {
-    // get user email from session cookie
     const user = req.session.user;
-    // if session cookie exists, redirect to homepage TO DO - CHANGE THIS TO REDIRECT TO USER'S PAGE
-    if (user) {
-      getFeaturedProducts()
-      .then(products => {
-        const templateVars = {
+    getFeaturedProducts()
+    .then(products => {
+      if (user) {
+      const templateVars = {
           userObject: user,
           products: products
         };
         return res.render("../views/urls_index", templateVars);
+      } else {
+        const templateVars = {
+          userObject: null,
+          products: products
+        };
+        return res.render('../views/urls_register_user', templateVars);
+      }
       })
-    }
-    // if user doesn't have a session cookie, show the registration page
-    return res.render('../views/urls_register_user');
+      .catch(err => console.error('error', err.stack))
   });
 
 
