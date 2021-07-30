@@ -34,10 +34,10 @@
           <a class="nav-bar-links" id="sell" href='/product/:<%=product.name%>&itemId:<%=product.id%>'><%= product.name %></a>
           <img class="product-image" src=<%= product.image %>
           <p> <%= product.category %> </p>
-          <p><%= product.price %> </p>
+          <p><%= '$' + product.price / 100 + '.00'%> </p>
           <button id="more-info"> <a href='/product/:<%=product.name%>&itemId:<%=product.id%>'>Tell Me More</a></button>
-          <form method="POST" action="/favourites/add">
-            <input type="submit" name="<%= product.id%>" value="Add To Favourites"/>
+          <form class="add-fav" method="POST" action="/favourites/add">
+            <input class="add-fav" type="submit" name="<%= product.id%>" value="Add To Favourites"/>
         </form>
         </div>
 

@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
   <link rel="stylesheet" href="/styles/products.css" type="text/css" />
 
-
   <!-- internal js -->
   <!-- <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script> -->
 
@@ -33,14 +32,14 @@
     <main class="all-products">
       <div class="products">
       <% for (const favourite of favourites) { %>
-        <div class="featured-items">
-          <p class="prod-name"> <%= favourite.vendor_name%> </p>
+        <div class="favourite-items">
+          <h3 class="prod-name"><%= favourite.vendor_name%></h3>
           <p class="prod-name"> <%= favourite.item_name%> </p>
           <img class="product-image" src=<%= favourite.item_image %>
           <p class="prod-name"> <%= favourite.item_category%> </p>
-          <p class="prod-name"> <%= favourite.item_price%> </p>
+          <p class="prod-name"> <%= '$' + favourite.item_price / 100 + '.00'%> </p>
           <form method="POST" action="/favourites">
-            <button type="submit" name="<%= favourite.favourite_id%>" class="">Remove</button>
+            <button id='remove-fav' type="submit" name="<%= favourite.favourite_id%>" class="">Remove</button>
         </form>
         </div>
       <% } %>
