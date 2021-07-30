@@ -39,23 +39,14 @@ module.exports = (db) => {
       if (user.vendor) {
         return res.redirect('/vendors');
       }
-
       // helper function to retrieve products from DB
       getFeaturedProducts()
       .then(products => {
         const templateVars = {
           userObject: user,
-          products: products,
+          products: products
         };
-        // if user does exist in DB but password doesn't match (user === null)
-        // -----------------------------------TO DO: should be updated to better output (failure message)
-        if (!user) {
-          return res.render("../views/urls_index", templateVars);
-        }
-        // if user does exist in DB and password matches (data === userDBObject)
-        if (user) {
-          return res.render("../views/urls_index", templateVars);
-        }
+        return res.render("../views/urls_index", templateVars);
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
@@ -102,11 +93,7 @@ module.exports = (db) => {
     // Check if session cookie exists,
     const user = req.session.user;
     if (user) {
-      // return res.send({"error":"already logged in"});
-      const templateVars = {
-        errorMessage: "You are already logged in!"
-      }
-      return res.render('../views/urls_error', templateVars);
+      return res.send({"error":"already logged in"});
     }
     // -----------------------------------TO DO: Change this route to user profile page
     return res.render("../views/urls_login");
@@ -119,49 +106,50 @@ module.exports = (db) => {
     const {email, password} = req.body;
 
     // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
-
     getUserByEmail(email)
       .then(user => {
             if (user) {
-              bcrypt.compare(password, user.password);
-              req.session.user = user;
+              bcrypt.compare(password, user.password, function(err, result) {
+                console.log('result: ', result);
+                if (result) {
+                  req.session.user = user;
+
+                  // redirect to profile
+                  return res.redirect('/profile');
+                } else {
+                  return res.redirect('/login');
+                }
+              });
             }
           })
-      .then(result => {
-        return res.redirect('/profile');
-      })
       .catch(err => console.error('error', err.stack))
-
   });
 
 
   router.post('/vendors/login', (req, res) => {
     const {email, password} = req.body;
-    console.log('email: ', email);
-
-    // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
 
     getVendorByEmail(email)
       .then(vendor => {
             if (vendor) {
-              bcrypt.compare(password, vendor.password);
-              vendor.vendor = true;
-              req.session.user = vendor;
+              bcrypt.compare(password, vendor.password, function(err, result) {
+                console.log('result: ', result);
+                if (result) {
+                  req.session.user = vendor;
+
+                  // redirect to profile
+                  return res.redirect('/profile');
+                } else {
+                  return res.redirect('/login');
+                }
+              });
             }
           })
-      .then(result => {
-        return res.redirect('/vendors');
-      })
       .catch(err => console.error('error', err.stack))
   });
 
 
-
-
-
   // ---------------------------------------------- LOG OUT
-  // ---------------------------------------------------------TO DO: link to a logout button
-
   router.get('/logout', (req, res) => {
     req.session.user = null;
     res.redirect("/")
@@ -169,15 +157,25 @@ module.exports = (db) => {
 
 
   // ---------------------------------------------- REGISTER NEW USER
-  // ---------------------------------------------------------TO DO: link to a register button on homepage
-
   router.get('/register', (req, res) => {
-    // get user email from session cookie
     const user = req.session.user;
-    // if session cookie exists, redirect to homepage TO DO - CHANGE THIS TO REDIRECT TO USER'S PAGE
-    if (user) return res.send({"error":"already logged in"});
-    // if user doesn't have a session cookie, show the registration page
-    return res.render('../views/urls_register_user');
+    getFeaturedProducts()
+    .then(products => {
+      if (user) {
+      const templateVars = {
+          userObject: user,
+          products: products
+        };
+        return res.render("../views/urls_index", templateVars);
+      } else {
+        const templateVars = {
+          userObject: null,
+          products: products
+        };
+        return res.render('../views/urls_register_user', templateVars);
+      }
+      })
+      .catch(err => console.error('error', err.stack))
   });
 
 
@@ -188,8 +186,6 @@ module.exports = (db) => {
     newUser.password = bcrypt.hashSync(newUser.password, saltRounds);
 
     // Check if user email already exists in DB. Redirect to login page
-    // -----------------------------------TO DO: Provide user with a relevant error message
-    // -----------------------------------TO DO: Validate all inputs, provide user with appropriate error messages
     getUserByEmail(newUser.email)
     .then(userData => {
         // helper function to retrieve products from DB
