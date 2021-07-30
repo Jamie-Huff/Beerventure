@@ -12,15 +12,14 @@
 
         if ($postItemForm.is(':visible')) {
           $postItemForm.slideUp();
-          $('#hide-button').css("visibility", "visible");
+          $('#hide-button').css("visibility", "hidden");
+          $('#reveal-button').css("visibility", "visible");
 
         } else {
           $postItemForm.slideDown();
-          
-          $('#post-button').css("visibility", "hidden");
+          $('#hide-button').css("visibility", "visible");
+          $('#reveal-button').css("visibility", "hidden");
           $('.new-item-slide').css("visibility", "visible");
-          $('.new-item-slide').css("background-color", "#d8d5d5");
-
         }
       });
 
@@ -40,7 +39,7 @@
     </div>
 
     <section class="new-item-slide">
-      <form method="POST" action="/vendors/new_item">
+      <form class="form" method="POST" action="/vendors/new_item">
 
         <div class="right-side">
           <input type="text" name="name" placeholder="Item Name" required>
