@@ -171,7 +171,10 @@ module.exports = (db) => {
     // get user email from session cookie
     const user = req.session.user;
     // if session cookie exists, redirect to homepage TO DO - CHANGE THIS TO REDIRECT TO USER'S PAGE
-    if (user) return res.send({"error":"already logged in"});
+    if (user) {
+      return res.render("../views/urls_index");
+
+    }
     // if user doesn't have a session cookie, show the registration page
     return res.render('../views/urls_register_user');
   });
