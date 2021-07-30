@@ -106,37 +106,45 @@ module.exports = (db) => {
     const {email, password} = req.body;
 
     // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
-
     getUserByEmail(email)
       .then(user => {
             if (user) {
-              bcrypt.compare(password, user.password);
-              req.session.user = user;
+              bcrypt.compare(password, user.password, function(err, result) {
+                console.log('result: ', result);
+                if (result) {
+                  req.session.user = user;
+
+                  // redirect to profile
+                  return res.redirect('/profile');
+                } else {
+                  return res.redirect('/login');
+                }
+              });
             }
           })
-      .then(result => {
-        return res.redirect('/profile');
-      })
       .catch(err => console.error('error', err.stack))
-
   });
 
 
   router.post('/vendors/login', (req, res) => {
     const {email, password} = req.body;
-    console.log('email: ', email);
 
     getVendorByEmail(email)
       .then(vendor => {
             if (vendor) {
-              bcrypt.compare(password, vendor.password);
-              vendor.vendor = true;
-              req.session.user = vendor;
+              bcrypt.compare(password, vendor.password, function(err, result) {
+                console.log('result: ', result);
+                if (result) {
+                  req.session.user = vendor;
+
+                  // redirect to profile
+                  return res.redirect('/profile');
+                } else {
+                  return res.redirect('/login');
+                }
+              });
             }
           })
-      .then(result => {
-        return res.redirect('/vendors');
-      })
       .catch(err => console.error('error', err.stack))
   });
 
@@ -178,8 +186,6 @@ module.exports = (db) => {
     newUser.password = bcrypt.hashSync(newUser.password, saltRounds);
 
     // Check if user email already exists in DB. Redirect to login page
-    // -----------------------------------TO DO: Provide user with a relevant error message
-    // -----------------------------------TO DO: Validate all inputs, provide user with appropriate error messages
     getUserByEmail(newUser.email)
     .then(userData => {
         // helper function to retrieve products from DB
