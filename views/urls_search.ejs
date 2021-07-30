@@ -65,12 +65,13 @@
       <p class="prod-name"> <%= item.vendor %> </p>
       <a class="item-title" id="sell" href='/product/:<%=item.name%>&itemId:<%=item.id%>'> <%=item.name%></a>
       <img class="product-image" alt="photo of releative item" src=<%= item.image %>>
-      <p> <%= item.category %> </p>
+      <p class="item-category"> <%= item.category %> </p>
       <p><%= item.price %> </p>
-      <button id="more-info"> <a href='/product/:<%=item.name%>&itemId:<%=item.id%>'>More about this item</a></button>
-
-      <form method="POST" action="/favourites/add">
-        <input class="add-fav" type="submit" value="Add To Favourites" name="<%= item.id%>"/>
+      <form class="add-fav" method="GET" action="/product/:<%=item.name%>&itemId:<%=item.id%>">
+        <input class="add-fav" type="submit" name="<%= item.id%>" value="More About This Item"/>
+        </form>
+      <form class="add-fav" method="POST" action="/favourites/add">
+        <input class="add-fav" type="submit" name="<%= item.id%>" value="Add To Favourites"/>
     </form>
 
     </div>

@@ -40,7 +40,7 @@
           <h3 class="prod-name"><%= favourite.vendor_name%></h3>
           <p class="prod-name"> <%= favourite.item_name%> </p>
           <img class="product-image" src=<%= favourite.item_image %>
-          <p class="prod-name"> <%= favourite.item_category%> </p>
+          <p> <%= favourite.item_category%> </p>
           <p class="prod-name"> <%= '$' + favourite.item_price / 100 + '.00'%> </p>
           <form method="POST" action="/favourites">
             <button id='remove-fav' type="submit" name="<%= favourite.favourite_id%>" class="">Remove</button>
