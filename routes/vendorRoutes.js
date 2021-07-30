@@ -40,8 +40,12 @@ module.exports = (db) => {
             return res.status(500).json({ error: err.message });
           });
       } else {
-        return res.redirect('/login');
-        // return res.redirect('/');
+        const user = vendor;
+        const templateVars = {
+          userObject: user,
+          products: null,
+        }
+        return res.render("../views/urls_login", templateVars);
       }
     }
 
