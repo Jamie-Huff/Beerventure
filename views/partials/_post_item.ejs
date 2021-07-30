@@ -1,4 +1,5 @@
 <head>
+  <link rel="stylesheet" href="/styles/hero.css" type="text/css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
     $(document).ready(function(event){
@@ -8,10 +9,18 @@
         $('.new-item-slide').css("visibility", "visible");
 
         const $postItemForm = $('.new-item-slide');
+
         if ($postItemForm.is(':visible')) {
           $postItemForm.slideUp();
+          $('#hide-button').css("visibility", "visible");
+
         } else {
           $postItemForm.slideDown();
+          
+          $('#post-button').css("visibility", "hidden");
+          $('.new-item-slide').css("visibility", "visible");
+          $('.new-item-slide').css("background-color", "#d8d5d5");
+
         }
       });
 
@@ -24,32 +33,43 @@
 
   <main>
     <div class="reveal-hide">
-      <button class="reveal">Post New Item</button>
+      <button id="reveal-button" class="btn reveal">Post New Item</button>
+    </div>
+    <div class="reveal-hide">
+      <button id="hide-button" class="btn reveal">Hide ^</button>
     </div>
 
     <section class="new-item-slide">
       <form method="POST" action="/vendors/new_item">
-        <input type="text" name="name" placeholder="Item Name" required>
-        <br>
-        <input type="text" name="description" placeholder="Product description, Tasting or pairing notes">
-        <br>
-        <input type="text" name="price" placeholder="Price" required>
-        <br>
-        <input type="text" name="category" placeholder="category" required>
-        <br>
-        <input type="text" name="abv" placeholder="Alcohol Content (%)" required>
-        <br>
-        <input type="text" name="mliter" placeholder="Volume (mL)" required>
-        <br>
-        <label for="imageFile">Upload a photo:</label>
-        <br>
-        <input type="file" id="imageFile" capture="environment" accept="image/*" required>
-        <br>
-        <label for="featured-check">Make this a featured Item</label>
-        <br>
-        <input type="checkbox" id="featured_check" name="featured_check">
-        <br>
-        <button type="submit">Add New Item</button>
+
+        <div class="right-side">
+          <input type="text" name="name" placeholder="Item Name" required>
+          <br>
+          <input type="text" name="description" placeholder="Product description, Tasting or pairing notes">
+          <br>
+          <input type="text" name="price" placeholder="Price" required>
+          <br>
+          <input type="text" name="category" placeholder="category" required>
+          <br>
+          <input type="text" name="abv" placeholder="Alcohol Content (%)" required>
+          <br>
+          <input type="text" name="mliter" placeholder="Volume (mL)" required>
+          <br>
+        </div>
+
+        <div class="left-side">
+
+          <label for="imageFile">Upload a photo:</label>
+          <br>
+          <input type="file" id="imageFile" capture="environment" accept="image/*" required>
+          <br>
+          <label for="featured-check">Make this a featured Item</label>
+          <br>
+          <input type="checkbox" id="featured_check" name="featured_check">
+          <br>
+          <button class="btn" type="submit">Add New Item</button>
+          <br>
+        </div>
       </form>
     </section>
 
