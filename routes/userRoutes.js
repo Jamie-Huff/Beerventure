@@ -39,23 +39,14 @@ module.exports = (db) => {
       if (user.vendor) {
         return res.redirect('/vendors');
       }
-
       // helper function to retrieve products from DB
       getFeaturedProducts()
       .then(products => {
         const templateVars = {
           userObject: user,
-          products: products,
+          products: products
         };
-        // if user does exist in DB but password doesn't match (user === null)
-        // -----------------------------------TO DO: should be updated to better output (failure message)
-        if (!user) {
-          return res.render("../views/urls_index", templateVars);
-        }
-        // if user does exist in DB and password matches (data === userDBObject)
-        if (user) {
-          return res.render("../views/urls_index", templateVars);
-        }
+        return res.render("../views/urls_index", templateVars);
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
@@ -135,8 +126,6 @@ module.exports = (db) => {
     const {email, password} = req.body;
     console.log('email: ', email);
 
-    // -----------------------------------TO DO: Provide user with an error if password isn't valid, redirect back to login page
-
     getVendorByEmail(email)
       .then(vendor => {
             if (vendor) {
@@ -150,9 +139,6 @@ module.exports = (db) => {
       })
       .catch(err => console.error('error', err.stack))
   });
-
-
-
 
 
   // ---------------------------------------------- LOG OUT
@@ -172,8 +158,14 @@ module.exports = (db) => {
     const user = req.session.user;
     // if session cookie exists, redirect to homepage TO DO - CHANGE THIS TO REDIRECT TO USER'S PAGE
     if (user) {
-      return res.render("../views/urls_index");
-
+      getFeaturedProducts()
+      .then(products => {
+        const templateVars = {
+          userObject: user,
+          products: products
+        };
+        return res.render("../views/urls_index", templateVars);
+      })
     }
     // if user doesn't have a session cookie, show the registration page
     return res.render('../views/urls_register_user');
