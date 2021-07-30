@@ -1,0 +1,35 @@
+<!doctype html>
+
+<html lang="en">
+
+  <head>
+    <title>Home Page</title>
+    <!-- internal css sheets-->
+    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/error.css" type="text/css" />
+
+    <!-- internal javascript-->
+
+    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+    <script type="text/javascript" src="/scripts/app.js"></script>
+
+  </head>
+
+  <div class="error">
+    <link rel="stylesheet" href="/styles/error.css" type="text/css" />
+    <h1>Error!
+
+      You're not allowed here!
+
+      <%= errorMessage %>
+
+    </h1>
+
+    <div>
+      <a class="error-item-link" href="/">Get me outta here</a>
+    </div>
+
+  </div>
+
+</html>

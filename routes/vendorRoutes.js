@@ -80,7 +80,11 @@ module.exports = (db) => {
     // if session cookie exists, redirect to homepage TO DO - CHANGE THIS TO REDIRECT TO VENDOR'S PAGE
     if (user) {
       if (user.vendor) {
-        return res.send({"error":"vendor already logged in"});
+        // return res.send({"error":"vendor already logged in"});
+        const templateVars = {
+          errorMessage: "You are already logged in!"
+        }
+        return res.render('../views/urls_error', templateVars);
       }
     }
     // if vendor doesn't have a session cookie, show the registration page

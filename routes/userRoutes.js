@@ -93,7 +93,11 @@ module.exports = (db) => {
     // Check if session cookie exists,
     const user = req.session.user;
     if (user) {
-      return res.send({"error":"already logged in"});
+      // return res.send({"error":"already logged in"});
+      const templateVars = {
+        errorMessage: "You are already logged in!"
+      }
+      return res.render('../views/urls_error', templateVars);
     }
     // -----------------------------------TO DO: Change this route to user profile page
     return res.render("../views/urls_login");
