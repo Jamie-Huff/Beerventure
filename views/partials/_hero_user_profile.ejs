@@ -1,0 +1,66 @@
+
+<head>
+  <link rel="stylesheet" href="/styles/hero_user_profile.css" type="text/css" />
+</head>
+
+
+<header class="hero">
+
+    <link rel="stylesheet" href="/styles/hero.css" type="text/css" />
+
+      <% if (userObject && userObject.vendor) { %>
+
+      <div class="hero-content">
+
+        <div class="hero-left"
+        <h2>Hello <%= userObject.name %></h2>
+        <br>
+        </div>
+        <div class="hero-right">
+        <h6>Manage your items for sale</h6>
+        <%- include('_post_item') %>
+        </div>
+      </div>
+
+
+      <% } else if (userObject) { %>
+
+      <div class="hero-content">
+        <h2>Welcome back <%= userObject.name %></h2>
+        <br>
+      </div>
+
+
+
+
+      <% } else { %>
+
+      <div class="hero-content">
+        <div class="hero-left">
+          <h2>Thirsty for adventure?</h2>
+          <p>
+            Blurb about finding beer and cider local to user.
+            Who we are and what the site does.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          </p>
+        </div>
+
+        <div class="hero-right">
+          <form method="get" action="/search" class="hero-form">
+            <label class="cta-message" for="hero-input-city">Support a local brewery near you</label>
+            <button type="submit" class="btn">Browse Beers</button>
+          </form>
+        </div>
+
+      <% } %>
+
+
+
+    </div>
+  </div>
+
+</header>
+

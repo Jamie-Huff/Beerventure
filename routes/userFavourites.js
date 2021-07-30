@@ -22,8 +22,8 @@ module.exports = (db) => {
           const templateVars = {
             userObject: user,
             favourites: data
-          }
-        return res.render("../views/urls_favourites", templateVars)
+          };
+          return res.render("../views/urls_favourites", templateVars)
         })
         .catch(err => console.error('error', err.stack))
     } else {

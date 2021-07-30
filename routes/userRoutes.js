@@ -4,7 +4,8 @@ const {
   getUserByEmail,
   getFeaturedProducts,
   addNewUser,
-  getVendorByEmail
+  getVendorByEmail,
+  getUserFavourites
 } = require('./database');
 
 const bcrypt = require('bcrypt');
@@ -81,12 +82,17 @@ module.exports = (db) => {
         };
         return res.render("../views/urls_vendor_profile", templateVars);
       });
+    } else {
+      getUserFavourites(user.id)
+      .then(data => {
+        const templateVars = {
+          userObject: user,
+          favourites: data
+        };
+        return res.render("../views/urls_favourites", templateVars)
+      })
+      .catch(err => console.error('error', err.stack))
     }
-    const templateVars = {
-      userObject: user,
-      isVendor: false
-    }
-    return res.render("../views/urls_profile", templateVars);
   });
 
     // ---------------------------------------------- LOG IN (RENDER)
