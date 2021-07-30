@@ -93,11 +93,7 @@ module.exports = (db) => {
     // Check if session cookie exists,
     const user = req.session.user;
     if (user) {
-      // return res.send({"error":"already logged in"});
-      const templateVars = {
-        errorMessage: "You are already logged in!"
-      }
-      return res.render('../views/urls_error', templateVars);
+      return res.send({"error":"already logged in"});
     }
     // -----------------------------------TO DO: Change this route to user profile page
     return res.render("../views/urls_login");
@@ -146,8 +142,6 @@ module.exports = (db) => {
 
 
   // ---------------------------------------------- LOG OUT
-  // ---------------------------------------------------------TO DO: link to a logout button
-
   router.get('/logout', (req, res) => {
     req.session.user = null;
     res.redirect("/")
@@ -155,8 +149,6 @@ module.exports = (db) => {
 
 
   // ---------------------------------------------- REGISTER NEW USER
-  // ---------------------------------------------------------TO DO: link to a register button on homepage
-
   router.get('/register', (req, res) => {
     const user = req.session.user;
     getFeaturedProducts()
