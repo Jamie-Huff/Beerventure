@@ -37,13 +37,11 @@ module.exports = (db) => {
                       uniqueConvos.push(element.vendor_id);
                     }
                   }
-                  // console.log("UNIQUE CONVOS AFTER FUNCTION: ", uniqueConvos);
 
                   let arrayofConvos = [];
                   for (const u of uniqueConvos) {
                     arrayofConvos.push([]);
                   }
-                  // console.log("ARRAYOFCONVOS: ", arrayofConvos)
 
                   for (let i = 0; i < uniqueConvos.length; i++) {
                     for (const item of messages) {
@@ -52,9 +50,6 @@ module.exports = (db) => {
                       }
                     }
                   }
-                  // console.log("ARRAY OF CONVOS ALL: ", arrayofConvos)
-                  // console.log("ARRAY OF CONVOS ARRAY 1: ", arrayofConvos[0])
-                  // console.log("ARRAY OF CONVOS ARRAY 2: ", arrayofConvos[1])
 
                   res.render("../views/urls_messages", { messages, reply, userID, userEmail, arrayofConvos, uniqueConvos, isVendor });
                 })
@@ -68,7 +63,6 @@ module.exports = (db) => {
               getMessages(userID, isVendor)
                 .then(data => {
                   const messages = data;
-                  // console.log("MESSAGES: ", messages)
 
                   const uniqueConvos = [];
 
@@ -78,13 +72,11 @@ module.exports = (db) => {
                       uniqueConvos.push(element.user_id);
                     }
                   }
-                  // console.log("UNIQUE CONVOS AFTER FUNCTION: ", uniqueConvos);
 
                   let arrayofConvos = [];
                   for (const u of uniqueConvos) {
                     arrayofConvos.push([]);
                   }
-                  // console.log("ARRAYOFCONVOS: ", arrayofConvos)
 
                   for (let i = 0; i < uniqueConvos.length; i++) {
                     for (const item of messages) {
@@ -93,9 +85,6 @@ module.exports = (db) => {
                       }
                     }
                   }
-                  // console.log("ARRAY OF CONVOS ALL: ", arrayofConvos)
-                  // console.log("ARRAY OF CONVOS ARRAY 1: ", arrayofConvos[0])
-                  // console.log("ARRAY OF CONVOS ARRAY 2: ", arrayofConvos[1])
 
                   res.render("../views/urls_messages", { messages, reply, userID, userEmail, arrayofConvos, uniqueConvos, isVendor });
                 })
@@ -135,16 +124,13 @@ module.exports = (db) => {
     const userID = user.id;
     const userEmail = user.email;
     isVendor = false;
-    // console.log("POST REQUEST: USER: ", user);
 
     if (!req.body.text) {
-      res.status(400).json({ error: 'invalid request: no data in POST body'});
-      return;
+      return res.redirect(`/messages/${userID}`);
     }
 
     getUserByEmail(userEmail)
     .then(async userData => {
-      // helper function to retrieve products from DB
       const vendor = req.body.name ? await getVendorByName(req.body.name) : null;
       const user = req.body.name ? await getUserByName(req.body.name) : null;
 
