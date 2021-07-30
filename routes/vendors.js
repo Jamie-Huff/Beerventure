@@ -5,7 +5,11 @@ const router  = express.Router();
 module.exports = (db) => {
   router.get("/", (req, res) => {
     let user = req.session.user
-    let query = `SELECT * FROM items`;
+    let query = `
+    SELECT price, items.name, category, vendors.city as city, date_posted, image, vendors.name as vendor
+    FROM items
+    JOIN vendors ON vendors.id = vendor_id
+    `;
     return db.query(query)
       .then(data => {
         let templateVars;
@@ -99,7 +103,6 @@ module.exports = (db) => {
             city,
             }
           }
-
           res.render('urls_search', templateVars)
         })
         .catch(err => {

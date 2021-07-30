@@ -6,9 +6,8 @@
 .all-products {
   border: 1px solid black;
   display: flex;
-  .favourite-items {
-    background-color: #A6DEA9;
-    border-radius: 1%;
+  .featured-item {
+    background-color: #d8d5d5;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,13 +15,21 @@
     height: 500px;
     width: 274px;
     padding-bottom: 1em;
-    margin: 1em 1em;
+    margin: 8px;
+    border-radius: 5%;
   }
+  .favourite-items:hover {
+  text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
+  -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+  -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+  transition: all 0.4s ease 0s;
+  }
+
   #remove-fav {
     color: white;
-    text-transform: uppercase;
+    text-transform: capitalize;
     text-decoration: none;
-    background: black;
+    background: rgb(109, 107, 107);
     border-radius: 10%;
     border: none;
     transition: all 0.4s ease 0s;
@@ -42,7 +49,7 @@
   color: white;
   text-transform: uppercase;
   text-decoration: none;
-  background: black;
+  background: rgb(109, 107, 107);
   border-radius: 10%;
   border: none;
   transition: all 0.4s ease 0s;
