@@ -4,7 +4,12 @@
 <head>
   <!-- internal css -->
   <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
-  <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css">
+  <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+  <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+  <!-- <link rel="stylesheet" href="/styles/navbar.css" type="text/css" /> -->
+  <link rel="stylesheet" href="/styles/products.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/partials/_hero.css" type="text/css" />
 
   <!-- internal js -->
   <!-- <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script> -->
@@ -23,10 +28,9 @@
     <%- include('partials/_navbar') %>
     <% } %>
 
+    <%- include('partials/_hero') %>
 
-  <h1>Profile page</h1>
-  <!-- your content here... -->
-  <h1>Welcome Back!</h1>
+
 
   <p>Favourites</p>
   <a class="messages-after-signin" id="messages-link" href='/messages'>messages</a>
